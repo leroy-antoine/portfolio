@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Antoine Leroy - Ingénieur logiciel &amp; développeur IA</title>
+<meta name="description" content="Portfolio d'Antoine Leroy, étudiant à EPITECH : systèmes en C/C++, IA en Python. Lunar Lander, Zappy, Arcade, Raytracer. Recherche un stage d'avril à fin juillet.">
+<meta name="author" content="Antoine Leroy">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#070a12">
+
+<!-- Open Graph : remplacer l'URL relative de og:image par l'URL absolue du site une fois déployé (voir README). -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="Antoine Leroy">
+<meta property="og:title" content="Antoine Leroy - Ingénieur logiciel &amp; développeur IA">
+<meta property="og:description" content="Systèmes en C/C++, IA en Python. Étudiant à EPITECH, disponible pour un stage d'avril à fin juillet.">
+<meta property="og:image" content="assets/raytracer-spheres.png">
+<meta property="og:image:width" content="870">
+<meta property="og:image:height" content="487">
+<meta property="og:image:alt" content="Rendu du raytracer : une douzaine de sphères colorées posées sur un plan gris, avec des ombres portées nettes">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Schibsted+Grotesk:wght@400;500;600;700&amp;display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body id="top">
+<a class="skip" href="#contenu">Aller au contenu principal</a>
+
+<header class="site-header">
+  <div class="site-header__bar">
+    <a class="brand" href="#top" aria-label="Antoine Leroy - retour en haut">
+      <span class="brand__logo" aria-hidden="true">AL</span>
+      <span class="brand__name">Antoine Leroy</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="site-nav" id="menu" aria-label="Navigation principale">
+      <ul>
+        <li><a href="#projets">Projets</a></li>
+        <li><a href="#stack">Stack</a></li>
+        <li><a href="#parcours">Parcours</a></li>
+        <li><a class="site-nav__cta" href="#contact">Me contacter</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenu" tabindex="-1">
+
+  <!-- Héro -->
+  <section class="section section--hero" aria-labelledby="hero-title">
+    <div class="container container--hero">
+      <div class="hero">
+        <div class="hero__text">
+          <p class="badge">
+            <span class="badge__dot" aria-hidden="true"></span>
+            <span class="lg-only">Disponible pour un stage · avril → fin juillet</span>
+            <span class="sm-only">Stage · avril → fin juillet</span>
+          </p>
+          <h1 id="hero-title">Ingénieur logiciel &amp; développeur IA en devenir.</h1>
+          <p class="hero__lead">Étudiant à EPITECH, je construis des systèmes bas niveau en <strong>C et C++</strong> et j'entraîne des modèles d'apprentissage par renforcement en <strong>Python</strong>. Je cherche un stage d'ingénieur logiciel ou de développeur IA.</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary btn--primary-wide" href="#projets">Voir mes projets
+              <svg class="lg-only" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></a>
+            <a class="btn btn--ghost btn--grow" href="assets/CV_LEROY_ANTOINE.pdf" download="CV_LEROY_ANTOINE.pdf">
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              <span class="sm-only">CV (PDF)</span>
+              <span class="lg-only">Télécharger le CV <span class="muted">(PDF, 135 ko)</span></span></a>
+            <a class="btn btn--ghost btn--icon" href="https://github.com/leroy-antoine" target="_blank" rel="noopener noreferrer" aria-label="Profil GitHub de Antoine Leroy (nouvel onglet)">
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a>
+          </div>
+        </div>
+        <figure class="hero__media">
+          <video class="video video--hero" src="assets/ppo-ep700.mp4" poster="assets/ppo-ep700-poster.jpg" width="600" height="400" controls preload="metadata" playsinline aria-label="Vidéo sans son de 5 secondes : l'agent PPO pilote le module lunaire vers la zone d'atterrissage entre les deux drapeaux"></video>
+          <figcaption>Agent PPO sur <span class="strong">Lunar Lander</span>, épisode 700 de l'entraînement. Vidéo sans son, lecture au clavier.</figcaption>
+        </figure>
+      </div>
+
+      <ul class="facts" aria-label="Faits marquants">
+        <li class="fact">
+          <span class="kicker">Hackathon · sept. 2025</span>
+          <span class="fact__title">1<sup>re</sup> place - « Agents building Agents »</span>
+          <span class="fact__text">Organisé par 42 AI en partenariat avec BlackBox AI.</span>
+        </li>
+        <li class="fact">
+          <span class="kicker">EPITECH Code Breaker · juin 2025</span>
+          <span class="fact__title">Vainqueur avec Corewar</span>
+          <span class="fact__text">Et finaliste avec le projet 42sh (my_shell).</span>
+        </li>
+        <li class="fact">
+          <span class="kicker">EPITECH · GPA 3.04</span>
+          <span class="fact__title">80+ projets réalisés</span>
+          <span class="fact__text">En C, C++, Python, TypeScript, SQL et Bash.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Projets -->
+  <section class="section" id="projets" aria-labelledby="projets-title">
+    <div class="container container--projects">
+      <div class="section-head section-head--split">
+        <div class="section-head__title">
+          <span class="eyebrow">01 - Projets</span>
+          <h2 id="projets-title">Projets sélectionnés</h2>
+        </div>
+        <p class="section-head__lead">Du machine learning au bas niveau : chaque projet renvoie vers son code source, ses vidéos et ses graphiques d'entraînement.</p>
+      </div>
+
+      <!-- Lunar Lander : le panneau ci-dessous est le rendu de l'onglet PPO (défaut), script.js le recalcule au clic. -->
+      <article class="card card--feature" aria-labelledby="p-rl">
+        <div class="card__top">
+          <div class="card__intro">
+            <span class="kicker">Projet phare · IA · Python</span>
+            <h3 id="p-rl">Deep Learning - Lunar Lander</h3>
+            <p>Trois algorithmes d'apprentissage par renforcement comparés sur <span class="strong">lunar-lander-v3</span> (Gymnasium) : Q-Learning discrétisé, Deep Q-Learning, puis PPO face à du vent. 95&nbsp;% de réussite sur Lunar Lander.</p>
+          </div>
+          <a class="btn btn--ghost btn--sm" href="https://github.com/leroy-antoine/Deep-learning">Code source<span class="sr-only"> du projet Deep Learning sur GitHub</span>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </div>
+
+        <!-- Les boutons sont créés par script.js : sans JavaScript, seul l'onglet PPO (statique) est affiché. -->
+        <div class="tabs" id="rl-tabs" role="group" aria-label="Choisir l'algorithme" hidden></div>
+        <p class="sr-only" id="rl-status" role="status"></p>
+
+        <div class="rl-grid" id="rl-panel">
+          <figure class="rl-media">
+            <div class="video-grid">
+              <div class="video-item">
+                <video class="video video--sm" src="assets/ppo-ep250.mp4" poster="assets/ppo-ep250-poster.jpg" width="600" height="400" controls preload="metadata" playsinline aria-label="Vidéo sans son : épisode 250, l'agent PPO encore hésitant descend vers la zone d'atterrissage"></video>
+                <span class="video-item__label">Épisode 250</span>
+              </div>
+              <div class="video-item">
+                <video class="video video--sm" src="assets/ppo-ep700.mp4" poster="assets/ppo-ep700-poster.jpg" width="600" height="400" controls preload="metadata" playsinline aria-label="Vidéo sans son : épisode 700, l'agent PPO se stabilise et vise la zone entre les drapeaux"></video>
+                <span class="video-item__label">Épisode 700</span>
+              </div>
+            </div>
+            <figcaption>PPO sur la variante avec vent : de l'épisode 250 à 700, la politique devient robuste aux perturbations.</figcaption>
+          </figure>
+          <div class="rl-side">
+            <figure class="rl-graph">
+              <a class="thumb thumb--graph" href="assets/ppo-crash-rate.png" aria-label="Agrandir le graphique : taux de crash PPO">
+                <img src="assets/ppo-crash-rate.png" width="960" height="720" loading="lazy" decoding="async" alt="Courbe du taux de crash sur environ 950 épisodes : pic à 75 % au départ, chute vers 35 à 45 %, minimum de 18 % vers l'épisode 300, puis environ 32 % en fin d'entraînement."></a>
+              <figcaption>Taux de crash (moyenne glissante) au fil de l'entraînement PPO avec vent.</figcaption>
+            </figure>
+            <dl class="metrics">
+              <div><dt>Entraînement</dt><dd>~950 épisodes</dd></div>
+              <div><dt>Résultat</dt><dd>Crashs ~75&nbsp;% → ~30&nbsp;%</dd></div>
+            </dl>
+          </div>
+        </div>
+
+        <ul class="tags" aria-label="Technologies">
+          <li>Python</li><li>Gymnasium</li><li>PPO</li><li>DQN</li><li>Q-Learning</li>
+        </ul>
+      </article>
+
+      <!-- Zappy. TODO Antoine : ajouter le lien GitHub du dépôt quand il existera. -->
+      <article class="card card--feature" aria-labelledby="p-zappy">
+        <div class="card__intro card__intro--wide">
+          <span class="kicker">Projet phare · Réseau · C++ · Python</span>
+          <h3 id="p-zappy">Zappy - simulation multijoueur en réseau</h3>
+          <p>Un jeu en réseau où des équipes d'IA s'affrontent sur Trantor, un monde en tuiles riche en ressources. Les habitants se nourrissent, collectent des pierres et réalisent des rituels d'élévation : la première équipe à amener 6 joueurs au niveau maximal l'emporte. Trois programmes dialoguent en TCP via un protocole texte.</p>
+        </div>
+        <div class="rl-grid rl-grid--start">
+          <figure class="rl-media">
+            <video class="video video--wide" src="assets/zappy-demo.mp4" poster="assets/zappy-poster.jpg" width="1280" height="720" controls preload="metadata" playsinline aria-label="Vidéo de démonstration de Zappy, 1 minute, sans son : le client graphique 3D affiche la carte en damier, les ressources et les joueurs des deux équipes, en mode navigation et interaction"></video>
+            <figcaption>Démo du client graphique 3D : caméra libre, sélection de tuiles et de joueurs, équipes en rouge et noir.</figcaption>
+          </figure>
+          <dl class="parts">
+            <div><dt>Serveur</dt><dd>Simule le monde : apparition des ressources, écoulement du temps, incantations. Gère les connexions TCP de tous les clients.</dd></div>
+            <div><dt>Client graphique · C++</dt><dd>Visualisation 3D en temps réel. Bibliothèques graphiques modulaires (.so) interchangeables à chaud avec TAB.</dd></div>
+            <div><dt>IA · Python</dt><dd>Pilote un habitant par commandes réseau : survie, collecte et coordination par broadcast pour s'élever.</dd></div>
+          </dl>
+        </div>
+        <ul class="tags" aria-label="Technologies">
+          <li>C++</li><li>Python</li><li>TCP / sockets</li><li>Protocole client-serveur</li><li>3D temps réel</li><li>Makefile</li>
+        </ul>
+      </article>
+
+      <div class="cards-grid">
+
+        <article class="card card--sm" aria-labelledby="p-doc">
+          <figure class="cq">
+            <div class="stack-12">
+              <a class="thumb" href="assets/cvrie-kmeans.png" aria-label="Agrandir le graphique de clustering K-means">
+                <img src="assets/cvrie-kmeans.png" width="578" height="435" loading="lazy" decoding="async" alt="Nuage de points : 1 011 témoignages de patients projetés en deux dimensions et répartis par K-means en 10 groupes de couleurs, avec leurs centroïdes en rouge"></a>
+              <div class="pair">
+                <a class="thumb thumb--round-sm" href="assets/cvrie-elbow.png" aria-label="Agrandir le graphique de la méthode du coude">
+                  <img src="assets/cvrie-elbow.png" width="708" height="470" loading="lazy" decoding="async" alt="Méthode du coude : la distorsion chute fortement jusqu'à environ 5 clusters puis décroît lentement jusqu'à 50"></a>
+                <div class="stat">
+                  <span class="stat__value">86&nbsp;%</span>
+                  <span class="stat__label">de précision sur radiographies (Random Forest)</span>
+                </div>
+              </div>
+            </div>
+          </figure>
+          <div class="card__intro card__intro--sm">
+            <span class="kicker">IA · Santé · Python</span>
+            <h3 id="p-doc">Doctor Cvrie - diagnostic médical</h3>
+            <p>Deux approches : K-means sur 1&nbsp;011 témoignages de patients vectorisés en TF-IDF, et classification de radiographies thoraciques (sain, pneumonie, tuberculose) réduites en 128×128 puis par PCA.</p>
+          </div>
+          <div class="card__foot">
+            <ul class="tags tags--sm" aria-label="Technologies">
+              <li>Python</li><li>scikit-learn</li><li>K-means</li><li>PCA</li><li>Random Forest</li>
+            </ul>
+            <a class="link-src" href="https://github.com/leroy-antoine/Doctor-Cvrie">Code source<span class="sr-only"> de Doctor Cvrie</span>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+          </div>
+        </article>
+
+        <article class="card card--sm" aria-labelledby="p-arcade">
+          <figure class="cq">
+            <div class="arch" role="img" aria-label="Schéma d'architecture : le cœur de l'Arcade charge à l'exécution une bibliothèque de jeu (Snake, Minesweeper, Menu) et une bibliothèque d'affichage (SFML, SDL2, NCURSES). TAB change d'affichage, F3 change de jeu, sans redémarrer.">
+              <div class="arch__group">
+                <span class="arch__label">Jeux .so</span>
+                <div class="arch__chips"><span class="chip">Snake</span><span class="chip">Minesweeper</span><span class="chip">Menu</span></div>
+              </div>
+              <svg class="arch__arrow arch__arrow--in" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7cb8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              <div class="arch__core">
+                <span class="arch__core-name">Core</span>
+                <span class="arch__core-meta">dlopen · à chaud</span>
+                <span class="arch__core-keys">TAB · F1 · F3</span>
+              </div>
+              <svg class="arch__arrow arch__arrow--out" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7cb8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              <div class="arch__group arch__group--display">
+                <span class="arch__label">Affichage .so</span>
+                <div class="arch__chips"><span class="chip">SFML</span><span class="chip">SDL2</span><span class="chip">NCURSES</span></div>
+              </div>
+            </div>
+          </figure>
+          <div class="card__intro card__intro--sm">
+            <span class="kicker">Architecture · C++ · Équipe de 3</span>
+            <h3 id="p-arcade">Arcade - borne modulaire</h3>
+            <p>Jeux et bibliothèques graphiques chargés dynamiquement (.so) et interchangeables à chaud : SFML, SDL2, NCURSES × Snake, Minesweeper.</p>
+          </div>
+          <div class="card__foot">
+            <ul class="tags tags--sm" aria-label="Technologies">
+              <li>C++</li><li>CMake</li><li>SDL2</li><li>SFML</li>
+            </ul>
+            <a class="link-src" href="https://github.com/leroy-antoine/Arcade">Code source<span class="sr-only"> de Arcade</span>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+          </div>
+        </article>
+
+        <article class="card card--sm" aria-labelledby="p-ray">
+          <figure class="cq">
+            <div class="stack-12">
+              <img class="cover" src="assets/raytracer-spheres.png" width="870" height="487" loading="lazy" decoding="async" alt="Rendu du raytracer : une douzaine de sphères colorées posées sur un plan gris, avec des ombres portées nettes">
+              <div class="pair">
+                <a class="thumb thumb--round-sm" href="assets/raytracer-room.png" aria-label="Agrandir le rendu d'une pièce aux murs colorés avec sphères et cônes">
+                  <img class="cover" src="assets/raytracer-room.png" width="870" height="487" loading="lazy" decoding="async" alt="Rendu : pièce aux murs rose et vert, sphères posées sur des cônes, éclairage ponctuel"></a>
+                <a class="thumb thumb--round-sm thumb--white" href="assets/raytracer-uml.png" aria-label="Agrandir le diagramme d'architecture du raytracer">
+                  <img src="assets/raytracer-uml.png" width="2041" height="784" loading="lazy" decoding="async" alt="Diagramme d'architecture : IPrimitive et PrimitiveFactory d'un côté, IMaterial et MaterialsFactory de l'autre, tous reliés au SceneBuilder"></a>
+              </div>
+            </div>
+          </figure>
+          <div class="card__intro card__intro--sm">
+            <span class="kicker">Graphisme 3D · C++20</span>
+            <h3 id="p-ray">Raytracer</h3>
+            <p>Moteur de lancer de rayons modulaire : scènes décrites en libconfig, sphères, plans et cônes créés par factories, matériaux, ombres et lumières multiples.</p>
+          </div>
+          <div class="card__foot">
+            <ul class="tags tags--sm" aria-label="Technologies">
+              <li>C++20</li><li>CMake</li><li>libconfig++</li>
+            </ul>
+            <a class="link-src" href="https://github.com/leroy-antoine/Raytracer">Code source<span class="sr-only"> du Raytracer</span>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+          </div>
+        </article>
+
+        <article class="card card--sm" aria-labelledby="p-shell">
+          <figure class="cq">
+            <div class="term" role="img" aria-label="Terminal : exemple de commande avec pipe et redirection exécutée dans 42sh">
+              <div class="term__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <span class="term__cmd"><span class="term__prompt">42sh&gt;</span> echo "hello" | cat -e &gt; out.txt ; cat out.txt</span>
+              <span class="term__out">hello$</span>
+              <span class="term__cmd"><span class="term__prompt">42sh&gt;</span> exit</span>
+            </div>
+          </figure>
+          <div class="card__intro card__intro--sm">
+            <span class="kicker">Système · C · Finaliste Code Breaker</span>
+            <h3 id="p-shell">my_shell (42sh)</h3>
+            <p>Shell inspiré de tcsh : exécution de commandes, pipes, séparateurs et redirections (&lt; &lt;&lt; &gt; ; |), environnement et builtins.</p>
+          </div>
+          <div class="card__foot">
+            <ul class="tags tags--sm" aria-label="Technologies">
+              <li>C</li><li>Make</li><li>POSIX</li>
+            </ul>
+            <a class="link-src" href="https://github.com/leroy-antoine/my_shell">Code source<span class="sr-only"> de my_shell</span>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+          </div>
+        </article>
+      </div>
+
+      <article class="card card--sm card--wide" aria-labelledby="p-n8n">
+        <div class="card--wide__main">
+          <span class="card--wide__icon" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7cb8ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M7.5 12h4l5-6M11.5 12l5 6"/></svg></span>
+          <div class="card--wide__text">
+            <h3 id="p-n8n">n8n Newsletter</h3>
+            <p>Automatisation d'une newsletter avec workflows n8n : inscription, connexion et envoi.</p>
+          </div>
+        </div>
+        <a class="link-src" href="https://github.com/leroy-antoine/n8n-newsletter">Code source<span class="sr-only"> de n8n Newsletter</span>
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section class="section" id="stack" aria-labelledby="stack-title">
+    <div class="container container--stack">
+      <div class="section-head">
+        <div class="section-head__title">
+          <span class="eyebrow">02 - Stack</span>
+          <h2 id="stack-title">Ma stack technique</h2>
+        </div>
+      </div>
+      <div class="block">
+        <h3 class="subhead">Stack principale</h3>
+        <ul class="core-stack">
+          <li>
+            <span class="core-stack__icon" aria-hidden="true">C</span>
+            <div class="core-stack__body"><span class="core-stack__name">C</span><span class="core-stack__text">Programmation système : shell POSIX, gestion mémoire, Corewar. Le socle de ma formation EPITECH.</span></div>
+          </li>
+          <li>
+            <span class="core-stack__icon" aria-hidden="true">C++</span>
+            <div class="core-stack__body"><span class="core-stack__name">C++</span><span class="core-stack__text">Architecture orientée objet et modulaire : bibliothèques dynamiques, raytracing, CMake, tests.</span></div>
+          </li>
+          <li>
+            <span class="core-stack__icon" aria-hidden="true">Py</span>
+            <div class="core-stack__body"><span class="core-stack__name">Python</span><span class="core-stack__text">IA et data : apprentissage par renforcement, supervisé et non supervisé, tests automatisés.</span></div>
+          </li>
+        </ul>
+      </div>
+      <div class="extras">
+        <div class="block">
+          <h3 class="subhead">Compétences complémentaires</h3>
+          <ul class="pills">
+            <li>Docker</li><li>GitHub</li><li>JavaScript / TypeScript</li><li>SQL</li><li>Bash</li><li>Proxmox · VirtualBox</li>
+          </ul>
+        </div>
+        <div class="block">
+          <h3 class="subhead">Langues</h3>
+          <ul class="pills">
+            <li>Français - natif</li><li>Anglais - C1</li><li>Allemand - B2</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Parcours -->
+  <section class="section" id="parcours" aria-labelledby="parcours-title">
+    <div class="container container--career">
+      <div class="career__col career__col--xp">
+        <div class="section-head__title">
+          <span class="eyebrow">03 - Parcours</span>
+          <h2 id="parcours-title">Expériences</h2>
+        </div>
+        <ol class="timeline">
+          <li>
+            <span class="timeline__date">Janv. → juil. 2026</span>
+            <h3>Assistant technique - EPITECH (Astek)</h3>
+            <p>Débogage et vulgarisation de concepts techniques ; production de cours et de sujets de projets pour une centaine d'étudiants de 1<sup>re</sup> année.</p>
+          </li>
+          <li>
+            <span class="timeline__date">Juil. → déc. 2025</span>
+            <h3>Assistant pédagogique et technique - ETNA</h3>
+            <p>Développement de tests automatiques en Python, création de vidéos et de sujets, débogage pour une centaine d'étudiants de la 1<sup>re</sup> à la 3<sup>e</sup> année.</p>
+          </li>
+          <li>
+            <span class="timeline__date timeline__date--alt">Sept. 2025 · juin 2025</span>
+            <h3>Distinctions</h3>
+            <p>1<sup>re</sup> place au hackathon « Agents building Agents » (42 AI × BlackBox AI). Vainqueur de l'EPITECH Code Breaker (Corewar), finaliste avec 42sh.</p>
+          </li>
+        </ol>
+      </div>
+      <div class="career__col career__col--edu">
+        <h2 class="h2-sm">Formation</h2>
+        <ol class="education">
+          <li>
+            <div><h3>EPITECH</h3><span>Études d'informatique - GPA 3.04</span></div>
+            <span class="education__date">2024 → auj.</span>
+          </li>
+          <li>
+            <div><h3>Université Paris 1 Panthéon-Sorbonne</h3><span>Licence d'économie, option gestion</span></div>
+            <span class="education__date">2023 → 2024</span>
+          </li>
+          <li>
+            <div><h3>Collège-Lycée Sainte-Marie d'Antony</h3><span>Baccalauréat mention bien - Maths, Physique-Chimie, SES</span></div>
+            <span class="education__date">2015 → 2023</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section section--contact" id="contact" aria-labelledby="contact-title">
+    <div class="container container--contact">
+      <span class="eyebrow">04 - Contact</span>
+      <h2 id="contact-title">Un stage d'avril à fin juillet ? Parlons-en.</h2>
+      <p class="contact__lead">Ingénierie logicielle, IA, systèmes : écrivez-moi, je serai ravi d'échanger.</p>
+      <div class="contact__actions">
+        <a class="btn btn--primary btn--lg" href="mailto:etudes.leroy.antoine@gmail.com">
+          <svg class="lg-only" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          etudes.leroy.antoine@gmail.com</a>
+        <a class="btn btn--ghost btn--lg" href="https://github.com/leroy-antoine">github.com/leroy-antoine</a>
+        <a class="btn btn--ghost btn--lg" href="assets/CV_LEROY_ANTOINE.pdf" download="CV_LEROY_ANTOINE.pdf">CV (PDF)</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <span>© 2026 Antoine Leroy</span>
+    <span>Accessible au clavier et aux lecteurs d'écran · contrastes WCAG AA · animations réduites respectées</span>
+  </div>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
