@@ -1,0 +1,1 @@
+echo -ne "if 1 then\nendif\n" | ./42sh && echo -ne "if 0 then\nendif\n" && if 0 ls && if 1 ls

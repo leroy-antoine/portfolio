@@ -1,0 +1,1 @@
+echo -ne "if ( == ) then\nendif\n" | ./42sh

@@ -27,7 +27,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Schibsted+Grotesk:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="styles.css">
-<script>document.documentElement.classList.add('js')</script>
+<script>
+  // Posé avant le premier rendu : la hauteur des séquences épinglées ne doit pas changer après coup (CLS).
+  // Mêmes conditions que dans script.js : mouvement autorisé, pas d'économie de données, 360 px minimum.
+  (function () {
+    var root = document.documentElement;
+    root.classList.add('js');
+    var mq = function (q) { return window.matchMedia && window.matchMedia(q).matches; };
+    var saveData = navigator.connection && navigator.connection.saveData;
+    if (!mq('(prefers-reduced-motion: reduce)') && !mq('(max-width: 359px)') && !saveData) root.classList.add('seq-on');
+  })();
+</script>
 </head>
 <body id="top">
 <a class="skip" href="#contenu">Aller au contenu principal</a>
@@ -46,6 +56,7 @@
         <li><a href="#projets">Projets</a></li>
         <li><a href="#stack">Stack</a></li>
         <li><a href="#parcours">Parcours</a></li>
+        <li><a href="assets/CV_LEROY_ANTOINE.pdf" download="CV_LEROY_ANTOINE.pdf">CV<span class="sr-only"> (PDF, 135 ko)</span></a></li>
         <li><a class="site-nav__cta" href="#contact">Me contacter</a></li>
       </ul>
     </nav>
@@ -54,34 +65,448 @@
 
 <main id="contenu" tabindex="-1">
 
-  <!-- Héro -->
-  <section class="section section--hero" aria-labelledby="hero-title">
-    <div class="container container--hero">
-      <div class="hero">
-        <div class="hero__text">
-          <p class="badge">
-            <span class="badge__dot" aria-hidden="true"></span>
-            <span class="lg-only">Disponible pour un stage · avril → fin juillet</span>
-            <span class="sm-only">Stage · avril → fin juillet</span>
-          </p>
-          <h1 id="hero-title">Ingénieur logiciel &amp; développeur IA.</h1>
-          <p class="hero__lead">Étudiant à EPITECH, je construis des systèmes bas niveau en <strong>C et C++</strong> et j'entraîne des modèles d'apprentissage par renforcement en <strong>Python</strong>. Je cherche un stage d'ingénieur logiciel ou de développeur IA.</p>
-          <div class="hero__actions">
-            <a class="btn btn--primary btn--primary-wide" href="#projets">Voir mes projets
-              <svg class="lg-only" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></a>
-            <a class="btn btn--ghost btn--grow" href="assets/CV_LEROY_ANTOINE.pdf" download="CV_LEROY_ANTOINE.pdf">
-              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-              <span class="sm-only">CV (PDF)</span>
-              <span class="lg-only">Télécharger le CV <span class="muted">(PDF, 135 ko)</span></span></a>
-          </div>
+  <!-- Héro. Avec JavaScript et animations autorisées, script.js épingle la scène (.seq-on) et pilote
+       la mise au point : le titre se floute et s'efface, la vidéo se défloute puis se pose dans son cadre.
+       Sans JavaScript ou en mouvement réduit : affiche nette du toucher, titre et légende visibles. -->
+  <section class="section section--hero hero-seq" aria-labelledby="hero-title" data-seq="hero">
+    <div class="hero-seq__track">
+    <div class="hero-seq__stage" data-video-group data-video-observe>
+      <figure class="hero-seq__figure">
+        <div class="hero-seq__media">
+          <video class="hero-seq__video" muted loop playsinline preload="auto" data-autoplay poster="assets/lander-hero-poster.jpg" width="2400" height="1600" aria-describedby="hero-caption" aria-label="Vidéo sans son de 6 secondes : l'agent PPO pilote le module lunaire malgré le vent et se pose entre les deux drapeaux">
+            <source src="assets/lander-hero.mp4" type="video/mp4">
+            <source src="assets/lander-hero.webm" type="video/webm">
+          </video>
+          <div class="hero-seq__veil" aria-hidden="true"></div>
         </div>
-        <figure class="hero__media">
-          <video class="video video--hero" src="assets/ppo-ep700.mp4" poster="assets/ppo-ep700-poster.jpg" width="600" height="400" controls muted loop preload="metadata" playsinline data-autoplay aria-label="Vidéo sans son de 5 secondes : l'agent PPO pilote le module lunaire vers la zone d'atterrissage entre les deux drapeaux"></video>
-          <figcaption>Agent PPO sur <span class="strong">Lunar Lander</span>, épisode 700 de l'entraînement. Vidéo sans son, en boucle.</figcaption>
-        </figure>
+        <figcaption class="hero-seq__caption" id="hero-caption">
+          <span class="spec">Lunar Lander · agent PPO avec vent</span>
+          <span class="hero-seq__caption-text">Évaluation de l'agent entraîné : il se pose entre les drapeaux, score 313,8 (seuil de réussite : 200).</span>
+          <a class="link-src" href="#p-rl">Voir le projet
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></a>
+        </figcaption>
+      </figure>
+
+      <div class="hero-seq__title">
+        <p class="badge">
+          <span class="badge__dot" aria-hidden="true"></span>
+          <span class="lg-only">Disponible pour un stage · avril → fin juillet</span>
+          <span class="sm-only">Stage · avril → fin juillet</span>
+        </p>
+        <h1 id="hero-title">Ingénieur logiciel &amp; développeur&nbsp;IA.</h1>
       </div>
 
-      <ul class="facts" aria-label="Faits marquants">
+      <span class="hero-seq__cue" aria-hidden="true">Défiler</span>
+
+      <button class="hero-seq__toggle video-toggle" type="button" aria-label="Mettre la vidéo en pause" hidden>
+        <svg class="icon-pause" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        <svg class="icon-play" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+      </button>
+    </div>
+    </div>
+
+  </section>
+
+  <!-- Projets : une scène plein écran par projet, chacune avec son entrée (script.js : initScenes). -->
+  <section class="projects" id="projets" aria-labelledby="projets-title">
+    <h2 id="projets-title" class="sr-only">Projets</h2>
+
+    <!-- Lunar Lander : carrousel chronologique (Q-Learning → Deep Q-Learning → PPO 250 → PPO 700).
+         Le graphique et les chiffres de droite suivent la diapositive affichée (script.js). -->
+    <article class="scene scene--lunar" aria-labelledby="p-rl" data-scene="lunar">
+      <div class="scene__stage">
+      <div class="scene__inner" data-anim="lunar">
+        <header class="scene__head">
+          <h3 id="p-rl">Deep Learning - Lunar Lander</h3>
+          <span class="spec">Projet phare · IA · Python</span>
+          <p class="scene__lead">Trois algorithmes d'apprentissage par renforcement comparés sur <span class="strong">lunar-lander-v3</span> (Gymnasium) : Q-Learning discrétisé, Deep Q-Learning, puis PPO face à du vent. 95&nbsp;% de réussite sur Lunar Lander.</p>
+        </header>
+        <div class="rl-grid" id="rl-panel">
+          <!-- Carrousel réutilisable (script.js : initCarousel).
+               Pour ajouter une vidéo : copier un bloc <li class="slide"> … </li> ci-dessous, à l'endroit voulu,
+               puis changer data-label (nom court affiché et annoncé), src, poster, aria-label (description de la vidéo)
+               et la légende <figcaption>. Le contenu de <template class="slide__side"> s'affiche dans la colonne
+               de droite quand la diapositive est visible (graphique et chiffres) ; il peut rester vide.
+               La numérotation « n sur N », les points et les boutons sont générés automatiquement. -->
+          <section class="carousel" aria-roledescription="carrousel" aria-label="Vidéos Lunar Lander, du Q-Learning au PPO" data-carousel data-video-group>
+            <ol class="carousel__track">
+            <li class="slide" data-label="Q-Learning">
+              <figure class="slide__figure">
+                <video class="video" src="assets/q-learning-best.mp4" poster="assets/q-learning-best-poster.jpg" width="600" height="400" muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo sans son : meilleur épisode du Q-Learning discrétisé, l'agent approche de la zone d'atterrissage sans l'atteindre"></video>
+                <figcaption><span class="slide__label">Q-Learning</span> Q-Learning discrétisé : l'agent approche l'objectif (+200) sans l'atteindre, limite de la discrétisation.</figcaption>
+              </figure>
+              <template class="slide__side">
+            <figure class="rl-graph">
+              <a class="thumb thumb--graph" href="assets/q-learning-training.png" aria-label="Agrandir le graphique : performance d'entraînement Q-Learning">
+                <img src="assets/q-learning-training.png" width="640" height="480" loading="lazy" decoding="async" alt="Courbe de récompense moyenne sur les 100 derniers épisodes, sur 50 000 épisodes : elle oscille sans converger, le plus souvent entre 40 et 100, avec un creux à environ -30 vers l'épisode 21 000."></a>
+              <figcaption>Courbe d'entraînement étendue (50 000 épisodes).</figcaption>
+            </figure>
+            <dl class="metrics">
+              <div><dt>Entraînement</dt><dd>50&nbsp;000+ épisodes</dd></div>
+              <div><dt>Résultat</dt><dd>Récompense moy. +60 à +80</dd></div>
+            </dl>
+              </template>
+            </li>
+            <li class="slide" data-label="Deep Q-Learning">
+              <figure class="slide__figure">
+                <video class="video" src="assets/dql-ep9500.mp4" poster="assets/dql-ep9500-poster.jpg" width="600" height="400" muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo sans son : épisode 9 500 de l'évaluation du Deep Q-Learning sur Lunar Lander"></video>
+                <figcaption><span class="slide__label">Deep Q-Learning</span> Deep Q-Learning : un réseau de neurones remplace la table Q et converge en une seule session.</figcaption>
+              </figure>
+              <template class="slide__side">
+            <figure class="rl-graph">
+              <a class="thumb thumb--graph" href="assets/dql-training.png" aria-label="Agrandir le graphique : performance d'entraînement DQL">
+                <img src="assets/dql-training.png" width="640" height="480" loading="lazy" decoding="async" alt="Courbe de récompense moyenne sur 14 000 épisodes : de -200 au départ, elle franchit 0 vers l'épisode 2 000, puis se stabilise entre 250 et 280 à partir de l'épisode 4 500."></a>
+              <figcaption>Récompense moyenne par épisode : le seuil de résolution (+200) est dépassé dès ~3 000 épisodes.</figcaption>
+            </figure>
+            <dl class="metrics">
+              <div><dt>Entraînement</dt><dd>14&nbsp;000 épisodes</dd></div>
+              <div><dt>Résultat</dt><dd>Résolu, moy. ~270</dd></div>
+            </dl>
+              </template>
+            </li>
+            <li class="slide" data-label="PPO avec vent · épisode 250">
+              <figure class="slide__figure">
+                <video class="video" src="assets/ppo-ep250.mp4" poster="assets/ppo-ep250-poster.jpg" width="600" height="400" muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo sans son : épisode 250, l'agent PPO encore hésitant descend vers la zone d'atterrissage"></video>
+                <figcaption><span class="slide__label">PPO avec vent · épisode 250</span> Épisode 250 : l'agent PPO, encore hésitant, descend vers la zone d'atterrissage.</figcaption>
+              </figure>
+              <template class="slide__side">
+            <figure class="rl-graph">
+              <a class="thumb thumb--graph graph-upto" style="--upto: 33.6%" href="assets/ppo-crash-rate.png" aria-label="Agrandir le graphique : taux de crash PPO">
+                <img class="graph-upto__base" src="assets/ppo-crash-rate.png" width="960" height="720" loading="lazy" decoding="async" alt="Courbe du taux de crash sur environ 950 épisodes : pic à 75 % au départ, chute vers 35 à 45 %, minimum de 18 % vers l'épisode 300, puis environ 32 % en fin d'entraînement."><img class="graph-upto__live" src="assets/ppo-crash-rate.png" width="960" height="720" loading="lazy" decoding="async" alt=""><span class="graph-upto__mark" aria-hidden="true"></span></a>
+              <figcaption>Taux de crash (moyenne glissante) au fil de l'entraînement PPO avec vent, tracé jusqu'à l'épisode 250.</figcaption>
+            </figure>
+            <dl class="metrics">
+              <div><dt>Entraînement</dt><dd>~950 épisodes</dd></div>
+              <div><dt>Crash avec vent</dt><dd>~75&nbsp;% → ~30&nbsp;%</dd></div>
+            </dl>
+              </template>
+            </li>
+            <li class="slide" data-label="PPO avec vent · épisode 700">
+              <figure class="slide__figure">
+                <video class="video" src="assets/ppo-ep700.mp4" poster="assets/ppo-ep700-poster.jpg" width="600" height="400" muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo sans son : épisode 700, l'agent PPO se stabilise et vise la zone entre les drapeaux"></video>
+                <figcaption><span class="slide__label">PPO avec vent · épisode 700</span> PPO sur la variante avec vent : de l'épisode 250 à 700, la politique devient robuste aux perturbations.</figcaption>
+              </figure>
+              <template class="slide__side">
+            <figure class="rl-graph">
+              <a class="thumb thumb--graph graph-upto" style="--upto: 74.4%" href="assets/ppo-crash-rate.png" aria-label="Agrandir le graphique : taux de crash PPO">
+                <img class="graph-upto__base" src="assets/ppo-crash-rate.png" width="960" height="720" loading="lazy" decoding="async" alt="Courbe du taux de crash sur environ 950 épisodes : pic à 75 % au départ, chute vers 35 à 45 %, minimum de 18 % vers l'épisode 300, puis environ 32 % en fin d'entraînement."><img class="graph-upto__live" src="assets/ppo-crash-rate.png" width="960" height="720" loading="lazy" decoding="async" alt=""><span class="graph-upto__mark" aria-hidden="true"></span></a>
+              <figcaption>Taux de crash (moyenne glissante) au fil de l'entraînement PPO avec vent, tracé jusqu'à l'épisode 700.</figcaption>
+            </figure>
+            <dl class="metrics">
+              <div><dt>Entraînement</dt><dd>~950 épisodes</dd></div>
+              <div><dt>Crash avec vent</dt><dd>~75&nbsp;% → ~30&nbsp;%</dd></div>
+            </dl>
+              </template>
+            </li>
+            </ol>
+            <div class="carousel__controls" hidden>
+              <button class="carousel__btn carousel__prev" type="button" aria-label="Vidéo précédente">
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <div class="carousel__dots"></div>
+              <button class="carousel__btn carousel__next" type="button" aria-label="Vidéo suivante">
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+              <button class="video-toggle carousel__toggle" type="button" aria-label="Mettre la vidéo en pause" hidden>
+                <svg class="icon-pause" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+                <svg class="icon-play" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+              </button>
+            </div>
+            <p class="sr-only carousel__status" aria-live="polite"></p>
+          </section>
+          <!-- Colonne de droite : sans JavaScript, celle de la première diapositive. -->
+          <div class="rl-side" id="rl-side">
+            <figure class="rl-graph">
+              <a class="thumb thumb--graph" href="assets/q-learning-training.png" aria-label="Agrandir le graphique : performance d'entraînement Q-Learning">
+                <img src="assets/q-learning-training.png" width="640" height="480" loading="lazy" decoding="async" alt="Courbe de récompense moyenne sur les 100 derniers épisodes, sur 50 000 épisodes : elle oscille sans converger, le plus souvent entre 40 et 100, avec un creux à environ -30 vers l'épisode 21 000."></a>
+              <figcaption>Courbe d'entraînement étendue (50 000 épisodes).</figcaption>
+            </figure>
+            <dl class="metrics">
+              <div><dt>Entraînement</dt><dd>50&nbsp;000+ épisodes</dd></div>
+              <div><dt>Résultat</dt><dd>Récompense moy. +60 à +80</dd></div>
+            </dl>
+          </div>
+        </div>
+        <div class="scene__foot">
+          <ul class="tags" aria-label="Technologies">
+            <li>Python</li><li>Gymnasium</li><li>PPO</li><li>DQN</li><li>Q-Learning</li>
+          </ul>
+          <a class="link-src" href="https://github.com/leroy-antoine/Deep-learning">Code source<span class="sr-only"> du projet Deep Learning sur GitHub</span>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </div>
+      </div>
+      </div>
+    </article>
+
+    <!-- Zappy. TODO Antoine : ajouter le lien GitHub du dépôt quand il existera. -->
+    <article class="scene scene--zappy" aria-labelledby="p-zappy" data-scene="zappy">
+      <div class="scene__stage">
+      <div class="scene__inner" data-anim="zappy">
+        <header class="scene__head">
+          <h3 id="p-zappy">Zappy - simulation multijoueur en réseau</h3>
+          <span class="spec">Projet phare · Réseau · C++ · Python</span>
+          <p class="scene__lead">Un jeu en réseau où des équipes d'IA s'affrontent sur Trantor, un monde en tuiles : la première équipe à amener 6 joueurs au niveau maximal l'emporte. Trois programmes dialoguent en TCP via un protocole texte.</p>
+        </header>
+        <figure class="zappy__media">
+          <!-- Démo recadrée sur la fenêtre du jeu (terminaux retirés) : contrôles natifs conservés pour avancer dans la minute de démo. -->
+          <video class="video video--zappy" poster="assets/zappy-poster-crop.jpg" width="1180" height="628" controls muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo de démonstration de Zappy, 49 secondes, sans son : le client graphique 3D affiche la carte en damier, les ressources et les joueurs des deux équipes en mode navigation et interaction, puis la vue 2D après un appui sur TAB">
+            <source src="assets/zappy-demo-crop.mp4" type="video/mp4">
+            <source src="assets/zappy-demo-crop.webm" type="video/webm">
+          </video>
+          <figcaption>Démo du client graphique 3D : caméra libre, sélection de tuiles et de joueurs, équipes en rouge et noir.</figcaption>
+        </figure>
+        <div class="zappy__net">
+          <span class="zappy__wire" aria-hidden="true"><span class="zappy__packet"></span><span class="zappy__packet zappy__packet--back"></span></span>
+          <dl class="parts">
+            <div><dt>Serveur</dt><dd>Simule le monde : apparition des ressources, écoulement du temps, incantations. Gère les connexions TCP de tous les clients.</dd></div>
+            <div><dt>Client graphique · C++</dt><dd>Visualisation 3D en temps réel. Bibliothèques graphiques modulaires (.so) interchangeables à chaud avec TAB.</dd></div>
+            <div><dt>IA · Python</dt><dd>Pilote un habitant par commandes réseau : survie, collecte et coordination par broadcast pour s'élever.</dd></div>
+          </dl>
+        </div>
+        <div class="scene__foot">
+          <ul class="tags" aria-label="Technologies">
+            <li>C++</li><li>Python</li><li>TCP / sockets</li><li>Protocole client-serveur</li><li>3D temps réel</li><li>Makefile</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    </article>
+
+    <!-- Raytracer : rayons lancés depuis la caméra, puis rendu progressif (de pixelisé à net) avec le compteur de rayons. -->
+    <article class="scene scene--ray" aria-labelledby="p-ray" data-scene="ray">
+      <div class="scene__stage">
+      <div class="scene__inner" data-anim="ray">
+        <header class="scene__head">
+          <h3 id="p-ray">Raytracer</h3>
+          <span class="spec">Graphisme 3D · C++20</span>
+          <p class="scene__lead">Moteur de lancer de rayons modulaire : scènes décrites en libconfig, sphères, plans et cônes créés par factories, matériaux, ombres et lumières multiples.</p>
+        </header>
+        <div class="ray">
+          <a class="ray__stage zoomable" href="assets/raytracer-spheres.png" aria-label="Agrandir le rendu des sphères">
+            <img class="ray__img" src="assets/raytracer-spheres.png" width="870" height="487" loading="lazy" decoding="async" alt="Rendu du raytracer : une douzaine de sphères colorées posées sur un plan gris, avec des ombres portées nettes">
+            <svg class="ray__rays" viewBox="0 0 870 487" aria-hidden="true">
+              <path class="ray__ray" pathLength="1" style="--i:0" d="M-4 330 L200 320"/>
+              <path class="ray__ray" pathLength="1" style="--i:1" d="M-4 330 L186 262"/>
+              <path class="ray__ray" pathLength="1" style="--i:2" d="M-4 330 L178 226"/>
+              <path class="ray__ray" pathLength="1" style="--i:3" d="M-4 330 L286 216"/>
+              <path class="ray__ray" pathLength="1" style="--i:4" d="M-4 330 L316 237"/>
+              <path class="ray__ray" pathLength="1" style="--i:5" d="M-4 330 L361 204"/>
+              <path class="ray__ray" pathLength="1" style="--i:6" d="M-4 330 L367 270"/>
+              <path class="ray__ray" pathLength="1" style="--i:7" d="M-4 330 L403 219"/>
+              <path class="ray__ray" pathLength="1" style="--i:8" d="M-4 330 L420 193"/>
+              <path class="ray__ray" pathLength="1" style="--i:9" d="M-4 330 L465 204"/>
+              <path class="ray__ray" pathLength="1" style="--i:10" d="M-4 330 L464 241"/>
+              <path class="ray__ray" pathLength="1" style="--i:11" d="M-4 330 L528 221"/>
+              <path class="ray__shadow" pathLength="1" style="--i:0" d="M200 320 L830 30"/>
+              <path class="ray__shadow" pathLength="1" style="--i:1" d="M286 216 L830 30"/>
+              <path class="ray__shadow" pathLength="1" style="--i:2" d="M367 270 L830 30"/>
+              <path class="ray__shadow" pathLength="1" style="--i:3" d="M465 204 L830 30"/>
+              <circle class="ray__hit" style="--i:0" cx="200" cy="320" r="14"/>
+              <circle class="ray__hit" style="--i:1" cx="186" cy="262" r="14"/>
+              <circle class="ray__hit" style="--i:2" cx="178" cy="226" r="14"/>
+              <circle class="ray__hit" style="--i:3" cx="286" cy="216" r="14"/>
+              <circle class="ray__hit" style="--i:4" cx="316" cy="237" r="14"/>
+              <circle class="ray__hit" style="--i:5" cx="361" cy="204" r="14"/>
+              <circle class="ray__hit" style="--i:6" cx="367" cy="270" r="14"/>
+              <circle class="ray__hit" style="--i:7" cx="403" cy="219" r="14"/>
+              <circle class="ray__hit" style="--i:8" cx="420" cy="193" r="14"/>
+              <circle class="ray__hit" style="--i:9" cx="465" cy="204" r="14"/>
+              <circle class="ray__hit" style="--i:10" cx="464" cy="241" r="14"/>
+              <circle class="ray__hit" style="--i:11" cx="528" cy="221" r="14"/>
+              <g class="ray__cam" transform="translate(0 330)"><rect x="0" y="-11" width="22" height="22" rx="4"/><path d="M22 -6 L32 -11 V11 L22 6Z"/></g>
+              <circle class="ray__light" cx="830" cy="30" r="9"/>
+            </svg>
+          </a>
+          <div class="ray__side">
+            <p class="ray__counter"><span class="ray__count" data-count="423690" data-format="fr">423&nbsp;690</span><span class="ray__count-label">rayons primaires lancés : 870 × 487 pixels, un rayon par pixel</span></p>
+            <a class="thumb zoomable" href="assets/raytracer-room.png" aria-label="Agrandir le rendu d'une pièce aux murs colorés avec sphères et cônes">
+              <img class="cover" src="assets/raytracer-room.png" width="870" height="487" loading="lazy" decoding="async" alt="Rendu : pièce aux murs rose et vert, sphères posées sur des cônes, éclairage ponctuel"></a>
+          </div>
+        </div>
+        <figure class="uml" data-stagger>
+          <ol class="uml__flow" aria-label="Architecture du moteur : les primitives et les matériaux sont créés par des fabriques, puis assemblés par le SceneBuilder">
+            <li class="uml__box"><span class="uml__name">IPrimitive</span><span class="uml__member">hits(const Ray &amp;)</span><span class="uml__member">getMaterial()</span><span class="uml__member">getPosition()</span></li>
+            <li class="uml__box"><span class="uml__name">PrimitiveFactory</span><span class="uml__member">createPrimitive(type)</span><span class="uml__member">registerType(name, func)</span></li>
+            <li class="uml__box uml__box--core"><span class="uml__name">SceneBuilder</span><span class="uml__member">build(configFile)</span><span class="uml__member">buildCamera(…)</span><span class="uml__member">buildPrimitives(…)</span><span class="uml__member">buildLights(…)</span></li>
+            <li class="uml__box"><span class="uml__name">MaterialsFactory</span><span class="uml__member">createMaterial(type)</span><span class="uml__member">hasType(type)</span></li>
+            <li class="uml__box"><span class="uml__name">IMaterial</span><span class="uml__member">calculateAmbient(light)</span><span class="uml__member">calculateNewLight(light)</span><span class="uml__member">getRayNewColor()</span></li>
+          </ol>
+          <figcaption>Architecture du moteur, redessinée d'après le <a class="zoomable" href="assets/raytracer-uml.png">diagramme UML d'origine</a> : les deux fabriques alimentent le SceneBuilder.</figcaption>
+        </figure>
+        <div class="scene__foot">
+          <ul class="tags" aria-label="Technologies">
+            <li>C++20</li><li>CMake</li><li>libconfig++</li>
+          </ul>
+          <a class="link-src" href="https://github.com/leroy-antoine/Raytracer">Code source<span class="sr-only"> du Raytracer</span>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </div>
+      </div>
+      </div>
+    </article>
+
+    <!-- Doctor Cvrie : vrai K-means (k = 10) sur les 1 011 témoignages, rejoué itération par itération (assets/cvrie-kmeans.json). -->
+    <article class="scene scene--cvrie" aria-labelledby="p-doc" data-scene="cvrie">
+      <div class="scene__stage">
+      <div class="scene__inner" data-anim="cvrie">
+        <header class="scene__head">
+          <h3 id="p-doc">Doctor Cvrie - diagnostic médical</h3>
+          <span class="spec">IA · Santé · Python</span>
+          <p class="scene__lead">Deux approches : K-means sur 1&nbsp;011 témoignages de patients vectorisés en TF-IDF, et classification de radiographies thoraciques (sain, pneumonie, tuberculose) réduites en 128×128 puis par PCA.</p>
+        </header>
+        <div class="cvrie">
+          <!-- Carrousel d'images : vraies données (TF-IDF, PCA, K-means k = 10, random_state = 42), comme dans le notebook. -->
+          <section class="carousel cvrie__carousel" aria-roledescription="carrousel" aria-label="Clustering K-means des témoignages, étape par étape" data-carousel data-side="#cvrie-explain">
+            <ol class="carousel__track">
+              <li class="slide" data-label="Méthode du coude">
+                <figure class="slide__figure">
+                  <a class="cvrie__frame zoomable" href="assets/cvrie-elbow-dark.png" aria-label="Agrandir : Méthode du coude">
+                    <img src="assets/cvrie-elbow-dark.png" width="1200" height="900" loading="lazy" decoding="async" alt="Méthode du coude : la distorsion moyenne chute fortement jusqu'à environ 5 clusters puis décroît lentement jusqu'à 50 ; k = 10 est retenu."></a>
+                </figure>
+                <template class="slide__side"><h4 class="cvrie__explain-title">Le K-means, et le choix de k</h4><p>Le K-means regroupe des points en k groupes. On place k centroïdes, chaque point rejoint le plus proche, puis chaque centroïde se déplace au centre de ses points ; on recommence jusqu'à ce que plus aucun point ne change de groupe.</p><p>Ici, chaque point est le témoignage d'un patient, transformé en vecteur de mots (TF-IDF) puis projeté en deux dimensions (PCA). Le graphique mesure la distorsion, la distance moyenne au centroïde, pour k de 1 à 49 : elle chute jusqu'à environ 5 groupes puis ne baisse presque plus. k = 10 a été retenu.</p></template>
+              </li>
+              <li class="slide" data-label="Itération 1">
+                <figure class="slide__figure">
+                  <a class="cvrie__frame zoomable" href="assets/cvrie-kmeans-it01.png" aria-label="Agrandir : Itération 1">
+                    <img src="assets/cvrie-kmeans-it01.png" width="1200" height="900" loading="lazy" decoding="async" alt="Nuage de 1 011 témoignages projetés en 2D par PCA, colorés selon leur cluster après la première itération du K-means, avec les 10 centroïdes en rouge."></a>
+                </figure>
+                <template class="slide__side"><h4 class="cvrie__explain-title">Première itération</h4><p>Les 10 centroïdes de départ sont placés par k-means++, loin les uns des autres. Chaque témoignage rejoint le centroïde le plus proche : les couleurs montrent ce premier découpage.</p><p>Les centroïdes, en rouge, se sont ensuite recentrés sur les points qui les ont rejoints.</p></template>
+              </li>
+              <li class="slide" data-label="Itération 3">
+                <figure class="slide__figure">
+                  <a class="cvrie__frame zoomable" href="assets/cvrie-kmeans-it03.png" aria-label="Agrandir : Itération 3">
+                    <img src="assets/cvrie-kmeans-it03.png" width="1200" height="900" loading="lazy" decoding="async" alt="Le même nuage après trois itérations : les centroïdes se sont déplacés vers le centre de leurs groupes."></a>
+                </figure>
+                <template class="slide__side"><h4 class="cvrie__explain-title">Troisième itération</h4><p>Deux itérations plus tard, les centroïdes ont glissé vers le cœur de leur groupe et les témoignages ont été réaffectés.</p><p>Le découpage se stabilise : d'une itération à l'autre, de moins en moins de points changent de couleur.</p></template>
+              </li>
+              <li class="slide" data-label="Convergence">
+                <figure class="slide__figure">
+                  <a class="cvrie__frame zoomable" href="assets/cvrie-kmeans-it11.png" aria-label="Agrandir : Convergence">
+                    <img src="assets/cvrie-kmeans-it11.png" width="1200" height="900" loading="lazy" decoding="async" alt="Le même nuage à la convergence, après 11 itérations : 10 groupes stables et leurs centroïdes."></a>
+                </figure>
+                <template class="slide__side"><h4 class="cvrie__explain-title">Convergence</h4><p>Après 11 itérations, plus aucun témoignage ne change de groupe : l'algorithme a convergé sur 10 groupes de patients au vocabulaire proche.</p><p>Dans le projet, un K-means entraîné sur les vecteurs TF-IDF complets prédit le groupe d'un nouveau témoignage, pour orienter le patient vers le bon service.</p></template>
+              </li>
+            </ol>
+            <div class="carousel__controls" hidden>
+              <button class="carousel__btn carousel__prev" type="button" aria-label="Image précédente">
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <div class="carousel__dots"></div>
+              <button class="carousel__btn carousel__next" type="button" aria-label="Image suivante">
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+            </div>
+            <p class="sr-only carousel__status" aria-live="polite"></p>
+          </section>
+          <div class="cvrie__side">
+            <!-- Explication de l'image affichée dans le carrousel (script.js) ; sans JavaScript, celle de la première. -->
+            <div class="cvrie__explain" id="cvrie-explain" aria-live="polite"><h4 class="cvrie__explain-title">Le K-means, et le choix de k</h4><p>Le K-means regroupe des points en k groupes. On place k centroïdes, chaque point rejoint le plus proche, puis chaque centroïde se déplace au centre de ses points ; on recommence jusqu'à ce que plus aucun point ne change de groupe.</p><p>Ici, chaque point est le témoignage d'un patient, transformé en vecteur de mots (TF-IDF) puis projeté en deux dimensions (PCA). Le graphique mesure la distorsion, la distance moyenne au centroïde, pour k de 1 à 49 : elle chute jusqu'à environ 5 groupes puis ne baisse presque plus. k = 10 a été retenu.</p></div>
+            <div class="stat">
+              <span class="stat__value" data-count="86" data-suffix="&nbsp;%">86&nbsp;%</span>
+              <span class="stat__label">de précision sur radiographies (Random Forest)</span>
+            </div>
+          </div>
+        </div>
+        <div class="scene__foot">
+          <ul class="tags" aria-label="Technologies">
+            <li>Python</li><li>scikit-learn</li><li>K-means</li><li>PCA</li><li>Random Forest</li>
+          </ul>
+          <a class="link-src" href="https://github.com/leroy-antoine/Doctor-Cvrie">Code source<span class="sr-only"> de Doctor Cvrie</span>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </div>
+      </div>
+      </div>
+    </article>
+
+    <!-- Arcade : au scroll, le cœur charge tour à tour un jeu et une bibliothèque d'affichage, sans redémarrer. -->
+    <article class="scene scene--arcade" aria-labelledby="p-arcade" data-scene="arcade">
+      <div class="scene__stage">
+      <div class="scene__inner" data-anim="arcade">
+        <header class="scene__head">
+          <h3 id="p-arcade">Arcade - borne modulaire</h3>
+          <span class="spec">Architecture · C++ · Équipe de 3</span>
+          <p class="scene__lead">Jeux et bibliothèques graphiques chargés dynamiquement (.so) et interchangeables à chaud : SFML, SDL2, NCURSES × Snake, Minesweeper.</p>
+        </header>
+        <figure class="arcade__media">
+          <!-- Enregistrement complet du terminal : les jeux s'y affichent aussi en NCURSES, il n'est donc pas recadré. -->
+          <video class="video video--arcade" poster="assets/arcade-poster.jpg" width="1850" height="1076" controls muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo de démonstration d'Arcade, 33 secondes, sans son : le menu, Snake puis le Démineur, affichés tour à tour avec SFML, SDL2 et NCURSES dans le terminal, sans redémarrer le programme">
+            <source src="assets/arcade.mp4" type="video/mp4">
+            <source src="assets/arcade.webm" type="video/webm">
+          </video>
+          <figcaption>Démo : le menu, Snake et le Démineur, passés à chaud de SFML à SDL2 puis à NCURSES (dans le terminal).</figcaption>
+        </figure>
+        <div class="cq arcade__diagram">
+          <p class="arch__hint" id="arcade-hint">Choisissez un jeu et une bibliothèque d'affichage : le cœur les charge à chaud, sans redémarrer.</p>
+          <div class="arch arch--live">
+            <div class="arch__group arch__group--games" role="group" aria-label="Jeu chargé (bibliothèque .so)">
+              <span class="arch__label" aria-hidden="true">Jeux .so</span>
+              <div class="arch__chips"><button type="button" class="chip" data-chip="game" aria-pressed="false">Menu</button><button type="button" class="chip" data-chip="game" aria-pressed="true">Snake</button><button type="button" class="chip" data-chip="game" aria-pressed="false">Minesweeper</button></div>
+            </div>
+            <svg class="arch__arrow arch__arrow--in" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a597ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <div class="arch__core">
+              <span class="arch__core-name">Core</span>
+              <span class="arch__core-meta">dlopen · à chaud</span>
+              <span class="arch__core-load" aria-live="polite"><span data-load="game">Snake</span> avec <span data-load="display">SDL2</span></span>
+            </div>
+            <svg class="arch__arrow arch__arrow--out" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a597ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <div class="arch__group arch__group--display" role="group" aria-label="Bibliothèque d'affichage (.so)">
+              <span class="arch__label" aria-hidden="true">Affichage .so</span>
+              <div class="arch__chips"><button type="button" class="chip" data-chip="display" aria-pressed="false">SFML</button><button type="button" class="chip" data-chip="display" aria-pressed="true">SDL2</button><button type="button" class="chip" data-chip="display" aria-pressed="false">NCURSES</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="scene__foot">
+          <ul class="tags" aria-label="Technologies">
+            <li>C++</li><li>CMake</li><li>SDL2</li><li>SFML</li>
+          </ul>
+          <a class="link-src" href="https://github.com/leroy-antoine/Arcade">Code source<span class="sr-only"> de Arcade</span>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </div>
+      </div>
+      </div>
+    </article>
+
+    <!-- my_shell : émulation dans le navigateur (script.js : initShell), d'après le code de 42sh.
+         Sans JavaScript, l'exemple statique ci-dessous reste affiché. -->
+    <article class="scene scene--shell" aria-labelledby="p-shell" data-scene="shell">
+      <div class="scene__stage">
+      <div class="scene__inner" data-anim="shell">
+        <header class="scene__head">
+          <h3 id="p-shell">my_shell (42sh)</h3>
+          <span class="spec">Système · C · Finaliste Code Breaker</span>
+          <p class="scene__lead">Shell inspiré de tcsh : exécution de commandes, pipes, séparateurs et redirections (&lt; &lt;&lt; &gt; ; |), environnement et builtins.</p>
+        </header>
+        <div class="term term--live" data-shell>
+          <div class="term__bar">
+            <span class="term__dots" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span class="term__title">42sh</span>
+            <span class="term__note">Émulation dans le navigateur</span>
+          </div>
+          <div class="term__screen" role="log" aria-label="Sortie du terminal 42sh" tabindex="0">
+            <span class="term__cmd"><span class="term__prompt">42sh&gt;</span> echo "hello" | cat -e &gt; out.txt ; cat out.txt</span>
+            <span class="term__out">hello$</span>
+            <span class="term__cmd"><span class="term__prompt">42sh&gt;</span> exit</span>
+          </div>
+          <form class="term__form" hidden>
+            <span class="term__ps" aria-hidden="true"></span>
+            <input class="term__input" id="shell-input" type="text" aria-label="Commande 42sh (émulation)" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send">
+          </form>
+          <div class="term__try" hidden>
+            <span class="term__try-label">Essayer :</span>
+          </div>
+        </div>
+        <div class="scene__foot">
+          <ul class="tags" aria-label="Technologies">
+            <li>C</li><li>Make</li><li>POSIX</li>
+          </ul>
+          <a class="link-src" href="https://github.com/leroy-antoine/my_shell">Code source<span class="sr-only"> de my_shell</span>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </div>
+      </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- À propos de moi : chiffres clés -->
+  <section class="section section--facts" id="a-propos" aria-labelledby="a-propos-title">
+    <div class="container container--facts">
+      <h2 id="a-propos-title">À propos de moi</h2>
+      <ul class="facts" data-anim="facts">
         <li class="fact">
           <span class="fact__title">1<sup>re</sup> place</span>
           <span class="fact__text">« Agents building Agents » · hackathon 42 AI x BlackBox AI · sept. 2025</span>
@@ -98,236 +523,27 @@
     </div>
   </section>
 
-  <!-- Projets -->
-  <section class="section" id="projets" aria-labelledby="projets-title">
-    <div class="container container--projects">
-      <div class="section-head section-head--split">
-        <div class="section-head__title">
-          <h2 id="projets-title">Projets sélectionnés</h2>
-        </div>
-        <p class="section-head__lead">Du machine learning au bas niveau : chaque projet renvoie vers son code source, ses vidéos et ses graphiques d'entraînement.</p>
-      </div>
-
-      <!-- Lunar Lander : le panneau ci-dessous est le rendu de l'onglet PPO (défaut), script.js le recalcule au clic. -->
-      <article class="card card--feature" aria-labelledby="p-rl">
-        <div class="card__top">
-          <div class="card__intro">
-            <h3 id="p-rl">Deep Learning - Lunar Lander</h3>
-            <span class="spec">Projet phare · IA · Python</span>
-            <p>Trois algorithmes d'apprentissage par renforcement comparés sur <span class="strong">lunar-lander-v3</span> (Gymnasium) : Q-Learning discrétisé, Deep Q-Learning, puis PPO face à du vent. 95&nbsp;% de réussite sur Lunar Lander.</p>
-          </div>
-          <a class="btn btn--ghost btn--sm" href="https://github.com/leroy-antoine/Deep-learning">Code source<span class="sr-only"> du projet Deep Learning sur GitHub</span>
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
-        </div>
-
-        <!-- Les boutons sont créés par script.js : sans JavaScript, seul l'onglet PPO (statique) est affiché. -->
-        <div class="tabs" id="rl-tabs" role="group" aria-label="Choisir l'algorithme" hidden></div>
-        <p class="sr-only" id="rl-status" role="status"></p>
-
-        <div class="rl-grid" id="rl-panel">
-          <figure class="rl-media">
-            <div class="video-grid">
-              <div class="video-item">
-                <video class="video video--sm" src="assets/ppo-ep250.mp4" poster="assets/ppo-ep250-poster.jpg" width="600" height="400" controls preload="metadata" playsinline aria-label="Vidéo sans son : épisode 250, l'agent PPO encore hésitant descend vers la zone d'atterrissage"></video>
-                <span class="video-item__label">Épisode 250</span>
-              </div>
-              <div class="video-item">
-                <video class="video video--sm" src="assets/ppo-ep700.mp4" poster="assets/ppo-ep700-poster.jpg" width="600" height="400" controls preload="metadata" playsinline aria-label="Vidéo sans son : épisode 700, l'agent PPO se stabilise et vise la zone entre les drapeaux"></video>
-                <span class="video-item__label">Épisode 700</span>
-              </div>
-            </div>
-            <figcaption>PPO sur la variante avec vent : de l'épisode 250 à 700, la politique devient robuste aux perturbations.</figcaption>
-          </figure>
-          <div class="rl-side">
-            <figure class="rl-graph">
-              <a class="thumb thumb--graph" href="assets/ppo-crash-rate.png" aria-label="Agrandir le graphique : taux de crash PPO">
-                <img src="assets/ppo-crash-rate.png" width="960" height="720" loading="lazy" decoding="async" alt="Courbe du taux de crash sur environ 950 épisodes : pic à 75 % au départ, chute vers 35 à 45 %, minimum de 18 % vers l'épisode 300, puis environ 32 % en fin d'entraînement."></a>
-              <figcaption>Taux de crash (moyenne glissante) au fil de l'entraînement PPO avec vent.</figcaption>
-            </figure>
-            <dl class="metrics">
-              <div><dt>Entraînement</dt><dd>~950 épisodes</dd></div>
-              <div><dt>Crash avec vent</dt><dd>~75&nbsp;% → ~30&nbsp;%</dd></div>
-            </dl>
-          </div>
-        </div>
-
-        <ul class="tags" aria-label="Technologies">
-          <li>Python</li><li>Gymnasium</li><li>PPO</li><li>DQN</li><li>Q-Learning</li>
-        </ul>
-      </article>
-
-      <!-- Zappy. TODO Antoine : ajouter le lien GitHub du dépôt quand il existera. -->
-      <article class="card card--feature" aria-labelledby="p-zappy">
-        <div class="card__intro card__intro--wide">
-          <h3 id="p-zappy">Zappy - simulation multijoueur en réseau</h3>
-          <span class="spec">Projet phare · Réseau · C++ · Python</span>
-          <p>Un jeu en réseau où des équipes d'IA s'affrontent sur Trantor, un monde en tuiles : la première équipe à amener 6 joueurs au niveau maximal l'emporte. Trois programmes dialoguent en TCP via un protocole texte.</p>
-        </div>
-        <div class="rl-grid rl-grid--start">
-          <figure class="rl-media">
-            <video class="video video--wide" src="assets/zappy-demo.mp4" poster="assets/zappy-poster.jpg" width="1280" height="720" controls preload="metadata" playsinline aria-label="Vidéo de démonstration de Zappy, 1 minute, sans son : le client graphique 3D affiche la carte en damier, les ressources et les joueurs des deux équipes, en mode navigation et interaction"></video>
-            <figcaption>Démo du client graphique 3D : caméra libre, sélection de tuiles et de joueurs, équipes en rouge et noir.</figcaption>
-          </figure>
-          <dl class="parts">
-            <div><dt>Serveur</dt><dd>Simule le monde : apparition des ressources, écoulement du temps, incantations. Gère les connexions TCP de tous les clients.</dd></div>
-            <div><dt>Client graphique · C++</dt><dd>Visualisation 3D en temps réel. Bibliothèques graphiques modulaires (.so) interchangeables à chaud avec TAB.</dd></div>
-            <div><dt>IA · Python</dt><dd>Pilote un habitant par commandes réseau : survie, collecte et coordination par broadcast pour s'élever.</dd></div>
-          </dl>
-        </div>
-        <ul class="tags" aria-label="Technologies">
-          <li>C++</li><li>Python</li><li>TCP / sockets</li><li>Protocole client-serveur</li><li>3D temps réel</li><li>Makefile</li>
-        </ul>
-      </article>
-
-      <div class="cards-grid">
-
-        <article class="card card--sm" aria-labelledby="p-doc">
-          <figure class="cq">
-            <div class="stack-12">
-              <a class="thumb" href="assets/cvrie-kmeans.png" aria-label="Agrandir le graphique de clustering K-means">
-                <img src="assets/cvrie-kmeans.png" width="578" height="435" loading="lazy" decoding="async" alt="Nuage de points : 1 011 témoignages de patients projetés en deux dimensions et répartis par K-means en 10 groupes de couleurs, avec leurs centroïdes en rouge"></a>
-              <div class="pair">
-                <a class="thumb thumb--round-sm" href="assets/cvrie-elbow.png" aria-label="Agrandir le graphique de la méthode du coude">
-                  <img src="assets/cvrie-elbow.png" width="708" height="470" loading="lazy" decoding="async" alt="Méthode du coude : la distorsion chute fortement jusqu'à environ 5 clusters puis décroît lentement jusqu'à 50"></a>
-                <div class="stat">
-                  <span class="stat__value">86&nbsp;%</span>
-                  <span class="stat__label">de précision sur radiographies (Random Forest)</span>
-                </div>
-              </div>
-            </div>
-          </figure>
-          <div class="card__intro card__intro--sm">
-            <h3 id="p-doc">Doctor Cvrie - diagnostic médical</h3>
-            <span class="spec">IA · Santé · Python</span>
-            <p>Deux approches : K-means sur 1&nbsp;011 témoignages de patients vectorisés en TF-IDF, et classification de radiographies thoraciques (sain, pneumonie, tuberculose) réduites en 128×128 puis par PCA.</p>
-          </div>
-          <div class="card__foot">
-            <ul class="tags tags--sm" aria-label="Technologies">
-              <li>Python</li><li>scikit-learn</li><li>K-means</li><li>PCA</li><li>Random Forest</li>
-            </ul>
-            <a class="link-src" href="https://github.com/leroy-antoine/Doctor-Cvrie">Code source<span class="sr-only"> de Doctor Cvrie</span>
-              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
-          </div>
-        </article>
-
-        <article class="card card--sm" aria-labelledby="p-arcade">
-          <figure class="cq">
-            <div class="arch" role="img" aria-label="Schéma d'architecture : le cœur de l'Arcade charge à l'exécution une bibliothèque de jeu (Snake, Minesweeper, Menu) et une bibliothèque d'affichage (SFML, SDL2, NCURSES). TAB change d'affichage, F3 change de jeu, sans redémarrer.">
-              <div class="arch__group">
-                <span class="arch__label">Jeux .so</span>
-                <div class="arch__chips"><span class="chip">Snake</span><span class="chip">Minesweeper</span><span class="chip">Menu</span></div>
-              </div>
-              <svg class="arch__arrow arch__arrow--in" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a597ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              <div class="arch__core">
-                <span class="arch__core-name">Core</span>
-                <span class="arch__core-meta">dlopen · à chaud</span>
-                <span class="arch__core-keys">TAB · F1 · F3</span>
-              </div>
-              <svg class="arch__arrow arch__arrow--out" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a597ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              <div class="arch__group arch__group--display">
-                <span class="arch__label">Affichage .so</span>
-                <div class="arch__chips"><span class="chip">SFML</span><span class="chip">SDL2</span><span class="chip">NCURSES</span></div>
-              </div>
-            </div>
-          </figure>
-          <div class="card__intro card__intro--sm">
-            <h3 id="p-arcade">Arcade - borne modulaire</h3>
-            <span class="spec">Architecture · C++ · Équipe de 3</span>
-            <p>Jeux et bibliothèques graphiques chargés dynamiquement (.so) et interchangeables à chaud : SFML, SDL2, NCURSES × Snake, Minesweeper.</p>
-          </div>
-          <div class="card__foot">
-            <ul class="tags tags--sm" aria-label="Technologies">
-              <li>C++</li><li>CMake</li><li>SDL2</li><li>SFML</li>
-            </ul>
-            <a class="link-src" href="https://github.com/leroy-antoine/Arcade">Code source<span class="sr-only"> de Arcade</span>
-              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
-          </div>
-        </article>
-
-        <article class="card card--sm" aria-labelledby="p-ray">
-          <figure class="cq">
-            <div class="stack-12">
-              <img class="cover" src="assets/raytracer-spheres.png" width="870" height="487" loading="lazy" decoding="async" alt="Rendu du raytracer : une douzaine de sphères colorées posées sur un plan gris, avec des ombres portées nettes">
-              <div class="pair">
-                <a class="thumb thumb--round-sm" href="assets/raytracer-room.png" aria-label="Agrandir le rendu d'une pièce aux murs colorés avec sphères et cônes">
-                  <img class="cover" src="assets/raytracer-room.png" width="870" height="487" loading="lazy" decoding="async" alt="Rendu : pièce aux murs rose et vert, sphères posées sur des cônes, éclairage ponctuel"></a>
-                <a class="thumb thumb--round-sm thumb--white" href="assets/raytracer-uml.png" aria-label="Agrandir le diagramme d'architecture du raytracer">
-                  <img src="assets/raytracer-uml.png" width="2041" height="784" loading="lazy" decoding="async" alt="Diagramme d'architecture : IPrimitive et PrimitiveFactory d'un côté, IMaterial et MaterialsFactory de l'autre, tous reliés au SceneBuilder"></a>
-              </div>
-            </div>
-          </figure>
-          <div class="card__intro card__intro--sm">
-            <h3 id="p-ray">Raytracer</h3>
-            <span class="spec">Graphisme 3D · C++20</span>
-            <p>Moteur de lancer de rayons modulaire : scènes décrites en libconfig, sphères, plans et cônes créés par factories, matériaux, ombres et lumières multiples.</p>
-          </div>
-          <div class="card__foot">
-            <ul class="tags tags--sm" aria-label="Technologies">
-              <li>C++20</li><li>CMake</li><li>libconfig++</li>
-            </ul>
-            <a class="link-src" href="https://github.com/leroy-antoine/Raytracer">Code source<span class="sr-only"> du Raytracer</span>
-              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
-          </div>
-        </article>
-
-        <article class="card card--sm" aria-labelledby="p-shell">
-          <figure class="cq">
-            <div class="term" role="img" aria-label="Terminal : exemple de commande avec pipe et redirection exécutée dans 42sh">
-              <div class="term__dots" aria-hidden="true"><span></span><span></span><span></span></div>
-              <span class="term__cmd"><span class="term__prompt">42sh&gt;</span> echo "hello" | cat -e &gt; out.txt ; cat out.txt</span>
-              <span class="term__out">hello$</span>
-              <span class="term__cmd"><span class="term__prompt">42sh&gt;</span> exit</span>
-            </div>
-          </figure>
-          <div class="card__intro card__intro--sm">
-            <h3 id="p-shell">my_shell (42sh)</h3>
-            <span class="spec">Système · C · Finaliste Code Breaker</span>
-            <p>Shell inspiré de tcsh : exécution de commandes, pipes, séparateurs et redirections (&lt; &lt;&lt; &gt; ; |), environnement et builtins.</p>
-          </div>
-          <div class="card__foot">
-            <ul class="tags tags--sm" aria-label="Technologies">
-              <li>C</li><li>Make</li><li>POSIX</li>
-            </ul>
-            <a class="link-src" href="https://github.com/leroy-antoine/my_shell">Code source<span class="sr-only"> de my_shell</span>
-              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
-          </div>
-        </article>
-      </div>
-
-      <article class="card card--sm card--wide" aria-labelledby="p-n8n">
-        <div class="card--wide__main">
-          <span class="card--wide__icon" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#a597ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M7.5 12h4l5-6M11.5 12l5 6"/></svg></span>
-          <div class="card--wide__text">
-            <h3 id="p-n8n">n8n Newsletter</h3>
-            <p>Automatisation d'une newsletter avec workflows n8n : inscription, connexion et envoi.</p>
-          </div>
-        </div>
-        <a class="link-src" href="https://github.com/leroy-antoine/n8n-newsletter">Code source<span class="sr-only"> de n8n Newsletter</span>
-          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
-      </article>
-    </div>
-  </section>
-
   <!-- Stack -->
-  <section class="section" id="stack" aria-labelledby="stack-title">
-    <div class="container container--stack">
-      <div class="section-head">
-        <div class="section-head__title">
-          <h2 id="stack-title">Ma stack technique</h2>
-        </div>
-      </div>
+  <section class="section section--stack" id="stack" aria-labelledby="stack-title">
+    <div class="container container--stack" data-anim="stack">
+      <h2 id="stack-title">Ma stack technique</h2>
       <div class="block">
         <h3 class="subhead">Stack principale</h3>
         <ul class="core-stack">
           <li>
-            <div class="core-stack__body"><span class="core-stack__name">C</span><span class="core-stack__text">Programmation système : shell POSIX, gestion mémoire, Corewar. Le socle de ma formation EPITECH.</span><span class="core-stack__proof">Dans : <a href="#p-shell">42sh</a></span></div>
+            <span class="core-stack__name">C</span>
+            <p class="core-stack__text">Programmation système : shell POSIX, gestion mémoire, Corewar. Le socle de ma formation EPITECH.</p>
+            <p class="core-stack__proof">Dans : <a href="#p-shell">42sh</a></p>
           </li>
           <li>
-            <div class="core-stack__body"><span class="core-stack__name">C++</span><span class="core-stack__text">Architecture orientée objet et modulaire : bibliothèques dynamiques, raytracing, CMake, tests.</span><span class="core-stack__proof">Dans : <a href="#p-zappy">Zappy</a> · <a href="#p-arcade">Arcade</a> · <a href="#p-ray">Raytracer</a></span></div>
+            <span class="core-stack__name">C++</span>
+            <p class="core-stack__text">Architecture orientée objet et modulaire : bibliothèques dynamiques, raytracing, CMake, tests.</p>
+            <p class="core-stack__proof">Dans : <a href="#p-zappy">Zappy</a> · <a href="#p-arcade">Arcade</a> · <a href="#p-ray">Raytracer</a></p>
           </li>
           <li>
-            <div class="core-stack__body"><span class="core-stack__name">Python</span><span class="core-stack__text">IA et data : apprentissage par renforcement, supervisé et non supervisé, tests automatisés.</span><span class="core-stack__proof">Dans : <a href="#p-rl">Lunar Lander</a> · <a href="#p-doc">Doctor Cvrie</a></span></div>
+            <span class="core-stack__name">Python</span>
+            <p class="core-stack__text">IA et data : apprentissage par renforcement, supervisé et non supervisé, tests automatisés.</p>
+            <p class="core-stack__proof">Dans : <a href="#p-rl">Lunar Lander</a> · <a href="#p-doc">Doctor Cvrie</a></p>
           </li>
         </ul>
       </div>
@@ -348,13 +564,11 @@
     </div>
   </section>
 
-  <!-- Parcours -->
-  <section class="section" id="parcours" aria-labelledby="parcours-title">
-    <div class="container container--career">
+  <!-- Parcours : expériences et formation alignées, même format de liste datée -->
+  <section class="section section--career" id="parcours" aria-labelledby="parcours-title">
+    <div class="container container--career" data-anim="career">
       <div class="career__col career__col--xp">
-        <div class="section-head__title">
-          <h2 id="parcours-title">Expériences</h2>
-        </div>
+        <h2 id="parcours-title">Expériences</h2>
         <ol class="timeline">
           <li>
             <span class="timeline__date">Janv. → juil. 2026</span>
@@ -369,19 +583,22 @@
         </ol>
       </div>
       <div class="career__col career__col--edu">
-        <h2 class="h2-sm">Formation</h2>
-        <ol class="education">
+        <h2>Formation</h2>
+        <ol class="timeline timeline--edu">
           <li>
-            <div><h3>EPITECH</h3><span>Études d'informatique - GPA 3.04</span></div>
-            <span class="education__date">2024 → auj.</span>
+            <span class="timeline__date">2024 → auj.</span>
+            <h3>EPITECH</h3>
+            <p>Études d'informatique - GPA 3.04</p>
           </li>
           <li>
-            <div><h3>Université Paris 1 Panthéon-Sorbonne</h3><span>Licence d'économie, option gestion</span></div>
-            <span class="education__date">2023 → 2024</span>
+            <span class="timeline__date">2023 → 2024</span>
+            <h3>Université Paris 1 Panthéon-Sorbonne</h3>
+            <p>Licence d'économie, option gestion</p>
           </li>
           <li>
-            <div><h3>Collège-Lycée Sainte-Marie d'Antony</h3><span>Baccalauréat mention bien - Maths, Physique-Chimie, SES</span></div>
-            <span class="education__date">2015 → 2023</span>
+            <span class="timeline__date">2015 → 2023</span>
+            <h3>Collège-Lycée Sainte-Marie d'Antony</h3>
+            <p>Baccalauréat mention bien - Maths, Physique-Chimie, SES</p>
           </li>
         </ol>
       </div>
@@ -390,7 +607,7 @@
 
   <!-- Contact -->
   <section class="section section--contact" id="contact" aria-labelledby="contact-title">
-    <div class="container container--contact">
+    <div class="container container--contact" data-anim="contact">
       <h2 id="contact-title">Un stage d'avril à fin juillet ? Parlons-en.</h2>
       <p class="contact__lead">Ingénierie logicielle, IA, systèmes : écrivez-moi, je serai ravi d'échanger.</p>
       <div class="contact__actions">
@@ -412,5 +629,6 @@
 </footer>
 
 <script src="script.js" defer></script>
+<script src="shell.js" defer></script>
 </body>
 </html>
