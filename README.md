@@ -70,7 +70,7 @@ Après le premier déploiement, remplacer dans `index.html` la valeur relative d
 ## Accessibilité et performance
 
 - Lien d'évitement, repères `header` / `nav` / `main` / `footer`, hiérarchie de titres `h1` → `h2` → `h3`, `lang="fr"`.
-- Focus visible (contour 3 px `#7cb8ff`), cibles d'au moins 44 px.
+- Focus visible (contour 3 px `#a597ff`), cibles d'au moins 44 px.
 - Vidéos : `controls`, `preload="metadata"`, `poster` quand il existe, pas de lecture automatique.
 - Menu burger : `aria-expanded`, `aria-controls`, fermeture avec Échap. Onglets : boutons avec `aria-pressed`, annonce du changement dans une zone `role="status"`.
 - `prefers-reduced-motion` respecté.

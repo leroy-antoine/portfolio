@@ -97,7 +97,8 @@
       id: 'ppo',
       label: 'PPO + vent',
       episodes: '~950 épisodes',
-      result: 'Crashs ~75\u00a0% → ~30\u00a0%',
+      resultLabel: 'Crash avec vent',
+      result: '~75\u00a0% → ~30\u00a0%',
       videos: [
         {
           src: 'assets/ppo-ep250.mp4',
@@ -156,7 +157,7 @@
         </figure>
         <dl class="metrics">
           <div><dt>Entraînement</dt><dd>${escapeHtml(algo.episodes)}</dd></div>
-          <div><dt>Résultat</dt><dd>${escapeHtml(algo.result)}</dd></div>
+          <div><dt>${escapeHtml(algo.resultLabel || 'Résultat')}</dt><dd>${escapeHtml(algo.result)}</dd></div>
         </dl>
       </div>`;
   }
@@ -168,6 +169,12 @@
     if (!algo) return;
     buttons.forEach((button, key) => button.setAttribute('aria-pressed', String(key === id)));
     panel.innerHTML = panelHtml(algo);
+    if (announce) {
+      panel.classList.remove('is-swapping');
+      void panel.offsetWidth;
+      panel.classList.add('is-swapping');
+      if (window.revealGraphs) window.revealGraphs(panel);
+    }
     if (announce && status) {
       status.textContent = `${algo.label} : vidéo, graphique et chiffres mis à jour.`;
     }
@@ -186,4 +193,55 @@
 
   // Le HTML statique contient déjà l'onglet par défaut (PPO) : pas de nouveau rendu au chargement.
   tabsEl.hidden = false;
+})();
+
+/* ==========================================================================
+   Vidéo du héro : lecture automatique en boucle, sauf si l'utilisateur réduit les animations
+   ========================================================================== */
+(function initHeroVideo() {
+  const video = document.querySelector('video[data-autoplay]');
+  if (!video || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const play = video.play();
+  if (play && play.catch) play.catch(() => {});
+})();
+
+/* ==========================================================================
+   Navigation : section visible marquée avec aria-current
+   ========================================================================== */
+(function initScrollSpy() {
+  const links = [...document.querySelectorAll('.site-nav a[href^="#"]')];
+  const map = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+  const sections = [...map.keys()].map((id) => document.getElementById(id)).filter(Boolean);
+  if (!sections.length || !('IntersectionObserver' in window)) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      links.forEach((a) => a.removeAttribute('aria-current'));
+      map.get(entry.target.id).setAttribute('aria-current', 'true');
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach((s) => observer.observe(s));
+})();
+
+/* ==========================================================================
+   Graphique d'entraînement : tracé de gauche à droite à l'arrivée dans l'écran
+   ========================================================================== */
+(function initGraphReveal() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-in');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.4 });
+
+  window.revealGraphs = (root) => {
+    root.querySelectorAll('.thumb--graph').forEach((el) => {
+      el.classList.add('reveal-graph');
+      observer.observe(el);
+    });
+  };
+  window.revealGraphs(document);
 })();

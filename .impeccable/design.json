@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-22T17:58:08Z",
+  "title": "Design System: Portfolio Antoine Leroy",
+  "extensions": {
+    "colorMeta": {
+      "signal-violet": {
+        "role": "primary",
+        "displayName": "Signal Violet",
+        "canonical": "#a597ff",
+        "tonalRamp": [
+          "#0a004c",
+          "#110080",
+          "#1800b2",
+          "#1f00e6",
+          "#381aff",
+          "#654dff",
+          "#a799ff",
+          "#e9e5ff"
+        ]
+      },
+      "readout-yellow": {
+        "role": "secondary",
+        "displayName": "Readout Yellow",
+        "canonical": "#ecd24a",
+        "tonalRamp": [
+          "#453b07",
+          "#73630c",
+          "#a28a11",
+          "#d0b216",
+          "#e9cb2f",
+          "#eed75d",
+          "#f5e8a3",
+          "#fdf9e8"
+        ]
+      },
+      "available-green": {
+        "role": "tertiary",
+        "displayName": "Available Green",
+        "canonical": "#6ee7a8",
+        "tonalRamp": [
+          "#0b4225",
+          "#126d3e",
+          "#199957",
+          "#21c56f",
+          "#3ade89",
+          "#66e6a3",
+          "#a7f1ca",
+          "#e9fbf2"
+        ]
+      },
+      "void": {
+        "role": "neutral",
+        "displayName": "Void",
+        "canonical": "#09080f",
+        "tonalRamp": [
+          "#1e1b32",
+          "#322c53",
+          "#463e74",
+          "#5a5096",
+          "#7369af",
+          "#928bc1",
+          "#c1bcdc",
+          "#efeef6"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#100e1b",
+        "tonalRamp": [
+          "#1e1a32",
+          "#322c54",
+          "#463d76",
+          "#5a4e97",
+          "#7368b1",
+          "#9289c2",
+          "#c1bcdc",
+          "#efeef6"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Text",
+        "canonical": "#ece9f6",
+        "tonalRamp": [
+          "#1e1636",
+          "#31255a",
+          "#45347f",
+          "#5943a3",
+          "#725cbc",
+          "#9280cb",
+          "#c0b7e1",
+          "#efedf8"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Titre du hero."
+      },
+      "readout": {
+        "displayName": "Readout",
+        "purpose": "Chiffres clés mono jaune."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Spécifications, métriques, dates."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Tracé du graphique (1,4 s) et fondu d'onglet (0,35 s)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tablet",
+        "value": "720px"
+      },
+      {
+        "name": "desktop",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Action principale, une par zone.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Voir mes projets</a>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:12px;background:#a597ff;color:#09080f;font:600 16px/1.2 \"Schibsted Grotesk\",sans-serif;text-decoration:none}.ds-btn-primary:hover{background:#cbc3ff}.ds-btn-primary:focus-visible{outline:3px solid #a597ff;outline-offset:3px}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Action secondaire.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">Télécharger le CV</a>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:12px;border:1px solid #6f69ad;color:#ece9f6;font:600 16px/1.2 \"Schibsted Grotesk\",sans-serif;text-decoration:none}.ds-btn-ghost:hover{border-color:#a597ff;color:#fff}.ds-btn-ghost:focus-visible{outline:3px solid #a597ff;outline-offset:3px}"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Technologie utilisée par un projet.",
+      "html": "<span class=\"ds-chip\">Python</span>",
+      "css": ".ds-chip{display:inline-block;padding:5px 10px;border:1px solid #38345a;border-radius:7px;color:#cfcbe0;font:14px \"JetBrains Mono\",monospace}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Conteneur de projet.",
+      "html": "<article class=\"ds-card\"><h3>Arcade - borne modulaire</h3><p class=\"ds-spec\">Architecture · C++ · Équipe de 3</p></article>",
+      "css": ".ds-card{padding:20px;border:1px solid #25223a;border-radius:18px;background:#100e1b;color:#ece9f6}.ds-card h3{margin:0 0 6px;font:600 22px \"Schibsted Grotesk\",sans-serif}.ds-spec{margin:0;font:14px \"JetBrains Mono\",monospace;color:#aaa6c0}"
+    },
+    {
+      "name": "Readout",
+      "kind": "custom",
+      "description": "Chiffre clé mono jaune avec contexte.",
+      "html": "<div class=\"ds-readout\"><span class=\"ds-readout__v\">80+ projets</span><span class=\"ds-readout__t\">EPITECH · GPA 3.04</span></div>",
+      "css": ".ds-readout{display:flex;flex-direction:column;gap:4px;padding:16px 0;border-bottom:1px solid #25223a}.ds-readout__v{font:500 28px/1.2 \"JetBrains Mono\",monospace;color:#ecd24a}.ds-readout__t{font:15px/1.5 \"Schibsted Grotesk\",sans-serif;color:#aaa6c0}"
+    },
+    {
+      "name": "Tab",
+      "kind": "custom",
+      "description": "Onglet d'algorithme (actif et inactif).",
+      "html": "<button class=\"ds-tab\" aria-pressed=\"false\">Q-Learning</button> <button class=\"ds-tab\" aria-pressed=\"true\">PPO + vent</button>",
+      "css": ".ds-tab{min-height:44px;padding:0 12px;border:1px solid #6f69ad;border-radius:10px;background:transparent;color:#ece9f6;font:500 14px \"Schibsted Grotesk\",sans-serif;cursor:pointer}.ds-tab:hover{border-color:#a597ff}.ds-tab[aria-pressed=\"true\"]{background:#a597ff;border-color:#a597ff;color:#09080f;font-weight:600}"
+    }
+  ],
+  "narrative": {
+    "northStar": "La télémétrie",
+    "overview": "Une page sombre comme un tableau de bord de vol. La vidéo du module lunaire est l'objet central ; le reste se lit comme des instruments : mesures en mono, surfaces calmes, une seule couleur pour agir.",
+    "keyCharacteristics": [
+      "Fond quasi noir teinté de violet, surfaces par paliers tonals, sans ombres.",
+      "Violet réservé à l'action, jaune réservé aux valeurs mesurées.",
+      "Mono pour la donnée, sans-serif pour la lecture.",
+      "Un seul geste de mouvement : le tracé du graphique de crash.",
+      "Contenu en français, WCAG 2.2 AA, fonctionne sans JavaScript."
+    ],
+    "rules": [
+      {
+        "name": "La règle des deux voix",
+        "body": "Violet = j'agis, jaune = j'ai mesuré. Un élément n'emprunte jamais l'autre voix.",
+        "section": "colors"
+      },
+      {
+        "name": "La règle de la teinte",
+        "body": "Les neutres sont tous teintés de violet ; pas de gris pur.",
+        "section": "colors"
+      },
+      {
+        "name": "La règle du mono",
+        "body": "Le mono sert à la donnée, au code et aux libellés techniques, jamais à la décoration.",
+        "section": "typography"
+      },
+      {
+        "name": "La règle du plat",
+        "body": "Pas d'ombre portée, pas de lueur. Un nouvel élément gagne sa place par un palier de surface ou un filet.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do réserver le violet (#a597ff) à l'action et le jaune (#ecd24a) à la mesure.",
+      "Do laisser les vidéos et les courbes réelles porter chaque projet.",
+      "Do garder un contraste d'au moins 4,5:1 pour le texte et 3:1 pour les bordures de contrôle.",
+      "Do respecter prefers-reduced-motion : le graphique est alors entièrement visible, sans tracé.",
+      "Do teinter tous les neutres de violet."
+    ],
+    "donts": [
+      "Don't ajouter d'ombre portée ou de lueur.",
+      "Don't utiliser un kicker ou un numéro de section au-dessus d'un titre.",
+      "Don't utiliser le mono en décoration ou sous 14 px (hors schéma Arcade).",
+      "Don't imbriquer des cartes dans des cartes au-delà des blocs de métriques et de parties déjà présents.",
+      "Don't inventer de chiffres, de témoignages ou de projets : le contenu reste factuel."
+    ]
+  }
+}
