@@ -360,7 +360,7 @@
                   <a class="cvrie__frame zoomable" href="assets/cvrie-elbow-dark.png" aria-label="Agrandir : Méthode du coude">
                     <img src="assets/cvrie-elbow-dark.png" width="1200" height="900" loading="lazy" decoding="async" alt="Méthode du coude : la distorsion moyenne chute fortement jusqu'à environ 5 clusters puis décroît lentement jusqu'à 50 ; k = 10 est retenu."></a>
                 </figure>
-                <template class="slide__side"><h4 class="cvrie__explain-title">Le K-means, et le choix de k</h4><p>Le K-means regroupe des points en k groupes. On place k centroïdes, chaque point rejoint le plus proche, puis chaque centroïde se déplace au centre de ses points ; on recommence jusqu'à ce que plus aucun point ne change de groupe.</p><p>Ici, chaque point est le témoignage d'un patient, transformé en vecteur de mots (TF-IDF) puis projeté en deux dimensions (PCA). Le graphique mesure la distorsion, la distance moyenne au centroïde, pour k de 1 à 49 : elle chute jusqu'à environ 5 groupes puis ne baisse presque plus. k = 10 a été retenu.</p></template>
+                <template class="slide__side"><h4 class="cvrie__explain-title">Le K-means, et le choix de k</h4><p>Le K-means regroupe des points en k groupes. On place k centroïdes, chaque point rejoint le plus proche, puis chaque centroïde se déplace au centre de ses points ; on recommence jusqu'à ce que plus aucun point ne change de groupe.</p><p>Ici, chaque point est le témoignage d'un patient, vectorisé (TF-IDF) puis projeté en 2D (PCA). Le graphique mesure la distorsion (distance moyenne au centroïde) pour k de 1 à 49 : elle chute jusqu'à environ 5 groupes puis ne baisse presque plus ; k = 10 a été retenu.</p></template>
               </li>
               <li class="slide" data-label="Itération 1">
                 <figure class="slide__figure">
@@ -395,17 +395,17 @@
           </section>
           <div class="cvrie__side">
             <!-- Explication de l'image affichée dans le carrousel (script.js) ; sans JavaScript, celle de la première. -->
-            <div class="cvrie__explain" id="cvrie-explain" aria-live="polite"><h4 class="cvrie__explain-title">Le K-means, et le choix de k</h4><p>Le K-means regroupe des points en k groupes. On place k centroïdes, chaque point rejoint le plus proche, puis chaque centroïde se déplace au centre de ses points ; on recommence jusqu'à ce que plus aucun point ne change de groupe.</p><p>Ici, chaque point est le témoignage d'un patient, transformé en vecteur de mots (TF-IDF) puis projeté en deux dimensions (PCA). Le graphique mesure la distorsion, la distance moyenne au centroïde, pour k de 1 à 49 : elle chute jusqu'à environ 5 groupes puis ne baisse presque plus. k = 10 a été retenu.</p></div>
+            <div class="cvrie__explain" id="cvrie-explain" aria-live="polite"><h4 class="cvrie__explain-title">Le K-means, et le choix de k</h4><p>Le K-means regroupe des points en k groupes. On place k centroïdes, chaque point rejoint le plus proche, puis chaque centroïde se déplace au centre de ses points ; on recommence jusqu'à ce que plus aucun point ne change de groupe.</p><p>Ici, chaque point est le témoignage d'un patient, vectorisé (TF-IDF) puis projeté en 2D (PCA). Le graphique mesure la distorsion (distance moyenne au centroïde) pour k de 1 à 49 : elle chute jusqu'à environ 5 groupes puis ne baisse presque plus ; k = 10 a été retenu.</p></div>
             <div class="stat stat--xray">
               <h4 class="stat__title">Volet supervisé : radiographies thoraciques</h4>
               <span class="stat__value" data-count="86" data-suffix="&nbsp;%">86&nbsp;%</span>
-              <span class="stat__label">de précision sur radiographies (Random Forest)</span>
+              <span class="stat__label">de bons diagnostics sur les radiographies (Random Forest)</span>
               <dl class="xray-split" aria-label="Répartition des 4 768 radiographies étiquetées">
                 <div style="--v: 1"><dt>Saines</dt><dd><span class="xray-split__bar" aria-hidden="true"></span><span class="xray-split__n">1&nbsp;600</span></dd></div>
                 <div style="--v: 1; --k: 1"><dt>Pneumonie</dt><dd><span class="xray-split__bar" aria-hidden="true"></span><span class="xray-split__n">1&nbsp;600</span></dd></div>
                 <div style="--v: 0.98; --k: 2"><dt>Tuberculose</dt><dd><span class="xray-split__bar" aria-hidden="true"></span><span class="xray-split__n">1&nbsp;568</span></dd></div>
               </dl>
-              <p class="stat__note">4&nbsp;768 radiographies étiquetées, converties en niveaux de gris et réduites en 128×128 px.</p>
+              <p class="stat__note">En clair : sur 100 radiographies, le modèle reconnaît correctement 86 fois s'il s'agit d'une radio saine, d'une pneumonie ou d'une tuberculose. Entraîné sur 4&nbsp;768 radiographies étiquetées (niveaux de gris, 128×128 px).</p>
             </div>
           </div>
         </div>
@@ -484,6 +484,7 @@
             <span class="term__title">42sh</span>
             <span class="term__note">Émulation dans le navigateur</span>
           </div>
+          <div class="term__body">
           <div class="term__screen" role="log" aria-label="Sortie du terminal 42sh" tabindex="0">
             <span class="term__cmd"><span class="term__prompt">42sh&gt;</span> echo "hello" | cat -e &gt; out.txt ; cat out.txt</span>
             <span class="term__out">hello$</span>
@@ -496,6 +497,13 @@
           <div class="term__try" hidden>
             <span class="term__try-label">Essayer :</span>
           </div>
+          </div>
+          <!-- Affiché par shell.js : un clic défloute le terminal et donne la main au visiteur. -->
+          <button class="term__start" type="button" hidden>
+            <span class="term__start-icon" aria-hidden="true">&gt;_</span>
+            <span class="term__start-label">Essayez par vous-même</span>
+            <span class="term__start-hint">Tapez vos propres commandes dans 42sh</span>
+          </button>
         </div>
         <div class="scene__foot">
           <ul class="tags" aria-label="Technologies">

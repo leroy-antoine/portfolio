@@ -722,14 +722,31 @@
     tryBox.append(b);
   });
 
-  /* ---------- Démarrage : invitation à essayer, saisie libre ---------- */
+  /* ---------- Démarrage ----------
+     Derrière le bouton « Essayez par vous-même », le terminal flouté montre une courte session.
+     Un clic défloute le terminal, active la saisie et y place le curseur. */
+  const body = root.querySelector('.term__body');
+  const start = root.querySelector('.term__start');
   reset();
   screen.replaceChildren();
-  const welcome = document.createElement('span');
-  welcome.className = 'term__welcome';
-  welcome.textContent = 'Essayez par vous-même : tapez une commande ci-dessous (help affiche la liste), ou cliquez sur un exemple.';
-  screen.append(welcome);
   refreshPrompt();
   form.hidden = false;
   tryBox.hidden = false;
+  ['ls', 'echo "hello" | cat -e', 'cd my_shell && ls src'].forEach((cmd) => submit(cmd));
+  const welcome = document.createElement('span');
+  welcome.className = 'term__welcome';
+  welcome.textContent = 'À vous : tapez une commande ci-dessous (help affiche la liste), ou cliquez sur un exemple.';
+  screen.append(welcome);
+  scrollDown();
+  if (body && start) {
+    root.classList.add('is-locked');
+    body.inert = true;
+    start.hidden = false;
+    start.addEventListener('click', () => {
+      root.classList.remove('is-locked');
+      body.inert = false;
+      start.hidden = true;
+      input.focus({ preventScroll: true });
+    });
+  }
 })();
