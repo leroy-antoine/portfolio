@@ -10,7 +10,7 @@ web
 Primary: recruiters and engineers (tech leads, hiring engineers) evaluating a software-engineering or AI internship candidate. A recruiter triages in about 30 seconds (name, role, availability, CV); an engineer then digs into projects (source code, videos, metrics) before proposing an interview.
 
 ## Product Purpose
-Personal portfolio of Antoine Leroy, EPITECH student (GPA 3.04, 80+ projects), seeking a software-engineer or AI-developer internship from early April to end of July. Success: a visitor downloads the CV, opens a project's source, or emails to book an interview.
+Personal portfolio of Antoine Leroy, EPITECH student (GPA 3.04, 80+ projects), seeking a software-engineer or AI-developer internship from early April to early August 2027. Success: a visitor downloads the CV, opens a project's source, or emails to book an interview.
 
 ## Positioning
 Low-level systems (C/C++: 42sh, Zappy, Arcade, Raytracer) combined with reinforcement-learning work in Python (Lunar Lander, 95 % success), backed by proof: training videos, crash-rate curves, a won 42 AI hackathon.

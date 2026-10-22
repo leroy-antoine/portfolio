@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Antoine Leroy - Ingénieur logiciel &amp; développeur IA</title>
-<meta name="description" content="Portfolio d'Antoine Leroy, étudiant à EPITECH : systèmes en C/C++, IA en Python. Lunar Lander, Zappy, Arcade, Raytracer. Recherche un stage d'avril à fin juillet.">
+<meta name="description" content="Portfolio d'Antoine Leroy, étudiant à EPITECH : systèmes en C/C++, IA en Python. Lunar Lander, Zappy, Arcade, Raytracer. Recherche un stage de début avril à début août 2027.">
 <meta name="author" content="Antoine Leroy">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#09080f">
@@ -14,7 +14,7 @@
 <meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="Antoine Leroy">
 <meta property="og:title" content="Antoine Leroy - Ingénieur logiciel &amp; développeur IA">
-<meta property="og:description" content="Systèmes en C/C++, IA en Python. Étudiant à EPITECH, disponible pour un stage d'avril à fin juillet.">
+<meta property="og:description" content="Systèmes en C/C++, IA en Python. Étudiant à EPITECH, disponible pour un stage de début avril à début août 2027.">
 <meta property="og:image" content="assets/raytracer-spheres.png">
 <meta property="og:image:width" content="870">
 <meta property="og:image:height" content="487">
@@ -90,8 +90,8 @@
       <div class="hero-seq__title">
         <p class="badge">
           <span class="badge__dot" aria-hidden="true"></span>
-          <span class="lg-only">Disponible pour un stage · avril → fin juillet</span>
-          <span class="sm-only">Stage · avril → fin juillet</span>
+          <span class="lg-only">Disponible pour un stage · début avril → début août 2027</span>
+          <span class="sm-only">Stage · avril → août 2027</span>
         </p>
         <h1 id="hero-title">Ingénieur logiciel &amp; développeur&nbsp;IA.</h1>
       </div>
@@ -396,9 +396,16 @@
           <div class="cvrie__side">
             <!-- Explication de l'image affichée dans le carrousel (script.js) ; sans JavaScript, celle de la première. -->
             <div class="cvrie__explain" id="cvrie-explain" aria-live="polite"><h4 class="cvrie__explain-title">Le K-means, et le choix de k</h4><p>Le K-means regroupe des points en k groupes. On place k centroïdes, chaque point rejoint le plus proche, puis chaque centroïde se déplace au centre de ses points ; on recommence jusqu'à ce que plus aucun point ne change de groupe.</p><p>Ici, chaque point est le témoignage d'un patient, transformé en vecteur de mots (TF-IDF) puis projeté en deux dimensions (PCA). Le graphique mesure la distorsion, la distance moyenne au centroïde, pour k de 1 à 49 : elle chute jusqu'à environ 5 groupes puis ne baisse presque plus. k = 10 a été retenu.</p></div>
-            <div class="stat">
+            <div class="stat stat--xray">
+              <h4 class="stat__title">Volet supervisé : radiographies thoraciques</h4>
               <span class="stat__value" data-count="86" data-suffix="&nbsp;%">86&nbsp;%</span>
               <span class="stat__label">de précision sur radiographies (Random Forest)</span>
+              <dl class="xray-split" aria-label="Répartition des 4 768 radiographies étiquetées">
+                <div style="--v: 1"><dt>Saines</dt><dd><span class="xray-split__bar" aria-hidden="true"></span><span class="xray-split__n">1&nbsp;600</span></dd></div>
+                <div style="--v: 1; --k: 1"><dt>Pneumonie</dt><dd><span class="xray-split__bar" aria-hidden="true"></span><span class="xray-split__n">1&nbsp;600</span></dd></div>
+                <div style="--v: 0.98; --k: 2"><dt>Tuberculose</dt><dd><span class="xray-split__bar" aria-hidden="true"></span><span class="xray-split__n">1&nbsp;568</span></dd></div>
+              </dl>
+              <p class="stat__note">4&nbsp;768 radiographies étiquetées, converties en niveaux de gris et réduites en 128×128 px.</p>
             </div>
           </div>
         </div>
@@ -608,7 +615,7 @@
   <!-- Contact -->
   <section class="section section--contact" id="contact" aria-labelledby="contact-title">
     <div class="container container--contact" data-anim="contact">
-      <h2 id="contact-title">Un stage d'avril à fin juillet ? Parlons-en.</h2>
+      <h2 id="contact-title">Un stage de début avril à début août 2027 ? Parlons-en.</h2>
       <p class="contact__lead">Ingénierie logicielle, IA, systèmes : écrivez-moi, je serai ravi d'échanger.</p>
       <div class="contact__actions">
         <a class="btn btn--primary btn--lg" href="mailto:etudes.leroy.antoine@gmail.com">

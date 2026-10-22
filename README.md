@@ -1,6 +1,6 @@
 # Portfolio - Antoine Leroy
 
-Étudiant en informatique à EPITECH (GPA 3.04, plus de 80 projets réalisés), **je recherche un stage d'ingénieur logiciel et de développeur IA, de début avril à fin juillet.**
+Étudiant en informatique à EPITECH (GPA 3.04, plus de 80 projets réalisés), **je recherche un stage d'ingénieur logiciel et de développeur IA, de début avril à début août 2027.**
 
 Ce dépôt contient mon portfolio : mes projets (Lunar Lander en apprentissage par renforcement, Zappy, Arcade, Raytracer, Doctor Cvrie, my_shell), ma stack, mon parcours et mes coordonnées.
 
@@ -64,7 +64,7 @@ Après le premier déploiement, remplacer dans `index.html` la valeur relative d
 ## À compléter
 
 - **Lien GitHub de Zappy** : aucun dépôt n'est indiqué. Ajouter un lien « Code source » dans la carte Zappy (repère `TODO` dans `index.html`).
-- **Année du stage** : le texte actuel est « avril → fin juillet » (badge du héro, titre de la section Contact, balises meta).
+- **Année du stage** : le texte actuel est « début avril → début août 2027 » (badge du héro, titre de la section Contact, balises meta).
 - **Affiches des vidéos Q-Learning et Deep Q-Learning** : ces deux vidéos n'ont pas d'image `poster`. Les navigateurs de bureau affichent leur première image, pas toujours Safari sur iOS. Ajouter un `poster` dans `script.js` si besoin.
 
 ## Accessibilité et performance

@@ -81,7 +81,7 @@ body {
   overflow-wrap: break-word;
 }
 
-h1, h2, h3, p, figure, dl, dd { margin: 0; }
+h1, h2, h3, h4, p, figure, dl, dd { margin: 0; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 img, video, svg { max-width: 100%; }
 img { height: auto; }
@@ -691,20 +691,25 @@ h1 {
 .stat { display: flex; flex-direction: column; gap: 6px; padding: 24px; border-radius: 16px; background: var(--surface-2); }
 .stat__value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: clamp(48px, calc(48px + 24 * (100vw - 390px) / 890), 72px); font-weight: 500; line-height: 1; color: var(--accent-2); }
 .stat__label { font-size: 16px; line-height: 1.45; color: var(--text-2); }
+/* Doctor Cvrie : panneau du volet supervisé (titre, précision, répartition des classes). */
+.stat--xray { gap: 8px; padding: 20px 22px; }
+.stat--xray .stat__value { font-size: clamp(44px, calc(44px + 12 * (100vw - 390px) / 890), 56px); }
+.stat__title { margin-bottom: 6px; font-size: 18px; font-weight: 600; line-height: 1.3; color: var(--text); }
+.stat__note { font-size: 15px; line-height: 1.5; color: var(--text-2); }
+.xray-split { display: flex; flex-direction: column; gap: 6px; margin: 6px 0 2px; }
+.xray-split > div { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); align-items: center; gap: 12px; }
+.xray-split dt { font-size: 15px; color: var(--text-3); }
+.xray-split dd { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; }
+.xray-split__bar { position: relative; height: 8px; border-radius: 999px; background: var(--line-2); overflow: hidden; }
+.xray-split__bar::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--accent-2); transform: scaleX(var(--v, 1)); transform-origin: left; }
+.xray-split__n { font-family: var(--font-mono); font-size: 15px; font-variant-numeric: tabular-nums; color: var(--accent-2); }
 
 /* ---------- Projets : une scène plein écran par projet ---------- */
 .projects { border-bottom: 1px solid var(--line); }
-.scene {
-  display: flex;
-  align-items: center;
-  min-height: 100svh;
-  overflow: clip; /* les entrées latérales ne créent pas de défilement horizontal */
-}
+.scene { overflow: clip; /* les entrées latérales ne créent pas de défilement horizontal */ }
 .scene__stage {
-  display: flex;
-  align-items: center;
   width: 100%;
-  padding: clamp(88px, calc(88px + 24 * (100vw - 390px) / 634), 120px) var(--gutter) clamp(48px, calc(48px + 32 * (100vw - 390px) / 634), 80px);
+  padding: clamp(64px, calc(64px + 32 * (100vw - 390px) / 634), 96px) var(--gutter) clamp(48px, calc(48px + 16 * (100vw - 390px) / 634), 64px);
 }
 .scene + .scene { border-top: 1px solid var(--line); }
 .scene__inner { display: flex; flex-direction: column; gap: clamp(24px, calc(24px + 12 * (100vw - 390px) / 634), 36px); width: 100%; max-width: var(--max); margin-inline: auto; }
@@ -775,7 +780,18 @@ h1 {
 .cvrie__plot figcaption { font-size: 15px; line-height: 1.5; color: var(--text-2); }
 .cvrie__frame { position: relative; display: block; overflow: hidden; aspect-ratio: 4 / 3; border: 1px solid var(--line-2); border-radius: 16px; background: var(--bg-deep); }
 .cvrie__frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.cvrie__side { display: flex; flex-direction: column; gap: 16px; }
+.cvrie__side { display: flex; flex-direction: column; gap: 20px; }
+/* Explication de l'image du carrousel : titre plus grand que le texte. */
+.cvrie__explain { display: flex; flex-direction: column; gap: 10px; }
+.cvrie__explain-title { font-size: 22px; font-weight: 600; line-height: 1.25; color: var(--text); }
+.cvrie__explain p, .carousel-side__layer p { font-size: 17px; line-height: 1.6; color: var(--text-3); }
+.carousel-side { display: grid; }
+.carousel-side__layer { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 10px; transition: opacity var(--dur-medium) var(--ease-out), transform var(--dur-medium) var(--ease-out), visibility 0s; }
+.carousel-side__layer[aria-hidden="true"] { visibility: hidden; opacity: 0; transform: translate3d(0, var(--move-sm), 0); transition-delay: 0s, 0s, var(--dur-medium); }
+
+.arcade__media { display: flex; flex-direction: column; gap: 10px; }
+.arcade__media figcaption { font-size: 15px; line-height: 1.5; color: var(--text-2); }
+.video--arcade { aspect-ratio: 1850 / 1076; border-radius: 16px; background: #15141f; }
 
 /* Figures qui s'adaptent à la largeur de leur conteneur (container queries) */
 .cq { container-type: inline-size; }
@@ -959,9 +975,9 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
 .zappy__media { transform-origin: left center; }
 .anim-ready [data-anim="zappy"].is-in .scene__head { transition: opacity var(--dur-long) var(--ease-out), transform var(--dur-long) var(--ease-out); }
 .anim-ready [data-anim="zappy"].is-in .zappy__media { transition: opacity 900ms var(--ease-out) 100ms, transform 1200ms var(--ease-out) 100ms; }
-.anim-ready [data-anim="zappy"].is-in .zappy__wire { transition: transform 900ms var(--ease-in-out) 450ms; }
-.anim-ready [data-anim="zappy"].is-in .parts > div { transition: opacity var(--dur-medium) var(--ease-out), transform var(--dur-medium) var(--ease-out); transition-delay: calc(600ms + var(--k, 0) * 220ms); }
-.anim-ready [data-anim="zappy"].is-in .scene__foot { transition: opacity var(--dur-long) var(--ease-out) 900ms; }
+.anim-ready [data-anim="zappy"].is-in .zappy__wire { transition: transform 800ms var(--ease-in-out) 300ms; }
+.anim-ready [data-anim="zappy"].is-in .parts > div { transition: opacity var(--dur-medium) var(--ease-out), transform var(--dur-medium) var(--ease-out); transition-delay: calc(420ms + var(--k, 0) * 160ms); }
+.anim-ready [data-anim="zappy"].is-in .scene__foot { transition: opacity var(--dur-long) var(--ease-out) 600ms; }
 .scene--zappy .parts > div:nth-child(2) { --k: 1; }
 .scene--zappy .parts > div:nth-child(3) { --k: 2; }
 /* Paquets TCP : vont et viennent le long du fil tant que la scène est à l'écran. */
@@ -988,13 +1004,13 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
 .anim-ready [data-anim="ray"]:not(.is-in) .scene__foot { opacity: 0; transform: translate3d(0, calc(var(--dir) * var(--move-md)), 0); }
 .anim-ready [data-anim="ray"].is-in .scene__head { transition: opacity var(--dur-long) var(--ease-out), filter var(--dur-long) var(--ease-out); }
 .anim-ready [data-anim="ray"] .ray__ray { stroke-dashoffset: 0; }
-.anim-ready [data-anim="ray"].is-in .ray__ray { transition: stroke-dashoffset 700ms var(--ease-out); transition-delay: calc(250ms + var(--i) * 55ms); }
-.anim-ready [data-anim="ray"].is-in .ray__hit { transition: opacity var(--dur-medium) var(--ease-out), transform var(--dur-medium) var(--ease-out); transition-delay: calc(700ms + var(--i) * 55ms); }
+.anim-ready [data-anim="ray"].is-in .ray__ray { transition: stroke-dashoffset 480ms var(--ease-out); transition-delay: calc(120ms + var(--i) * 32ms); }
+.anim-ready [data-anim="ray"].is-in .ray__hit { transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out); transition-delay: calc(420ms + var(--i) * 32ms); }
 .anim-ready [data-anim="ray"].is-in .ray__shadow,
-.anim-ready [data-anim="ray"].is-in .ray__light { transition: opacity var(--dur-medium) var(--ease-out) 1250ms; }
+.anim-ready [data-anim="ray"].is-in .ray__light { transition: opacity 300ms var(--ease-out) 760ms; }
 /* Mise au point : le schéma s'efface en se floutant, le rendu apparaît de moins en moins flou. */
-.anim-ready [data-anim="ray"].is-in .ray__rays { opacity: 0; filter: blur(6px); transition: opacity 1200ms var(--ease-in-out) 2100ms, filter 1200ms var(--ease-in-out) 2100ms; }
-.anim-ready [data-anim="ray"].is-in .ray__img { transition: opacity 1400ms var(--ease-out) 1900ms, filter 1600ms var(--ease-out) 1900ms, transform 1600ms var(--ease-out) 1900ms; }
+.anim-ready [data-anim="ray"].is-in .ray__rays { opacity: 0; filter: blur(6px); transition: opacity 900ms var(--ease-in-out) 1300ms, filter 900ms var(--ease-in-out) 1300ms; }
+.anim-ready [data-anim="ray"].is-in .ray__img { transition: opacity 1000ms var(--ease-out) 1150ms, filter 1200ms var(--ease-out) 1150ms, transform 1200ms var(--ease-out) 1150ms; }
 .anim-ready [data-anim="ray"].is-in .ray__side { transition: opacity var(--dur-long) var(--ease-out) 300ms, transform var(--dur-long) var(--ease-out) 300ms; }
 .anim-ready [data-anim="ray"].is-in .uml__box { transition: opacity var(--dur-medium) var(--ease-out), transform var(--dur-medium) var(--ease-out); transition-delay: calc(500ms + var(--k, 0) * 110ms); }
 .anim-ready [data-anim="ray"].is-in .uml figcaption,
@@ -1012,6 +1028,9 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
 .anim-ready [data-anim="cvrie"].is-in .scene__head { transition: opacity var(--dur-long) var(--ease-out), transform var(--dur-long) var(--ease-out); }
 .anim-ready [data-anim="cvrie"].is-in .cvrie__carousel { clip-path: circle(150% at 50% 45%); transition: clip-path 1300ms var(--ease-out) 150ms; }
 .anim-ready [data-anim="cvrie"].is-in .cvrie__side { transition: opacity var(--dur-long) var(--ease-out) 450ms, transform var(--dur-long) var(--ease-out) 450ms; }
+/* Répartition des radiographies : les barres se remplissent l'une après l'autre. */
+.anim-ready [data-anim="cvrie"]:not(.is-in) .xray-split__bar::after { transform: scaleX(0); }
+.anim-ready [data-anim="cvrie"].is-in .xray-split__bar::after { transition: transform 1100ms var(--ease-out); transition-delay: calc(700ms + var(--k, 0) * 140ms); }
 .anim-ready [data-anim="cvrie"].is-in .scene__foot { transition: opacity var(--dur-long) var(--ease-out) 700ms, transform var(--dur-long) var(--ease-out) 700ms; }
 
 /* Arcade : les bibliothèques convergent vers le cœur, qui s'allume. */
@@ -1020,6 +1039,9 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
 .anim-ready [data-anim="arcade"]:not(.is-in) .arch__core { opacity: 0; transform: scale(0.82); }
 .anim-ready [data-anim="arcade"]:not(.is-in) .arch__group--games { opacity: 0; transform: translate3d(calc(-1 * var(--move-lg)), 0, 0); }
 .anim-ready [data-anim="arcade"]:not(.is-in) .arch__group--display { opacity: 0; transform: translate3d(var(--move-lg), 0, 0); }
+.anim-ready [data-anim="arcade"]:not(.is-in) .arcade__media { opacity: 0; transform: perspective(1400px) rotateX(24deg) translate3d(0, calc(var(--dir) * var(--move-lg)), 0) scale(0.94); }
+.anim-ready [data-anim="arcade"].is-in .arcade__media { transition: opacity 800ms var(--ease-out), transform 1100ms var(--ease-out); }
+.arcade__media { transform-origin: 50% 100%; }
 .anim-ready [data-anim="arcade"]:not(.is-in) .arch__arrow,
 .anim-ready [data-anim="arcade"]:not(.is-in) .scene__foot { opacity: 0; }
 .anim-ready [data-anim="arcade"].is-in .scene__head,
@@ -1027,8 +1049,8 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
 .anim-ready [data-anim="arcade"].is-in .arch__core { transition: opacity var(--dur-long) var(--ease-out) 150ms, transform var(--dur-long) var(--ease-out) 150ms; }
 .anim-ready [data-anim="arcade"].is-in .arch__group--games,
 .anim-ready [data-anim="arcade"].is-in .arch__group--display { transition: opacity var(--dur-long) var(--ease-out) 350ms, transform 1000ms var(--ease-out) 350ms; }
-.anim-ready [data-anim="arcade"].is-in .arch__arrow { transition: opacity var(--dur-medium) var(--ease-out) 900ms; }
-.anim-ready [data-anim="arcade"].is-in .scene__foot { transition: opacity var(--dur-long) var(--ease-out) 900ms; }
+.anim-ready [data-anim="arcade"].is-in .arch__arrow { transition: opacity var(--dur-medium) var(--ease-out) 600ms; }
+.anim-ready [data-anim="arcade"].is-in .scene__foot { transition: opacity var(--dur-long) var(--ease-out) 600ms; }
 
 /* my_shell : le terminal monte et s'allume comme un tube cathodique. */
 .anim-ready [data-anim="shell"]:not(.is-in) .scene__head { opacity: 0; transform: translate3d(0, calc(var(--dir) * var(--move-lg)), 0); }
@@ -1036,7 +1058,7 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
 .anim-ready [data-anim="shell"]:not(.is-in) .scene__foot { opacity: 0; }
 .anim-ready [data-anim="shell"].is-in .scene__head { transition: opacity var(--dur-long) var(--ease-out), transform var(--dur-long) var(--ease-out); }
 .anim-ready [data-anim="shell"].is-in .term { transition: opacity 300ms var(--ease-out) 200ms, clip-path 900ms var(--ease-in-out) 300ms, transform var(--dur-long) var(--ease-out) 200ms; }
-.anim-ready [data-anim="shell"].is-in .scene__foot { transition: opacity var(--dur-long) var(--ease-out) 900ms; }
+.anim-ready [data-anim="shell"].is-in .scene__foot { transition: opacity var(--dur-long) var(--ease-out) 600ms; }
 
 /* À propos de moi : les trois preuves montent l'une après l'autre. */
 .anim-ready [data-anim="facts"]:not(.is-in) .fact { opacity: 0; transform: translate3d(0, calc(var(--dir) * var(--move-md)), 0); }
@@ -1388,9 +1410,37 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .scene--ray .uml__box { align-items: center; justify-content: center; text-align: center; }
 
   /* Doctor Cvrie : le nuage tient dans la hauteur disponible. */
-  .scene--cvrie .cvrie { grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 48px; }
-  .scene--cvrie .cvrie__carousel { max-width: calc((100svh - 330px) * 1.333); }
+  /* Doctor Cvrie : titre, carrousel et boutons tiennent dans l'écran ; l'explication remplit la droite. */
+  .scene--cvrie .scene__inner { gap: 20px; }
+  .scene--cvrie .cvrie { grid-template-columns: minmax(360px, calc((100svh - 400px) * 1.333)) minmax(0, 1fr); gap: 48px; align-items: start; }
+  .scene--cvrie .cvrie__side { gap: 18px; padding-top: 4px; }
+
+  /* Arcade : la démo à gauche, le schéma interactif à droite. */
+  .scene--arcade .scene__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    grid-template-areas: "head head" "media diagram" "foot foot";
+    column-gap: 40px;
+    row-gap: 24px;
+    align-items: start;
+  }
+  .scene--arcade .scene__head { grid-area: head; }
+  .scene--arcade .arcade__media { grid-area: media; }
+  .scene--arcade .arcade__diagram { grid-area: diagram; }
+  .scene--arcade .scene__foot { grid-area: foot; }
   .scene--cvrie .cvrie__side { align-self: start; }
+}
+
+/* Bureau bas (portables 768 à 860 px de haut) : le carrousel Lunar Lander rétrécit pour que ses boutons restent à l'écran. */
+@media (min-width: 1024px) and (max-height: 860px) {
+  .scene--lunar .carousel { max-width: calc((100svh - 470px) * 1.5); }
+  /* Doctor Cvrie : panneau en deux colonnes (précision | répartition) pour tenir dans la hauteur. */
+  .scene--cvrie .carousel-side__layer p { font-size: 16px; line-height: 1.55; }
+  .stat--xray { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 24px; row-gap: 4px; align-items: center; }
+  .stat--xray .stat__title, .stat--xray .stat__note { grid-column: 1 / -1; }
+  .stat--xray .stat__value { grid-column: 1; grid-row: 2; }
+  .stat--xray .stat__label { grid-column: 1; grid-row: 3; max-width: 16ch; font-size: 15px; }
+  .stat--xray .xray-split { grid-column: 2; grid-row: 2 / span 2; margin: 0; }
 }
 
 /* ---------- Mouvement réduit ---------- */

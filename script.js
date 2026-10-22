@@ -571,12 +571,12 @@ const anims = (() => {
   }, { passive: true });
 
   /** Observe un élément : onIn à l'arrivée (assez visible), onOut quand il a entièrement quitté l'écran. */
-  function watch(el, onIn, onOut, enterMargin = '0px 0px -12% 0px') {
+  function watch(el, onIn, onOut, enterMargin = '0px 0px -8% 0px') {
     if (!enabled) return;
     let inside = false;
     const enter = new IntersectionObserver(([e]) => {
       if (e.isIntersecting && !inside) { inside = true; onIn(dir); }
-    }, { rootMargin: enterMargin, threshold: 0.12 });
+    }, { rootMargin: enterMargin, threshold: 0 });
     const leave = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting && inside) { inside = false; onOut(dir); }
     }, { threshold: 0 });
@@ -681,9 +681,29 @@ window.graphReveal = (() => {
   title.innerHTML = words.map((w, i) => `<span class="word" aria-hidden="true"><span style="--w:${i}">${w.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))}</span></span>`).join(' ');
 })();
 
-/* Carrousels sans colonne liée (Doctor Cvrie) */
+/* Autres carrousels (Doctor Cvrie). Avec data-side="#id", la colonne indiquée affiche
+   le contenu <template class="slide__side"> de la diapositive visible ; les contenus sont superposés
+   dans une même cellule pour que la colonne ne change pas de hauteur. */
 document.querySelectorAll('[data-carousel]').forEach((root) => {
-  if (!root.closest('#rl-panel')) initCarousel(root);
+  if (root.closest('#rl-panel')) return;
+  const side = root.dataset.side ? document.querySelector(root.dataset.side) : null;
+  if (side) {
+    const layers = [...root.querySelectorAll(':scope .slide')].map((slide) => {
+      const layer = document.createElement('div');
+      layer.className = 'carousel-side__layer';
+      const template = slide.querySelector('template.slide__side');
+      if (template) layer.append(template.content.cloneNode(true));
+      return layer;
+    });
+    side.removeAttribute('aria-live');
+    side.replaceChildren(...layers);
+    side.classList.add('carousel-side');
+    root.addEventListener('carousel:change', ({ detail }) => layers.forEach((layer, i) => {
+      layer.toggleAttribute('inert', i !== detail.index);
+      layer.setAttribute('aria-hidden', String(i !== detail.index));
+    }));
+  }
+  initCarousel(root);
 });
 
 /* ==========================================================================
