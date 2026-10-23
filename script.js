@@ -1,6 +1,52 @@
 'use strict';
 
 /* ==========================================================================
+   0. Menu du nom (en haut à gauche) : GitHub, Glance, retour en haut.
+   Le lien « retour en haut » devient un bouton qui ouvre un petit panneau animé (styles.css).
+   Fermeture : Échap (focus rendu au bouton), clic à côté, sortie du focus, choix d'une entrée.
+   ========================================================================== */
+(function initBrandMenu() {
+  const link = document.querySelector('.brand-wrap > .brand');
+  const pop = document.getElementById('brand-pop');
+  if (!link || !pop) return;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'brand';
+  button.setAttribute('aria-expanded', 'false');
+  button.setAttribute('aria-controls', 'brand-pop');
+  button.setAttribute('aria-label', 'Antoine Leroy : ouvrir le menu (GitHub, Glance, retour en haut)');
+  button.append(...link.childNodes);
+  button.insertAdjacentHTML('beforeend', '<svg class="brand__chev" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
+  link.replaceWith(button);
+  pop.hidden = false; // l'état fermé passe par la classe (visibility), pour que l'ouverture s'anime
+
+  const isOpen = () => button.getAttribute('aria-expanded') === 'true';
+  function setOpen(open) {
+    button.setAttribute('aria-expanded', String(open));
+    pop.classList.toggle('is-open', open);
+  }
+  button.addEventListener('click', () => setOpen(!isOpen()));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isOpen()) { setOpen(false); button.focus(); }
+  });
+  document.addEventListener('pointerdown', (event) => {
+    if (isOpen() && !event.target.closest('.brand-wrap')) setOpen(false);
+  });
+  pop.parentElement.addEventListener('focusout', (event) => {
+    if (isOpen() && !pop.parentElement.contains(event.relatedTarget)) setOpen(false);
+  });
+  pop.addEventListener('click', (event) => {
+    if (!event.target.closest('a, button')) return;
+    setOpen(false);
+    if (event.target.closest('[data-top]')) {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      button.focus({ preventScroll: true });
+    }
+  });
+})();
+
+/* ==========================================================================
    1. Menu burger (mobile / intermédiaire)
    ========================================================================== */
 (function initMenu() {
@@ -715,9 +761,32 @@ window.graphReveal = (() => {
 (function initContactTitle() {
   const title = document.querySelector('[data-anim="contact"] h2');
   if (!title || !anims.enabled) return;
-  const words = title.textContent.trim().split(/\s+/);
+  const words = title.textContent.trim().split(/[ \t\n\r]+/); // l'espace insécable de « 2027 ? » reste dans le mot
   title.setAttribute('aria-label', title.textContent.trim());
   title.innerHTML = words.map((w, i) => `<span class="word" aria-hidden="true"><span style="--w:${i}">${w.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))}</span></span>`).join(' ');
+})();
+
+/* Contact : en descendant, la section arrive floue et devient nette à mesure qu'elle remplit l'écran
+   (en plus de l'entrée des mots). Exception assumée à la règle ci-dessus : le flou suit la position
+   du scroll. Rien avec le mouvement réduit. */
+(function initContactFocus() {
+  const section = document.getElementById('contact');
+  const inner = section && section.querySelector('.container--contact');
+  if (!inner) return;
+  let queued = false;
+  const update = () => {
+    queued = false;
+    // 1 quand le haut de la section touche le bas de l'écran, 0 quand elle le remplit (à 24 px près :
+    // sur téléphone, l'arrivée par lien ou molette s'arrête quelques pixels plus bas, sous l'en-tête).
+    const t = motion.allowed() ? Math.min(1, Math.max(0, (section.getBoundingClientRect().top - 24) / (window.innerHeight * 0.85))) : 0;
+    inner.classList.toggle('is-focusing', t > 0);
+    inner.style.setProperty('--focus-blur', `${(18 * t).toFixed(2)}px`);
+    inner.style.setProperty('--focus-o', (1 - 0.7 * t).toFixed(3));
+  };
+  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+  window.addEventListener('scroll', queue, { passive: true });
+  window.addEventListener('resize', queue);
+  update();
 })();
 
 /* Autres carrousels (Doctor Cvrie). Avec data-side="#id", la colonne indiquée affiche
@@ -875,6 +944,29 @@ document.querySelectorAll('[data-carousel]').forEach((root) => {
     event.preventDefault();
     animateTo(target);
   }, { passive: false });
+  // Liens internes (menu, « Me contacter », « Voir le projet »…) : même arrivée que la molette, au lieu
+  // du décalage de scroll-padding. Projets → première scène ; un titre de projet → sa scène ;
+  // Stack (fusionnée avec « À propos ») → arrêt de la molette sur « À propos ». Mouvement réduit : saut direct.
+  function linkTop(el) {
+    if (el.id === 'projets') return snapTop(parts[0]);
+    const part = parts.find((p) => p === el || p.contains(el));
+    if (part) return snapTop(part);
+    if (el.id === 'stack') return snapTop(document.getElementById('a-propos')); // même arrêt que la molette
+    return null;
+  }
+  document.addEventListener('click', (event) => {
+    const a = event.target.closest('a[href^="#"]');
+    if (!a || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const el = a.hash.length > 1 && document.getElementById(decodeURIComponent(a.hash.slice(1)));
+    const y = el ? linkTop(el) : null;
+    if (y === null) return;
+    event.preventDefault();
+    history.pushState(null, '', a.hash);
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+    el.focus({ preventScroll: true }); // la suite de la tabulation part de la section atteinte
+    if (reduce.matches) window.scrollTo({ top: y, behavior: 'instant' });
+    else animateTo(y);
+  });
   // Une autre action de défilement (clavier, lien, barre) interrompt l'animation.
   ['keydown', 'pointerdown', 'touchstart'].forEach((type) => window.addEventListener(type, () => { if (anim && !anim.done) anim = null; }, { passive: true }));
 })();

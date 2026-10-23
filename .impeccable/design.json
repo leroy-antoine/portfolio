@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-22T17:58:08Z",
+  "generatedAt": "2026-10-23T14:43:29Z",
   "title": "Design System: Portfolio Antoine Leroy",
   "extensions": {
     "colorMeta": {
@@ -93,28 +93,91 @@
           "#c0b7e1",
           "#efedf8"
         ]
+      },
+      "data-blue": {
+        "role": "tertiary",
+        "displayName": "Data Blue",
+        "canonical": "#4da3ff",
+        "tonalRamp": [
+          "#00254c",
+          "#003e80",
+          "#0056b2",
+          "#006fe6",
+          "#1a88ff",
+          "#4da3ff",
+          "#a3d0ff",
+          "#e5f2ff"
+        ]
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Titre du hero."
+        "purpose": "Titre du hero, seul h1."
+      },
+      "contact": {
+        "displayName": "Contact",
+        "purpose": "Titre du contact, jusqu'à 120 px, remplit l'écran."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Titres de projet."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Titres de section."
       },
       "readout": {
         "displayName": "Readout",
-        "purpose": "Chiffres clés mono jaune."
+        "purpose": "Chiffres clés mono jaune (À propos, métriques des projets)."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Spécifications, métriques, dates."
+        "purpose": "Spécifications, métriques, dates, technologies."
       }
     },
-    "shadows": [],
+    "shadows": [
+      {
+        "name": "popover",
+        "value": "0 18px 48px rgba(0, 0, 0, 0.55)",
+        "purpose": "Menu du nom, calque flottant."
+      },
+      {
+        "name": "lightbox",
+        "value": "0 24px 80px rgba(0, 0, 0, 0.55)",
+        "purpose": "Image agrandie de la visionneuse."
+      }
+    ],
     "motion": [
       {
-        "name": "ease-out-expo",
+        "name": "ease-out",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Tracé du graphique (1,4 s) et fondu d'onglet (0,35 s)."
+        "purpose": "Entrées d'éléments et de scènes, ouverture des menus."
+      },
+      {
+        "name": "ease-in-out",
+        "value": "cubic-bezier(0.65, 0, 0.35, 1)",
+        "purpose": "Tracés (lignes de temps, clip-path) et défilement animé de la molette."
+      },
+      {
+        "name": "duration-short",
+        "value": "180ms",
+        "purpose": "Retours d'action : survol, bouton, fermeture de menu."
+      },
+      {
+        "name": "duration-medium",
+        "value": "420ms",
+        "purpose": "Apparitions d'éléments, ouverture du menu du nom."
+      },
+      {
+        "name": "duration-long",
+        "value": "800ms",
+        "purpose": "Entrées de scène."
+      },
+      {
+        "name": "duration-graph",
+        "value": "2400ms",
+        "purpose": "Tracé des graphiques jusqu'à l'épisode montré."
       }
     ],
     "breakpoints": [
@@ -142,7 +205,7 @@
       "kind": "button",
       "refersTo": "button-ghost",
       "description": "Action secondaire.",
-      "html": "<a class=\"ds-btn-ghost\" href=\"#\">Télécharger le CV</a>",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">CV (PDF)</a>",
       "css": ".ds-btn-ghost{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:12px;border:1px solid #6f69ad;color:#ece9f6;font:600 16px/1.2 \"Schibsted Grotesk\",sans-serif;text-decoration:none}.ds-btn-ghost:hover{border-color:#a597ff;color:#fff}.ds-btn-ghost:focus-visible{outline:3px solid #a597ff;outline-offset:3px}"
     },
     {
@@ -151,39 +214,47 @@
       "refersTo": "chip",
       "description": "Technologie utilisée par un projet.",
       "html": "<span class=\"ds-chip\">Python</span>",
-      "css": ".ds-chip{display:inline-block;padding:5px 10px;border:1px solid #38345a;border-radius:7px;color:#cfcbe0;font:14px \"JetBrains Mono\",monospace}"
+      "css": ".ds-chip{display:inline-block;padding:6px 12px;border:1px solid #38345a;border-radius:7px;color:#cfcbe0;font:14px \"JetBrains Mono\",monospace}"
     },
     {
       "name": "Card",
       "kind": "card",
       "refersTo": "card",
-      "description": "Conteneur de projet.",
+      "description": "Bloc de métriques ou de statistique à l'intérieur d'une scène de projet.",
       "html": "<article class=\"ds-card\"><h3>Arcade - borne modulaire</h3><p class=\"ds-spec\">Architecture · C++ · Équipe de 3</p></article>",
-      "css": ".ds-card{padding:20px;border:1px solid #25223a;border-radius:18px;background:#100e1b;color:#ece9f6}.ds-card h3{margin:0 0 6px;font:600 22px \"Schibsted Grotesk\",sans-serif}.ds-spec{margin:0;font:14px \"JetBrains Mono\",monospace;color:#aaa6c0}"
+      "css": ".ds-card{padding:24px;border-radius:16px;background:#181527;color:#ece9f6}.ds-card h3{margin:0 0 6px;font:600 22px \"Schibsted Grotesk\",sans-serif}.ds-spec{margin:0;font:14px \"JetBrains Mono\",monospace;color:#aaa6c0}"
     },
     {
       "name": "Readout",
       "kind": "custom",
       "description": "Chiffre clé mono jaune avec contexte.",
-      "html": "<div class=\"ds-readout\"><span class=\"ds-readout__v\">80+ projets</span><span class=\"ds-readout__t\">EPITECH · GPA 3.04</span></div>",
-      "css": ".ds-readout{display:flex;flex-direction:column;gap:4px;padding:16px 0;border-bottom:1px solid #25223a}.ds-readout__v{font:500 28px/1.2 \"JetBrains Mono\",monospace;color:#ecd24a}.ds-readout__t{font:15px/1.5 \"Schibsted Grotesk\",sans-serif;color:#aaa6c0}"
+      "html": "<div class=\"ds-readout\"><span class=\"ds-readout__v\">Finaliste</span><span class=\"ds-readout__t\">EPITECH Code Breaker 2026 avec Zappy et Lunar Lander</span></div>",
+      "css": ".ds-readout{display:flex;flex-direction:column;gap:4px;padding:4px 28px;border-left:1px solid #25223a}.ds-readout__v{font:500 30px/1.2 \"JetBrains Mono\",monospace;color:#ecd24a}.ds-readout__t{font:16px/1.5 \"Schibsted Grotesk\",sans-serif;color:#aaa6c0}"
     },
     {
-      "name": "Tab",
+      "name": "Carousel Controls",
       "kind": "custom",
-      "description": "Onglet d'algorithme (actif et inactif).",
-      "html": "<button class=\"ds-tab\" aria-pressed=\"false\">Q-Learning</button> <button class=\"ds-tab\" aria-pressed=\"true\">PPO + vent</button>",
-      "css": ".ds-tab{min-height:44px;padding:0 12px;border:1px solid #6f69ad;border-radius:10px;background:transparent;color:#ece9f6;font:500 14px \"Schibsted Grotesk\",sans-serif;cursor:pointer}.ds-tab:hover{border-color:#a597ff}.ds-tab[aria-pressed=\"true\"]{background:#a597ff;border-color:#a597ff;color:#09080f;font-weight:600}"
+      "description": "Flèches rondes, points (le point actif s'allonge en violet) et bouton pause ; un compteur remplace les points quand ils ne tiennent pas.",
+      "html": "<div class=\"ds-car\"><button class=\"ds-car__btn\" aria-label=\"Précédente\">‹</button><span class=\"ds-car__dot\"></span><span class=\"ds-car__dot is-on\"></span><span class=\"ds-car__dot\"></span><button class=\"ds-car__btn\" aria-label=\"Suivante\">›</button></div>",
+      "css": ".ds-car{display:flex;align-items:center;gap:4px}.ds-car__btn{display:grid;place-items:center;width:44px;height:44px;border:1px solid #6f69ad;border-radius:50%;background:transparent;color:#ece9f6;font-size:20px;cursor:pointer}.ds-car__btn:hover{border-color:#a597ff}.ds-car__dot{width:8px;height:8px;margin:18px;border-radius:999px;background:#38345a}.ds-car__dot.is-on{width:22px;background:#a597ff}"
+    },
+    {
+      "name": "Brand Menu",
+      "kind": "custom",
+      "description": "Panneau ouvert par la photo et le nom : liens avec logo sur pastille claire, puis action avec icône violette.",
+      "html": "<ul class=\"ds-pop\"><li><a class=\"ds-pop__item\" href=\"#\"><span class=\"ds-pop__icon ds-pop__icon--logo\">G</span>Glance</a></li><li><a class=\"ds-pop__item\" href=\"#\"><span class=\"ds-pop__icon\">↑</span>Retour en haut</a></li></ul>",
+      "css": ".ds-pop{min-width:248px;margin:0;padding:8px;list-style:none;border:1px solid #38345a;border-radius:16px;background:#100e1b;box-shadow:0 18px 48px rgba(0,0,0,.55)}.ds-pop__item{display:flex;align-items:center;gap:12px;min-height:48px;padding:6px 12px 6px 6px;border-radius:10px;color:#ece9f6;font:500 16px \"Schibsted Grotesk\",sans-serif;text-decoration:none}.ds-pop__item:hover{background:#181527}.ds-pop__icon{display:grid;place-items:center;width:36px;height:36px;border:1px solid #38345a;border-radius:9px;color:#a597ff}.ds-pop__icon--logo{border-color:transparent;background:#f4f3fa;color:#09080f}"
     }
   ],
   "narrative": {
     "northStar": "La télémétrie",
-    "overview": "Une page sombre comme un tableau de bord de vol. La vidéo du module lunaire est l'objet central ; le reste se lit comme des instruments : mesures en mono, surfaces calmes, une seule couleur pour agir.",
+    "overview": "Une page sombre comme un tableau de bord de vol. La vidéo du module lunaire ouvre la page puis rejoint sa place parmi les instruments du projet ; le reste se lit comme des mesures : chiffres en mono, surfaces calmes, une seule couleur pour agir, et des projets jouables dans le navigateur.",
     "keyCharacteristics": [
-      "Fond quasi noir teinté de violet, surfaces par paliers tonals, sans ombres.",
-      "Violet réservé à l'action, jaune réservé aux valeurs mesurées.",
+      "Fond quasi noir teinté de violet, surfaces par paliers tonals ; ombres réservées aux calques flottants.",
+      "Violet réservé à l'action, jaune aux valeurs mesurées, bleu aux courbes de données et aux distinctions.",
       "Mono pour la donnée, sans-serif pour la lecture.",
-      "Un seul geste de mouvement : le tracé du graphique de crash.",
+      "Une page en scènes : sur bureau, chaque projet tient dans un écran et la molette avance d'une scène par cran.",
+      "Un langage de mouvement unique (une famille de courbes, trois durées, trois distances), jamais indispensable à la compréhension.",
       "Contenu en français, WCAG 2.2 AA, fonctionne sans JavaScript."
     ],
     "rules": [
@@ -194,7 +265,7 @@
       },
       {
         "name": "La règle de la teinte",
-        "body": "Les neutres sont tous teintés de violet ; pas de gris pur.",
+        "body": "Les neutres sont tous teintés de violet ; pas de gris pur, sauf dans les reproductions (prompt 42sh, fenêtre Arcade).",
         "section": "colors"
       },
       {
@@ -204,22 +275,33 @@
       },
       {
         "name": "La règle du plat",
-        "body": "Pas d'ombre portée, pas de lueur. Un nouvel élément gagne sa place par un palier de surface ou un filet.",
+        "body": "Pas d'ombre portée ni de lueur sur la page. Seuls les calques flottants en ont une : la visionneuse d'images et le menu du nom.",
         "section": "elevation"
+      },
+      {
+        "name": "La règle de l'insécable",
+        "body": "Une espace insécable précède « ? », « : » et « % », y compris dans les titres découpés en mots.",
+        "section": "typography"
+      },
+      {
+        "name": "La règle du sens",
+        "body": "Aucune animation n'est nécessaire pour comprendre un contenu : sans elle, la page dit la même chose.",
+        "section": "motion"
       }
     ],
     "dos": [
       "Do réserver le violet (#a597ff) à l'action et le jaune (#ecd24a) à la mesure.",
-      "Do laisser les vidéos et les courbes réelles porter chaque projet.",
-      "Do garder un contraste d'au moins 4,5:1 pour le texte et 3:1 pour les bordures de contrôle.",
-      "Do respecter prefers-reduced-motion : le graphique est alors entièrement visible, sans tracé.",
+      "Do laisser les vidéos, les courbes réelles et les projets jouables porter chaque projet.",
+      "Do faire tenir chaque scène de projet dans un écran de bureau, médias dimensionnés sur la hauteur.",
+      "Do garder un contraste d'au moins 4,5:1 pour le texte et 3:1 pour les bordures de contrôle, et des cibles de 44 px.",
+      "Do respecter prefers-reduced-motion partout.",
       "Do teinter tous les neutres de violet."
     ],
     "donts": [
-      "Don't ajouter d'ombre portée ou de lueur.",
+      "Don't ajouter d'ombre portée ou de lueur en dehors des calques flottants.",
       "Don't utiliser un kicker ou un numéro de section au-dessus d'un titre.",
-      "Don't utiliser le mono en décoration ou sous 14 px (hors schéma Arcade).",
-      "Don't imbriquer des cartes dans des cartes au-delà des blocs de métriques et de parties déjà présents.",
+      "Don't utiliser le mono en décoration ou sous 14 px (hors schémas et touches d'Arcade).",
+      "Don't imbriquer des cartes dans des cartes au-delà des blocs de métriques déjà présents.",
       "Don't inventer de chiffres, de témoignages ou de projets : le contenu reste factuel."
     ]
   }

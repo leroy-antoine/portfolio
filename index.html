@@ -44,10 +44,27 @@
 
 <header class="site-header">
   <div class="site-header__bar">
-    <a class="brand" href="#top" aria-label="Antoine Leroy - retour en haut">
-      <img class="brand__logo" src="assets/antoine-avatar.jpg" width="40" height="40" alt="" decoding="async">
-      <span class="brand__name">Antoine Leroy</span>
-    </a>
+    <!-- Sans JavaScript, le nom ramène en haut. script.js (initBrandMenu) en fait un bouton
+         qui ouvre le petit menu : GitHub, Glance, retour en haut. -->
+    <div class="brand-wrap">
+      <a class="brand" href="#top" aria-label="Antoine Leroy - retour en haut">
+        <img class="brand__logo" src="assets/antoine-avatar.jpg" width="40" height="40" alt="" decoding="async">
+        <span class="brand__name">Antoine Leroy</span>
+      </a>
+      <div class="brand-pop" id="brand-pop" hidden>
+        <ul class="brand-pop__list">
+          <li><a class="brand-pop__item" href="https://github.com/leroy-antoine" target="_blank" rel="noopener noreferrer">
+            <span class="brand-pop__icon brand-pop__icon--logo"><img src="assets/github-64.png" width="22" height="22" alt="" loading="lazy" decoding="async"></span>
+            <span>Mon GitHub<span class="sr-only"> (nouvel onglet)</span></span></a></li>
+          <li><a class="brand-pop__item" href="https://glance-dashboard.fr/" target="_blank" rel="noopener noreferrer">
+            <span class="brand-pop__icon brand-pop__icon--logo"><img src="assets/glance-64.png" width="24" height="24" alt="" loading="lazy" decoding="async"></span>
+            <span>Glance<span class="sr-only"> (nouvel onglet)</span></span></a></li>
+          <li><button class="brand-pop__item" type="button" data-top>
+            <span class="brand-pop__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+            <span>Retour en haut</span></button></li>
+        </ul>
+      </div>
+    </div>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu">
       <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
@@ -56,7 +73,7 @@
         <li><a href="#projets">Projets</a></li>
         <li><a href="#stack">Stack</a></li>
         <li><a href="#parcours">Parcours</a></li>
-        <li><a href="assets/CV_LEROY_ANTOINE.pdf" download="CV_LEROY_ANTOINE.pdf">CV<span class="sr-only"> (PDF, 135 ko)</span></a></li>
+        <li><a href="assets/CV_LEROY_ANTOINE.pdf" target="_blank" rel="noopener">CV<span class="sr-only"> (PDF, 137 ko, nouvel onglet)</span></a></li>
         <li><a class="site-nav__cta" href="#contact">Me contacter</a></li>
       </ul>
     </nav>
@@ -250,7 +267,7 @@
           <ul class="tags" aria-label="Technologies">
             <li>Python</li><li>Gymnasium</li><li>PPO</li><li>DQN</li><li>Q-Learning</li>
           </ul>
-          <a class="link-src" href="https://github.com/leroy-antoine/Deep-learning">Code source<span class="sr-only"> du projet Deep Learning sur GitHub</span>
+          <a class="link-src" href="https://github.com/leroy-antoine/Deep-learning" target="_blank" rel="noopener noreferrer">Code source<span class="sr-only"> du projet Deep Learning sur GitHub (nouvel onglet)</span>
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
         </div>
       </div>
@@ -292,7 +309,7 @@
           <ul class="tags" aria-label="Technologies">
             <li>C++</li><li>Python</li><li>TCP / sockets</li><li>Protocole client-serveur</li><li>3D temps réel</li><li>Makefile</li>
           </ul>
-          <a class="link-src" href="https://github.com/leroy-antoine/Zappy">Code source<span class="sr-only"> de Zappy</span>
+          <a class="link-src" href="https://github.com/leroy-antoine/Zappy" target="_blank" rel="noopener noreferrer">Code source<span class="sr-only"> de Zappy (nouvel onglet)</span>
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
         </div>
       </div>
@@ -364,7 +381,7 @@
           <ul class="tags" aria-label="Technologies">
             <li>C++20</li><li>CMake</li><li>libconfig++</li>
           </ul>
-          <a class="link-src" href="https://github.com/leroy-antoine/Raytracer">Code source<span class="sr-only"> du Raytracer</span>
+          <a class="link-src" href="https://github.com/leroy-antoine/Raytracer" target="_blank" rel="noopener noreferrer">Code source<span class="sr-only"> du Raytracer (nouvel onglet)</span>
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
         </div>
       </div>
@@ -442,7 +459,7 @@
           <ul class="tags" aria-label="Technologies">
             <li>Python</li><li>scikit-learn</li><li>K-means</li><li>PCA</li><li>Random Forest</li>
           </ul>
-          <a class="link-src" href="https://github.com/leroy-antoine/Doctor-Cvrie">Code source<span class="sr-only"> de Doctor Cvrie</span>
+          <a class="link-src" href="https://github.com/leroy-antoine/Doctor-Cvrie" target="_blank" rel="noopener noreferrer">Code source<span class="sr-only"> de Doctor Cvrie (nouvel onglet)</span>
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
         </div>
       </div>
@@ -500,7 +517,7 @@
           <ul class="tags" aria-label="Technologies">
             <li>C++</li><li>CMake</li><li>SDL2</li><li>SFML</li>
           </ul>
-          <a class="link-src" href="https://github.com/leroy-antoine/Arcade">Code source<span class="sr-only"> de Arcade</span>
+          <a class="link-src" href="https://github.com/leroy-antoine/Arcade" target="_blank" rel="noopener noreferrer">Code source<span class="sr-only"> de Arcade (nouvel onglet)</span>
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
         </div>
       </div>
@@ -547,7 +564,7 @@
           <ul class="tags" aria-label="Technologies">
             <li>C</li><li>Make</li><li>POSIX</li>
           </ul>
-          <a class="link-src" href="https://github.com/leroy-antoine/my_shell">Code source<span class="sr-only"> de my_shell</span>
+          <a class="link-src" href="https://github.com/leroy-antoine/my_shell" target="_blank" rel="noopener noreferrer">Code source<span class="sr-only"> de my_shell (nouvel onglet)</span>
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
         </div>
       </div>
@@ -663,7 +680,7 @@
         <h2>Distinctions</h2>
         <ol class="timeline timeline--awards">
           <li>
-            <span class="timeline__date">2026</span>
+            <span class="timeline__date">Juin 2026</span>
             <h3>Finaliste - EPITECH Code Breaker</h3>
             <p>Avec Zappy et Lunar Lander.</p>
           </li>
@@ -683,7 +700,7 @@
            la frise couvre de septembre 2023 (8) à octobre 2027 (57). script.js place le repère « aujourd'hui ». -->
       <figure class="frise">
         <div class="frise__scroll">
-          <div class="frise__grid" role="img" aria-label="Frise de 2023 à 2027 : licence à Paris 1 de 2023 à 2024, EPITECH depuis 2024, ETNA de juillet à décembre 2025, Astek de janvier 2026 à mars 2027, EPITECH Code Breaker en juin 2025, hackathon 42 AI en septembre 2025, finaliste du Code Breaker 2026, puis un stage recherché d'avril à fin juillet 2027.">
+          <div class="frise__grid" role="img" aria-label="Frise de 2023 à 2027 : licence à Paris 1 de 2023 à 2024, EPITECH depuis 2024, ETNA de juillet à décembre 2025, Astek de janvier 2026 à mars 2027, EPITECH Code Breaker en juin 2025, hackathon 42 AI en septembre 2025, finaliste du Code Breaker en juin 2026, puis un stage recherché d'avril à fin juillet 2027.">
             <span class="frise__lane" style="--row: 1" aria-hidden="true">Formation</span>
             <span class="frise__lane" style="--row: 2" aria-hidden="true">Expériences</span>
             <span class="frise__lane" style="--row: 3" aria-hidden="true">Distinctions</span>
@@ -712,14 +729,14 @@
   <!-- Contact -->
   <section class="section section--contact" id="contact" aria-labelledby="contact-title">
     <div class="container container--contact" data-anim="contact">
-      <h2 id="contact-title">Un stage de début avril à fin juillet 2027 ? Parlons-en.</h2>
+      <h2 id="contact-title">Un stage de début avril à fin juillet 2027&nbsp;? Parlons-en.</h2>
       <p class="contact__lead">Ingénierie logicielle, IA, systèmes : écrivez-moi, je serai ravi d'échanger.</p>
       <div class="contact__actions">
         <a class="btn btn--primary btn--lg" href="mailto:etudes.leroy.antoine@gmail.com">
           <svg class="lg-only" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           etudes.leroy.antoine@gmail.com</a>
-        <a class="btn btn--ghost btn--lg" href="https://github.com/leroy-antoine">github.com/leroy-antoine</a>
-        <a class="btn btn--ghost btn--lg" href="assets/CV_LEROY_ANTOINE.pdf" download="CV_LEROY_ANTOINE.pdf">CV (PDF)</a>
+        <a class="btn btn--ghost btn--lg" href="https://github.com/leroy-antoine" target="_blank" rel="noopener noreferrer">github.com/leroy-antoine<span class="sr-only"> (nouvel onglet)</span></a>
+        <a class="btn btn--ghost btn--lg" href="assets/CV_LEROY_ANTOINE.pdf" target="_blank" rel="noopener">CV (PDF)<span class="sr-only"> (nouvel onglet)</span></a>
       </div>
     </div>
   </section>

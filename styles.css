@@ -36,7 +36,7 @@
   --hero-top: clamp(48px, calc(48px + 56 * (100vw - 390px) / 634), 104px);
   --fs-h1: clamp(38px, calc(38px + 22 * (100vw - 390px) / 890), 60px);
   --fs-h2: clamp(32px, calc(32px + 12 * (100vw - 390px) / 890), 44px);
-  --fs-h2-contact: clamp(34px, calc(34px + 22 * (100vw - 390px) / 890), 56px);
+  --fs-h2-contact: clamp(38px, min(11vw, 11svh), 120px); /* le titre du contact remplit l'écran */
   --card-pad: clamp(20px, calc(20px + 20 * (100vw - 390px) / 634), 40px);
   --max: 1680px;
 
@@ -100,6 +100,8 @@ main:focus-visible {
   border-radius: 8px;
 }
 main:focus-visible { outline: none; }
+/* Sections atteintes par un lien interne : focus posé par script.js, sans contour. */
+[tabindex="-1"]:focus { outline: none; }
 
 .sr-only {
   position: absolute;
@@ -226,6 +228,68 @@ svg.lg-only { display: none; }
   background: var(--bg-deep);
 }
 .brand__name { font-size: 16px; font-weight: 600; }
+/* Menu du nom (script.js, initBrandMenu) : le nom devient un bouton, le panneau s'ouvre dessous. */
+.brand-wrap { position: relative; }
+button.brand { padding: 0 8px 0 0; border: 0; border-radius: 12px; background: none; font: inherit; cursor: pointer; }
+.brand__chev { flex: none; color: var(--text-2); transition: transform var(--dur-medium) var(--ease-out), color var(--dur-short) var(--ease-out); }
+button.brand:hover .brand__chev, .brand[aria-expanded="true"] .brand__chev { color: var(--accent); }
+.brand[aria-expanded="true"] .brand__chev { transform: rotate(180deg); }
+.brand .brand__logo { transition: transform var(--dur-medium) var(--ease-out), border-color var(--dur-short) var(--ease-out); }
+.brand[aria-expanded="true"] .brand__logo { transform: scale(1.06); border-color: var(--accent); }
+.brand-pop {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: -8px;
+  z-index: 60;
+  min-width: 248px;
+  padding: 8px;
+  border: 1px solid var(--line-3);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+  transform-origin: 24px 0;
+  visibility: hidden;
+  opacity: 0;
+  transform: translate3d(0, -8px, 0) scale(0.94);
+  transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out), visibility 0s var(--dur-short);
+}
+.brand-pop.is-open {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--dur-medium) var(--ease-out), transform var(--dur-medium) var(--ease-out), visibility 0s;
+}
+.brand-pop__list { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.brand-pop__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 6px 12px 6px 6px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--text);
+  font: 500 16px var(--font-sans);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+}
+.brand-pop__item:hover { background: var(--surface-2); color: var(--text); }
+.brand-pop__item:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.brand-pop__icon { display: grid; flex: none; place-items: center; width: 36px; height: 36px; border: 1px solid var(--line-3); border-radius: 9px; color: var(--accent); }
+.brand-pop__icon--logo { border-color: transparent; background: #f4f3fa; } /* logos sombres : fond clair */
+/* Entrées en cascade à l'ouverture. */
+.brand-pop li { opacity: 0; transform: translate3d(0, -6px, 0); transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out); }
+.brand-pop.is-open li { opacity: 1; transform: none; transition-duration: var(--dur-medium); }
+.brand-pop.is-open li:nth-child(1) { transition-delay: 60ms; }
+.brand-pop.is-open li:nth-child(2) { transition-delay: 110ms; }
+.brand-pop.is-open li:nth-child(3) { transition-delay: 160ms; }
+@media (prefers-reduced-motion: reduce) {
+  .brand-pop, .brand-pop.is-open, .brand-pop li { transform: none; }
+}
 
 /* Bouton burger : visible seulement avec JavaScript, sous 1024 px */
 .menu-toggle { display: none; }
@@ -1401,9 +1465,11 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
 .anim-ready [data-anim="career"].is-in .frise__mark { transition: opacity var(--dur-medium) var(--ease-out); transition-delay: calc(700ms + var(--k, 0) * 160ms); }
 
 /* ---------- Contact ---------- */
-.section--contact { padding-block: 64px; border-bottom: 0; }
+.section--contact { display: flex; flex-direction: column; justify-content: center; min-height: 100svh; padding-block: 64px; border-bottom: 0; }
 .container--contact { gap: 24px; }
-.container--contact h2 { font-size: var(--fs-h2-contact); line-height: 1.08; text-wrap: balance; }
+.container--contact h2 { font-size: var(--fs-h2-contact); line-height: 1.04; letter-spacing: -0.03em; text-wrap: balance; }
+/* Arrivée floue, nette quand la section remplit l'écran (script.js, initContactFocus). */
+.container--contact.is-focusing { filter: blur(var(--focus-blur, 0px)); opacity: var(--focus-o, 1); }
 .contact__lead { display: none; font-size: 20px; line-height: 1.6; color: var(--text-2); }
 .contact__actions { display: flex; flex-direction: column; gap: 12px; }
 .contact__actions .btn { overflow-wrap: anywhere; }
@@ -1530,6 +1596,7 @@ a.zoomable, a.thumb { cursor: zoom-in; }
 
 
   .section--contact { padding-block: 120px; }
+  .contact__lead { font-size: clamp(20px, 1.6vw, 26px); }
   .contact__lead { display: block; max-width: 620px; }
   .contact__actions { flex-direction: row; flex-wrap: wrap; }
   .btn--lg { min-height: 56px; padding: 0 28px; font-size: 17px; }
@@ -1590,7 +1657,7 @@ a.zoomable, a.thumb { cursor: zoom-in; }
 
 
   .container--contact { align-items: center; gap: 32px; text-align: center; }
-  .container--contact h2 { max-width: 1100px; }
+  .container--contact h2 { max-width: 1500px; }
   .container--stack { gap: 48px; }
   .core-stack { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
   .extras { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 40px; }

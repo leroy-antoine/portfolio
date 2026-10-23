@@ -22,10 +22,10 @@ Single-page static site, hosted on any static file host (GitHub Pages, Netlify, 
 - Static HTML/CSS/native JS, no framework, no build step; deployable as-is.
 - Content in French; WCAG 2.2 AA; must work without JavaScript; `prefers-reduced-motion` respected.
 - Factual content stays exact: figures, distinctions, links and text are not changed or invented.
-- Open: Zappy has no repository link; internship year not stated; og:image is a relative URL.
+- Open: og:image is a relative URL, to be made absolute once the site is deployed.
 
 ## Evidence on Hand
-Real assets in `assets/`: RL training videos (PPO, Q-learning, DQL), crash-rate and training graphs, Zappy demo video, raytracer renders and UML, CV PDF. Awards: 1st place "Agents building Agents" hackathon (42 AI x BlackBox AI, Sept. 2025); EPITECH Code Breaker winner with Corewar and finalist with 42sh (June 2025). No testimonials exist; do not fabricate any.
+Real assets in `assets/`: RL training videos (PPO, Q-learning, DQL), crash-rate and training graphs, Zappy demo video, raytracer renders and UML, CV PDF. Awards: 1st place "Agents building Agents" hackathon (42 AI x BlackBox AI, Sept. 2025); EPITECH Code Breaker winner with Corewar, voted best project of the year 2025, and finalist with 42sh (June 2025); EPITECH Code Breaker finalist with Zappy and Lunar Lander (June 2026). Playable in the browser: Arcade (desktop) and a faithful 42sh emulation. No testimonials exist; do not fabricate any.
 
 ## Product Principles
 - The work is the proof: real videos, charts and metrics lead over self-description.
