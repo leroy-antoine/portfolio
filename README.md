@@ -31,20 +31,22 @@ Site statique d'une seule page, sans framework, sans dépendance et sans étape 
 | Structure | HTML5 sémantique (`header`, `nav`, `main`, `section`, `article`, `footer`) | Accessibilité (WCAG 2.2 AA) et référencement sans outil supplémentaire |
 | Style | CSS natif : variables CSS (design tokens), Grid, Flexbox, `clamp()` pour les tailles fluides, container queries pour les schémas | Un thème modifiable en un seul endroit (`:root`) |
 | Interactions | JavaScript natif, aucune bibliothèque | Le site reste lisible et utilisable sans JavaScript |
-| Polices | Schibsted Grotesk et JetBrains Mono via Google Fonts | Seule ressource externe |
+| Polices | Schibsted Grotesk et JetBrains Mono, hébergées dans `assets/fonts/` (WOFF2 variables, licence OFL) | Aucune requête vers un autre site (RGPD) |
 | Médias | PNG/JPG, vidéos MP4/WebM sans son avec affiche, favicon SVG | Chargement différé (`loading="lazy"`, `preload="metadata"`), lecture seulement à l'écran |
-| Hébergement | Tout hébergeur de fichiers statiques : GitHub Pages, Netlify, Vercel | Aucun serveur, aucune commande de build |
+| Hébergement | GitHub Pages | Aucun serveur, aucune commande de build |
 
 Organisation des fichiers :
 
 ```
 index.html     structure et contenu
+mentions-legales.html  mentions légales et confidentialité (lien en pied de page)
+_config.yml    GitHub Pages : fichiers du dépôt non publiés (documentation, originaux)
 styles.css     design tokens, mise en page responsive, animations
 script.js      menus (nom, burger), séquence du hero, carrousels, animations d'apparition,
                défilement section par section à la molette, liens internes, frise, contact
 shell.js       émulation de 42sh (my_shell)
 arcade.js      Arcade jouable (Core, jeux, affichages)
-assets/        images, vidéos, affiches, CV, logos, sprites d'Arcade (assets/arcade/)
+assets/        images, vidéos, affiches, CV, logos, polices (assets/fonts/), sprites d'Arcade (assets/arcade/)
 DESIGN.md      système de design
 PRODUCT.md     contexte produit (public, objectifs, contraintes)
 ```
@@ -57,6 +59,10 @@ PRODUCT.md     contexte produit (public, objectifs, contraintes)
 - **Accessibilité** : lien d'évitement, navigation complète au clavier, focus visible, cibles d'au moins 44 px, contraste AA, un seul `h1`, vidéos avec bouton pause.
 
 ## Avant la mise en ligne
+
+- Dans les réglages GitHub Pages du dépôt, cocher « Enforce HTTPS ».
+- Publier depuis une branche (Jekyll) : c'est ce qui applique `_config.yml` et laisse la documentation et les originaux hors du site. Avec un déploiement par GitHub Actions, ces fichiers seraient publiés.
+- La politique de sécurité (CSP) est posée par une balise `<meta>` dans `index.html`. Si le script inline du `<head>` change, recalculer son empreinte sha256 dans cette balise. GitHub Pages ne permet pas d'ajouter d'en-têtes HTTP : la protection contre l'intégration dans un cadre (`frame-ancestors`) n'est donc pas disponible.
 
 L'image de partage (`og:image`, dans `index.html`) pointe vers `assets/raytracer-spheres.png` en URL relative : la remplacer par l'URL absolue du site déployé (par exemple `https://mon-domaine.fr/assets/raytracer-spheres.png`), sinon les aperçus de lien (LinkedIn, Slack, Discord) n'afficheront pas d'image.
 

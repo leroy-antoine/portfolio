@@ -1728,6 +1728,8 @@ Exemples :
   }
   input.addEventListener('keydown', (event) => {
     const main = pending && pending.main;
+    // Tab sert à la complétion : Échap rend la main au clavier (Tab reprend après le terminal).
+    if (event.key === 'Escape') { input.blur(); return; }
     if (event.key === 'Tab' && !event.shiftKey && main && input.value.trim()) {
       event.preventDefault();
       doTab();

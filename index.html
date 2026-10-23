@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Politique de sécurité : seuls les fichiers du site et le script ci-dessous (empreinte sha256) sont autorisés.
+     Modifier ce script inline impose de recalculer son empreinte. Les styles inline (positions de la frise, variables) restent permis. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hWo4YhMMSizRZm5dCKzS1H9MfRXaNAEB8/yKTKsl5MM='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Antoine Leroy - Ingénieur logiciel &amp; développeur IA</title>
 <meta name="description" content="Portfolio d'Antoine Leroy, étudiant à EPITECH : systèmes en C/C++, IA en Python. Lunar Lander, Zappy, Arcade, Raytracer. Recherche un stage de début avril à fin juillet 2027.">
 <meta name="author" content="Antoine Leroy">
@@ -23,9 +27,8 @@
 
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Schibsted+Grotesk:wght@400;500;600;700&amp;display=swap">
+<link rel="preload" href="assets/fonts/schibsted-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
 <script>
   // Posé avant le premier rendu : la hauteur des séquences épinglées ne doit pas changer après coup (CLS).
@@ -110,7 +113,7 @@
           <span class="lg-only">Disponible pour un stage · début avril → fin juillet 2027</span>
           <span class="sm-only">Stage · avril → juillet 2027</span>
         </p>
-        <h1 id="hero-title">Ingénieur logiciel &amp; développeur&nbsp;IA.</h1>
+        <h1 id="hero-title">Ingénieur logiciel &amp; développeur IA.</h1>
       </div>
 
       <span class="hero-seq__cue" aria-hidden="true">Défiler</span>
@@ -547,7 +550,8 @@
 </span><span class="term__cmd"><span class="term__prompt">42sh&gt;</span> exit</span></div>
           <form class="term__form" hidden>
             <span class="term__ps" aria-hidden="true"></span>
-            <input class="term__input" id="shell-input" type="text" aria-label="Commande 42sh (émulation)" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send">
+            <span class="sr-only" id="shell-keys">Tab complète la commande ; Échap ou Maj + Tab pour quitter le terminal.</span>
+            <input class="term__input" id="shell-input" type="text" aria-label="Commande 42sh (émulation)" aria-describedby="shell-keys" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send">
           </form>
           <div class="term__try" hidden>
             <span class="term__try-label">Essayer :</span>
@@ -745,7 +749,10 @@
 <footer class="site-footer">
   <div class="site-footer__inner">
     <span>© 2026 Antoine Leroy</span>
-    <a href="#top">Retour en haut ↑</a>
+    <span class="site-footer__links">
+      <a href="mentions-legales.html">Mentions légales et confidentialité</a>
+      <a href="#top">Retour en haut ↑</a>
+    </span>
   </div>
 </footer>
 

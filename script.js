@@ -106,16 +106,17 @@ function initCarousel(root) {
   let current = -1;
 
   root.setAttribute('role', 'region');
-  slides.forEach((slide, i) => {
-    slide.setAttribute('role', 'group');
-    slide.setAttribute('aria-roledescription', 'diapositive');
-    slide.setAttribute('aria-label', `${i + 1} sur ${total}${name(slide)}`);
-  });
+  // Les diapositives restent des éléments de liste (<ol>) : la liste annonce déjà « 1 sur 5 ».
+  slides.forEach((slide, i) => slide.setAttribute('aria-label', `${i + 1} sur ${total}${name(slide)}`));
+  // La piste défile au clavier (flèches) : sans lien dedans (vidéos), elle reçoit elle-même le focus.
+  if (!track.querySelector('a, button') && !track.hasAttribute('tabindex')) track.tabIndex = 0;
+  // Carrousel de vidéos ou d'images : le libellé des points et l'annonce suivent le contenu.
+  const kind = track.querySelector('video') ? ['la vidéo', 'Vidéo'] : ["l'image", 'Image'];
   const dots = slides.map((slide, i) => {
     const dot = document.createElement('button');
     dot.type = 'button';
     dot.className = 'carousel__dot';
-    dot.setAttribute('aria-label', `Afficher la vidéo ${i + 1} sur ${total}${name(slide)}`);
+    dot.setAttribute('aria-label', `Afficher ${kind[0]} ${i + 1} sur ${total}${name(slide)}`);
     dot.addEventListener('click', () => goTo(i));
     dotsEl.appendChild(dot);
     return dot;
@@ -140,13 +141,15 @@ function initCarousel(root) {
     if (index === current) return;
     current = index;
     dots.forEach((dot, i) => dot.toggleAttribute('aria-current', i === index));
+    // Diapositives hors écran : hors de la tabulation et des lecteurs d'écran.
+    slides.forEach((slide, i) => slide.toggleAttribute('inert', i !== index));
     count.textContent = `${index + 1} / ${total}`;
     slides.forEach((slide, i) => slide.querySelectorAll('video').forEach((video) => {
       if (i === index) delete video.dataset.inactive;
       else video.dataset.inactive = '';
     }));
     if (window.videoManager) window.videoManager.refresh();
-    if (announce && status) status.textContent = `Vidéo ${index + 1} sur ${total}${name(slides[index])}`;
+    if (announce && status) status.textContent = `${kind[1]} ${index + 1} sur ${total}${name(slides[index])}`;
     root.dispatchEvent(new CustomEvent('carousel:change', { detail: { index, slide: slides[index], announce } }));
   }
 
@@ -969,6 +972,23 @@ document.querySelectorAll('[data-carousel]').forEach((root) => {
   });
   // Une autre action de défilement (clavier, lien, barre) interrompt l'animation.
   ['keydown', 'pointerdown', 'touchstart'].forEach((type) => window.addEventListener(type, () => { if (anim && !anim.done) anim = null; }, { passive: true }));
+})();
+
+/* Frise du parcours : sur petit écran elle défile en largeur ; elle devient alors atteignable au
+   clavier (flèches) et nommée, comme une région. Sur grand écran, pas d'arrêt de tabulation inutile. */
+(function initFriseScroll() {
+  const scroller = document.querySelector('.frise__scroll');
+  if (!scroller || !('ResizeObserver' in window)) return;
+  new ResizeObserver(() => {
+    const scrolls = scroller.scrollWidth > scroller.clientWidth + 1;
+    if (scrolls) {
+      scroller.tabIndex = 0;
+      scroller.setAttribute('role', 'region');
+      scroller.setAttribute('aria-label', 'Frise 2023 → 2027, défilement horizontal');
+    } else {
+      ['tabindex', 'role', 'aria-label'].forEach((a) => scroller.removeAttribute(a));
+    }
+  }).observe(scroller);
 })();
 
 /* Frise du parcours : repère « aujourd'hui », en mois depuis janvier 2023 (échelle de la frise : 8 à 57). */

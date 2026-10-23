@@ -5,6 +5,42 @@
    390 px et ~1024 px / 1280 px, pour éviter les sauts.
    ========================================================================== */
 
+/* ---------- Polices : hébergées avec le site (aucune requête vers Google, RGPD) ----------
+   Polices variables (une graisse continue par fichier), sous-ensembles latin et latin étendu.
+   Licence SIL Open Font License 1.1 : assets/fonts/OFL-*.txt */
+@font-face {
+  font-family: 'Schibsted Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(assets/fonts/schibsted-grotesk-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Schibsted Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(assets/fonts/schibsted-grotesk-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url(assets/fonts/jetbrains-mono-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url(assets/fonts/jetbrains-mono-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 /* ---------- Design tokens ---------- */
 :root {
   --bg: #09080f;
@@ -422,19 +458,22 @@ h2 {
   align-items: center;
   gap: 24px;
   align-self: start;
+  min-width: 0; /* ne s'élargit pas au mot le plus long : le titre passe à la ligne */
   padding: clamp(112px, 19svh, 200px) var(--gutter) 0;
   text-align: center;
   pointer-events: none;
 }
 .seq-on .hero-seq__title { align-self: center; padding-top: 72px; }
 .hero-seq h1 {
-  max-width: 8.6em; /* en em et non en ch : ne dépend pas de la police chargée (pas de saut au chargement) */
+  max-width: min(8.6em, 100%); /* en em et non en ch : ne dépend pas de la police chargée (pas de saut au chargement) */
+  hyphens: auto; /* espacement du texte agrandi (RGAA 10.12) sur petit écran : les mots longs se coupent au lieu de sortir */
+  text-wrap: balance; /* lignes équilibrées : « IA. » ne reste jamais seul */
   font-size: clamp(46px, calc(46px + 72 * (100vw - 390px) / 1050), 118px);
   line-height: 0.98;
   letter-spacing: -0.035em;
   text-shadow: 0 2px 24px rgba(6, 5, 11, 0.55);
 }
-.hero-seq .badge { align-self: center; background: rgba(9, 8, 15, 0.72); }
+.hero-seq .badge { align-self: center; max-width: 100%; background: rgba(9, 8, 15, 0.72); }
 
 .hero-seq__caption {
   position: absolute;
@@ -1408,6 +1447,7 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
    Sur petit écran, elle garde sa largeur et défile horizontalement. */
 .frise { display: flex; flex-direction: column; gap: 14px; grid-column: 1 / -1; }
 .frise__scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-color: var(--line-3) transparent; }
+.frise__scroll:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
 .frise__grid {
   --lane: 46px;
   display: grid;
@@ -1544,6 +1584,19 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   max-width: var(--max);
   margin-inline: auto;
 }
+
+.site-footer__links { display: flex; flex-wrap: wrap; column-gap: 24px; }
+
+/* ---------- Mentions légales (mentions-legales.html) ---------- */
+.legal { display: flex; flex-direction: column; gap: 40px; max-width: 760px; margin-inline: auto; padding: 48px var(--gutter) var(--section-y); }
+.legal h1 { font-size: var(--fs-h2); }
+.legal section { display: flex; flex-direction: column; gap: 12px; }
+.legal h2 { font-size: 22px; }
+.legal p, .legal li { font-size: 17px; line-height: 1.6; color: var(--text-3); }
+.legal ul { display: flex; flex-direction: column; gap: 10px; padding-left: 20px; list-style: disc; }
+.legal li::marker { color: var(--accent); }
+.legal strong { color: var(--text); font-weight: 600; }
+.site-header__bar > .link-src { min-height: 44px; }
 
 /* ==========================================================================
    Intermédiaire : >= 720 px (grilles à 2 colonnes, textes longs)

@@ -1,0 +1,14 @@
+# GitHub Pages (Jekyll) : fichiers du dépôt qui ne sont pas publiés sur le site.
+# Les dossiers commençant par « . » (.impeccable, .idea) sont déjà exclus par Jekyll.
+exclude:
+  - README.md
+  - DESIGN.md
+  - PRODUCT.md
+  - graphify-out/
+  - START_TREK/
+  - 42sh/
+  - Arcade/
+  # Originaux : le site utilise leurs versions réduites (antoine-avatar.jpg, github-64.png, glance-64.png)
+  - assets/Photo_Antoine.jpeg
+  - assets/githubLogo.png
+  - assets/glance-favicon-oRNVjxPu.png
