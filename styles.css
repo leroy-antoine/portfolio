@@ -1578,7 +1578,9 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .rl-media, .rl-graph { gap: 12px; }
   .ray { grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 32px; }
   .cvrie { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 40px; }
-  .scene--shell .term__screen { height: clamp(280px, 42svh, 460px); }
+  /* my_shell : le terminal laisse la place au pied (technologies, code source) dans l'écran. */
+  .scene--shell .scene__inner { gap: 24px; }
+  .scene--shell .term__screen { height: clamp(240px, calc(100svh - 680px), 460px); }
 
 
 
@@ -1684,6 +1686,8 @@ a.zoomable, a.thumb { cursor: zoom-in; }
 /* Parcours sur bureau : un écran entier, pour que la section suivante (contact) n'apparaisse pas
    à moitié quand la molette s'arrête sur le parcours. */
 @media (min-width: 1024px) {
+  /* À propos : la marge haute dégage l'en-tête fixe (88 px) quand la molette pose la section en haut de l'écran. */
+  .section--facts { padding-top: 136px; }
   .section--career { display: flex; flex-direction: column; justify-content: center; min-height: 100svh; padding-top: 104px; padding-bottom: 48px; }
   .container--career { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 56px; }
   .container--career .career__col { gap: 24px; }
