@@ -13,7 +13,7 @@ Primary: recruiters and engineers (tech leads, hiring engineers) evaluating a so
 Personal portfolio of Antoine Leroy, EPITECH student (GPA 3.04, 80+ projects), seeking a software-engineer or AI-developer internship from early April to early August 2027. Success: a visitor downloads the CV, opens a project's source, or emails to book an interview.
 
 ## Positioning
-Low-level systems (C/C++: 42sh, Zappy, Arcade, Raytracer) combined with reinforcement-learning work in Python (Lunar Lander, 95 % success), backed by proof: training videos, crash-rate curves, a won 42 AI hackathon.
+Low-level systems (C/C++: 42sh, Zappy, Arcade, Raytracer) combined with reinforcement-learning work in Python (Lunar Lander, 99.5 % successful landings with Deep Q-Learning over 1,000 evaluation episodes), backed by proof: training videos, crash-rate curves, a won 42 AI hackathon.
 
 ## Operating Context
 Single-page static site, hosted on any static file host (GitHub Pages, Netlify, Vercel). Visited on desktop and mobile, often from a recruiter's link or the CV.

@@ -1,9 +1,0 @@
-# ~/.myshrc
-
-# some ls aliases
-alias ll 'ls -alF'
-alias la 'ls -A'
-alias l 'ls -CF'
-
-# coding-style checker
-alias co 'coding-style . . && cat coding-style-reports.log && rm -rf coding-style-reports.log'

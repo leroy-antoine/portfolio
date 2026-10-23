@@ -141,7 +141,17 @@ function initCarousel(root) {
     if (event.target.classList.contains('carousel__dot')) dots[wrap(keys[event.key])].focus();
   });
 
-  select(0, false);
+  root.addEventListener('carousel:goto', ({ detail }) => {
+    const i = slides.indexOf(detail);
+    if (i < 0 || i === current) return;
+    track.scrollLeft = slides[i].offsetLeft - slides[0].offsetLeft;
+    select(i, false);
+  });
+
+  // data-start="last" : le carrousel s'ouvre sur la dernière diapositive (Lunar Lander : la vidéo du héro).
+  const first = root.dataset.start === 'last' ? total - 1 : 0;
+  if (first) track.scrollLeft = slides[first].offsetLeft - slides[0].offsetLeft;
+  select(first, false);
 }
 
 /* Lunar Lander : la colonne de droite (graphique et chiffres) suit le carrousel.
@@ -412,76 +422,40 @@ const videoManager = (() => {
 window.videoManager = videoManager;
 
 /* ==========================================================================
-   4. Héro : mise au point du titre vers la vidéo
+   4. Héro : mise au point du titre vers la vidéo, puis zoom arrière jusqu'à Lunar Lander
    0 → 0,1     titre net sur la vidéo floutée
    0,1 → 0,55  le titre se floute et s'efface, la vidéo devient nette
-   0,55 → 0,85 la vidéo se pose dans son cadre, la légende apparaît
-   0,85 → 1    tenue, puis la scène se libère
+   0,5 → 0,9   zoom arrière : la vidéo se pose exactement à la place de celle du carrousel
+               Lunar Lander (même fichier), qui glisse sous la scène ; ensuite elle la suit
+   0,82 → 0,97 le fond du héro s'efface : la case Lunar Lander apparaît autour de la vidéo
+   ≥ 0,985     relais : la vidéo du carrousel prend la suite, au même instant de lecture
    ========================================================================== */
 (function initHero() {
   const section = document.querySelector('[data-seq="hero"]');
   if (!section) return;
   const track = section.querySelector('.hero-seq__track');
   const stage = section.querySelector('.hero-seq__stage');
-  const caption = section.querySelector('.hero-seq__caption');
-  const toggle = section.querySelector('.hero-seq__toggle');
+  const heroVideo = section.querySelector('.hero-seq__video');
   const header = document.querySelector('.site-header');
+  const lunar = document.querySelector('.scene--lunar');
+  const lunarAnim = lunar && lunar.querySelector('[data-anim="lunar"]');
+  const carousel = lunar && lunar.querySelector('[data-carousel]');
+  const heroSlide = carousel && carousel.querySelector('.slide[data-hero-slide]');
+  const target = heroSlide && heroSlide.querySelector('video');
 
-  /* Cadre final : la vidéo en 3:2, la plus grande possible entre l'en-tête et la légende.
-     Départ : la même boîte agrandie pour couvrir l'écran, calée sur le sol (le ciel déborde en haut). */
   const RATIO = 1.5;
-  const RADIUS = 20; // rayon du cadre (styles.css)
-  const GAP = 16;    // écart entre le cadre et la légende
-  const CAP_BOTTOM = 20;   // marge basse de la légende et du bouton (styles.css)
-  const TOGGLE_INSET = 12; // retrait du bouton dans le coin du cadre
-  let geo = { start: 1, end: 1, yStart: 0, yEnd: 0, capShift: 0, capX: 0, toggleX: 0, toggleY: 0 };
-  function frameFor(vw, vh, top, gutter, capH) {
-    const h = Math.min((vw - 2 * gutter) / RATIO, vh - top - CAP_BOTTOM - capH - GAP);
-    return { w: h * RATIO, h };
-  }
+  const RADIUS = 12; // rayon des vidéos du carrousel (styles.css)
+  let geo = { start: 1, yStart: 0 };
   function resize() {
     const vw = stage.clientWidth;
     const vh = stage.clientHeight;
-    const top = (header ? header.offsetHeight : 64) + 12;
-    const gutter = parseFloat(getComputedStyle(caption).left) || 16;
-    // La légende prend la largeur du cadre, et sa hauteur dépend de cette largeur : deux passes suffisent.
-    let frame = frameFor(vw, vh, top, gutter, caption.offsetHeight);
-    for (let i = 0; i < 2; i++) {
-      stage.style.setProperty('--cap-w', `${frame.w.toFixed(1)}px`);
-      frame = frameFor(vw, vh, top, gutter, caption.offsetHeight);
-    }
-    const { w, h } = frame;
-    const capH = caption.offsetHeight;
-    stage.style.setProperty('--cap-w', `${w.toFixed(1)}px`);
-    // Échelles relatives à la boîte CSS (toute la largeur, 3:2).
-    const baseW = vw;
     const baseH = vw / RATIO;
-    const end = w / baseW;
-    // Départ : couvre l'écran avec une marge, pour que les coins arrondis restent hors champ.
-    const radiusAtStart = (RADIUS / end) * Math.max(1, vh / baseH); // rayon à l'écran au départ
-    const margin = radiusAtStart * 1.2 + 4;
-    const start = Math.max((vw + 2 * margin) / baseW, (vh + 2 * margin) / baseH);
-    // Fin : cadre et légende centrés ensemble entre l'en-tête et le bas de l'écran.
-    const group = h + GAP + capH;
-    const free = vh - top - CAP_BOTTOM - group;
-    const frameTop = top + Math.max(0, free / 2);
-    const frameLeft = (vw - w) / 2;
-    const tb = toggle.getBoundingClientRect();
-    geo = {
-      start,
-      end,
-      yStart: vh + margin - (start * baseH) / 2 - vh / 2, // bas de la vidéo agrandie sous le bas de l'écran
-      yEnd: frameTop + h / 2 - vh / 2,
-      capShift: -Math.max(0, free / 2),                  // la légende remonte sous le cadre
-      capX: Math.max(0, frameLeft - gutter),             // et s'aligne sur son bord gauche
-      // Le bouton pause rejoint le coin inférieur droit du cadre, comme une commande de lecteur.
-      toggleX: frameLeft + w - TOGGLE_INSET - (vw - gutter),
-      toggleY: frameTop + h - TOGGLE_INSET - (vh - CAP_BOTTOM),
-    };
-    if (!tb.width) geo.toggleX = geo.toggleY = 0;
+    // Départ : la boîte (toute la largeur, 3:2) agrandie pour couvrir l'écran, coins hors champ.
+    const endScale = target ? Math.max(0.05, target.getBoundingClientRect().width / vw) : 0.5;
+    const margin = (RADIUS / endScale) * Math.max(1, vh / baseH) * 1.2 + 4;
+    const start = Math.max((vw + 2 * margin) / vw, (vh + 2 * margin) / baseH);
+    geo = { start, yStart: vh + margin - (start * baseH) / 2 - vh / 2 };
     written.clear();
-    // Rayon dans le repère de la boîte : il apparaît à RADIUS px une fois réduite à l'échelle finale.
-    stage.style.setProperty('--media-r', `${(RADIUS / end).toFixed(2)}px`);
     sequences.refresh();
   }
 
@@ -492,21 +466,49 @@ window.videoManager = videoManager;
     written.set(name, value);
     stage.style.setProperty(name, value);
   };
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const DOCK = 0.9;
+  let handedOff = false;
+  let synced = false;
+  // Cale la vidéo du carrousel sur celle du héro. Une recherche prend du temps (décodage depuis
+  // l'image clé) : on vise un peu en avance, de l'écart mesuré à la recherche précédente.
+  let lead = 0;
+  function sync(done) {
+    let tries = 0;
+    const seek = () => {
+      try { target.currentTime = heroVideo.currentTime + lead; } catch (e) { if (done) done(); return; } // métadonnées pas encore chargées
+      target.addEventListener('seeked', () => {
+        const drift = heroVideo.currentTime - target.currentTime;
+        if (Math.abs(drift) > 0.05 && Math.abs(drift) < 2 && ++tries < 3) { lead += drift; seek(); }
+        else if (done) done();
+      }, { once: true });
+    };
+    seek();
+  }
+  const finish = () => {
+    if (!handedOff) return;
+    heroVideo.dataset.inactive = '';
+    stage.classList.add('is-handed-off');
+    if (window.videoManager) window.videoManager.refresh();
+  };
 
   function render(p, rect) {
-    if (header) header.classList.toggle('is-solid', rect.bottom <= header.offsetHeight + 1);
-    if (!motion.allowed()) {
-      if (written.size) {
-        stage.removeAttribute('style');
-        written.clear();
-      }
+    if (!motion.allowed() || !target) {
+      if (header) header.classList.toggle('is-solid', rect.bottom <= header.offsetHeight + 1);
+      if (written.size) { stage.removeAttribute('style'); written.clear(); }
+      if (lunarAnim) lunarAnim.classList.remove('is-held');
       return;
     }
+    // Lectures avant toute écriture : une seule mise en page par image.
+    const vw = stage.clientWidth;
+    const vh = stage.clientHeight;
+    const t = target.getBoundingClientRect();
+    const out = easeInOut(range(p, 0.04, 0.32));   // le titre sort
+    const focus = easeOut(range(p, 0.12, 0.56));    // la vidéo devient nette
+    const land = easeInOut(range(p, 0.5, DOCK));    // zoom arrière vers le carrousel
+    const fade = easeInOut(range(p, 0.82, 0.97));   // le fond du héro s'efface
 
-    const out = easeInOut(range(p, 0.04, 0.32));  // le titre sort
-    const focus = easeOut(range(p, 0.12, 0.56));   // la vidéo devient nette
-    const land = easeInOut(range(p, 0.54, 0.8));   // la vidéo se pose
-    const cap = easeOut(range(p, 0.76, 0.92));
+    if (header) header.classList.toggle('is-solid', p >= 0.82 || rect.bottom <= header.offsetHeight + 1);
 
     set('--cue-o', (1 - range(p, 0, 0.05)).toFixed(3));
     set('--title-o', (1 - out).toFixed(3));
@@ -516,21 +518,54 @@ window.videoManager = videoManager;
 
     const blur = 1 - focus;
     set('--blur', `${(28 * blur).toFixed(2)}px`);
-    set('--video-s', (1 + 0.06 * blur).toFixed(4));   // cache le liseré sombre du flou sur les bords
-    set('--veil', (1 - 0.8 * focus).toFixed(3));
+    set('--video-s', (1 + 0.06 * blur).toFixed(4));
+    set('--veil', ((1 - 0.8 * focus) * (1 - fade)).toFixed(3));
 
-    set('--media-s', (geo.start + (geo.end - geo.start) * land).toFixed(4));
-    set('--media-y', `${(geo.yStart + (geo.yEnd - geo.yStart) * land).toFixed(1)}px`);
+    // Cible du zoom : la vidéo du carrousel telle qu'elle sera à p = DOCK (sa position actuelle,
+    // remontée du défilement qui reste d'ici là). Au-delà, la vidéo suit le carrousel en direct :
+    // elle défile avec la page et le relais tombe pile, où que l'on s'arrête.
+    const ahead = Math.max(0, DOCK - p) * Math.max(1, track.offsetHeight - vh);
+    const endScale = t.width / vw;
+    const cx = t.left + t.width / 2 - vw / 2;
+    const cy = t.top - ahead + t.height / 2 - vh / 2;
+    set('--media-s', lerp(geo.start, endScale, land).toFixed(4));
+    set('--media-x', `${lerp(0, cx, land).toFixed(1)}px`);
+    set('--media-y', `${lerp(geo.yStart, cy, land).toFixed(1)}px`);
+    set('--media-r', `${(RADIUS / endScale).toFixed(2)}px`);
+    set('--stage-a', (1 - fade).toFixed(3));
+    // Le bouton pause du héro s'efface avant que celui du carrousel n'apparaisse au même endroit.
+    set('--toggle-o', (1 - easeInOut(range(p, 0.74, 0.84))).toFixed(3));
+    stage.classList.toggle('is-passing', fade > 0.5);
 
-    set('--cap-o', cap.toFixed(3));
-    set('--cap-shift', `${geo.capShift.toFixed(1)}px`);
-    set('--cap-x', `${geo.capX.toFixed(1)}px`);
-    set('--cap-y', `${(16 * (1 - cap)).toFixed(1)}px`);
-    caption.classList.toggle('is-hidden', cap < 0.05);
-    set('--toggle-x', `${(geo.toggleX * land).toFixed(1)}px`);
-    set('--toggle-y', `${(geo.toggleY * land).toFixed(1)}px`);
+    // La case Lunar Lander ne s'anime (titre depuis la gauche, instruments depuis la droite)
+    // qu'au moment où le fond du héro s'efface.
+    if (lunarAnim) lunarAnim.classList.toggle('is-held', p < 0.84);
+
+    // Calage discret, tant que la vidéo du carrousel est encore invisible : au relais, les deux
+    // vidéos (même fichier) en sont au même instant et aucune recherche n'est visible.
+    if (p >= 0.8 && !synced) { synced = true; sync(); }
+    else if (p < 0.7) synced = false;
+
+    // Relais : la vidéo du carrousel apparaît sous celle du héro (même cadre), puis celle du héro
+    // s'efface dès que les deux en sont au même instant.
+    const done = p >= 0.985;
+    if (done !== handedOff) {
+      handedOff = done;
+      lunar.classList.toggle('is-receiving', !done);
+      if (done) {
+        if (Math.abs(heroVideo.currentTime - target.currentTime) > 0.08) sync(finish);
+        else finish();
+      } else {
+        delete heroVideo.dataset.inactive;
+        stage.classList.remove('is-handed-off');
+        // En remontant, le carrousel revient sur la vidéo du héro pour que le relais reste continu.
+        if (carousel) carousel.dispatchEvent(new CustomEvent('carousel:goto', { detail: heroSlide }));
+        if (window.videoManager) window.videoManager.refresh();
+      }
+    }
   }
 
+  if (lunar) lunar.classList.add('is-receiving');
   sequences.add({ track, render, resize });
 })();
 
@@ -652,25 +687,7 @@ window.graphReveal = (() => {
   });
 })();
 
-/* Arcade : un clic sur un jeu ou une bibliothèque d'affichage les « charge » dans le cœur, à chaud. */
-(function initArcade() {
-  const arch = document.querySelector('.arch--live');
-  if (!arch) return;
-  const load = { game: arch.querySelector('[data-load="game"]'), display: arch.querySelector('[data-load="display"]') };
-  arch.addEventListener('click', (event) => {
-    const chip = event.target.closest('button.chip');
-    if (!chip) return;
-    const kind = chip.dataset.chip;
-    arch.querySelectorAll(`button[data-chip="${kind}"]`).forEach((b) => {
-      b.setAttribute('aria-pressed', String(b === chip));
-      b.classList.toggle('just-loaded', b === chip);
-    });
-    load[kind].textContent = chip.textContent;
-    arch.classList.remove('is-swapping');
-    void arch.offsetWidth;
-    arch.classList.add('is-swapping');
-  });
-})();
+/* Arcade : le schéma (jeu × affichage) pilote l'émulation jouable, voir arcade.js. */
 
 /* Contact : le titre est découpé en mots, qui montent un à un (le texte reste lisible tel quel). */
 (function initContactTitle() {

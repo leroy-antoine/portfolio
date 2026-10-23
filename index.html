@@ -119,7 +119,7 @@
         <header class="scene__head">
           <h3 id="p-rl">Deep Learning - Lunar Lander</h3>
           <span class="spec">Projet phare · IA · Python</span>
-          <p class="scene__lead">Trois algorithmes d'apprentissage par renforcement comparés sur <span class="strong">lunar-lander-v3</span> (Gymnasium) : Q-Learning discrétisé, Deep Q-Learning, puis PPO face à du vent. 95&nbsp;% de réussite sur Lunar Lander.</p>
+          <p class="scene__lead">Trois algorithmes d'apprentissage par renforcement comparés sur <span class="strong">lunar-lander-v3</span> (Gymnasium) : Q-Learning discrétisé, Deep Q-Learning, puis PPO face à du vent. 99,5&nbsp;% d'atterrissages réussis en Deep Q-Learning (1&nbsp;000 épisodes d'évaluation).</p>
         </header>
         <div class="rl-grid" id="rl-panel">
           <!-- Carrousel réutilisable (script.js : initCarousel).
@@ -128,7 +128,7 @@
                et la légende <figcaption>. Le contenu de <template class="slide__side"> s'affiche dans la colonne
                de droite quand la diapositive est visible (graphique et chiffres) ; il peut rester vide.
                La numérotation « n sur N », les points et les boutons sont générés automatiquement. -->
-          <section class="carousel" aria-roledescription="carrousel" aria-label="Vidéos Lunar Lander, du Q-Learning au PPO" data-carousel data-video-group>
+          <section class="carousel" aria-roledescription="carrousel" aria-label="Vidéos Lunar Lander, du Q-Learning au PPO" data-carousel data-start="last" data-video-group>
             <ol class="carousel__track">
             <li class="slide" data-label="Q-Learning">
               <figure class="slide__figure">
@@ -137,8 +137,8 @@
               </figure>
               <template class="slide__side">
             <figure class="rl-graph">
-              <a class="thumb thumb--graph" href="assets/q-learning-training.png" aria-label="Agrandir le graphique : performance d'entraînement Q-Learning">
-                <img src="assets/q-learning-training.png" width="640" height="480" loading="lazy" decoding="async" alt="Courbe de récompense moyenne sur les 100 derniers épisodes, sur 50 000 épisodes : elle oscille sans converger, le plus souvent entre 40 et 100, avec un creux à environ -30 vers l'épisode 21 000."></a>
+              <a class="thumb thumb--graph" href="assets/q-learning-training-dark.png" aria-label="Agrandir le graphique : performance d'entraînement Q-Learning">
+                <img src="assets/q-learning-training-dark.png" width="1200" height="750" loading="lazy" decoding="async" alt="Courbe de récompense moyenne sur les 100 derniers épisodes, sur 50 000 épisodes : elle oscille sans converger, le plus souvent entre 40 et 100, avec un creux à environ -30 vers l'épisode 21 000."></a>
               <figcaption>Courbe d'entraînement étendue (50 000 épisodes).</figcaption>
             </figure>
             <dl class="metrics">
@@ -154,13 +154,14 @@
               </figure>
               <template class="slide__side">
             <figure class="rl-graph">
-              <a class="thumb thumb--graph" href="assets/dql-training.png" aria-label="Agrandir le graphique : performance d'entraînement DQL">
-                <img src="assets/dql-training.png" width="640" height="480" loading="lazy" decoding="async" alt="Courbe de récompense moyenne sur 14 000 épisodes : de -200 au départ, elle franchit 0 vers l'épisode 2 000, puis se stabilise entre 250 et 280 à partir de l'épisode 4 500."></a>
+              <a class="thumb thumb--graph" href="assets/dql-training-dark.png" aria-label="Agrandir le graphique : performance d'entraînement DQL">
+                <img src="assets/dql-training-dark.png" width="1200" height="750" loading="lazy" decoding="async" alt="Courbe de récompense moyenne sur 14 000 épisodes : de -200 au départ, elle franchit 0 vers l'épisode 2 000, puis se stabilise entre 250 et 280 à partir de l'épisode 4 500."></a>
               <figcaption>Récompense moyenne par épisode : le seuil de résolution (+200) est dépassé dès ~3 000 épisodes.</figcaption>
             </figure>
             <dl class="metrics">
               <div><dt>Entraînement</dt><dd>14&nbsp;000 épisodes</dd></div>
               <div><dt>Résultat</dt><dd>Résolu, moy. ~270</dd></div>
+              <div><dt>Atterrissages réussis</dt><dd>99,5&nbsp;%</dd></div>
             </dl>
               </template>
             </li>
@@ -171,8 +172,8 @@
               </figure>
               <template class="slide__side">
             <figure class="rl-graph">
-              <a class="thumb thumb--graph graph-upto" style="--upto: 33.6%" href="assets/ppo-crash-rate.png" aria-label="Agrandir le graphique : taux de crash PPO">
-                <img class="graph-upto__base" src="assets/ppo-crash-rate.png" width="960" height="720" loading="lazy" decoding="async" alt="Courbe du taux de crash sur environ 950 épisodes : pic à 75 % au départ, chute vers 35 à 45 %, minimum de 18 % vers l'épisode 300, puis environ 32 % en fin d'entraînement."><img class="graph-upto__live" src="assets/ppo-crash-rate.png" width="960" height="720" loading="lazy" decoding="async" alt=""><span class="graph-upto__mark" aria-hidden="true"></span></a>
+              <a class="thumb thumb--graph graph-upto" style="--upto: 33.5%" href="assets/ppo-crash-rate-dark.png" aria-label="Agrandir le graphique : taux de crash PPO">
+                <img class="graph-upto__base" src="assets/ppo-crash-rate-dark.png" width="1200" height="750" loading="lazy" decoding="async" alt="Courbe du taux de crash sur environ 950 épisodes : pic à 75 % au départ, chute vers 35 à 45 %, minimum de 18 % vers l'épisode 300, puis environ 32 % en fin d'entraînement."><img class="graph-upto__live" src="assets/ppo-crash-rate-dark.png" width="1200" height="750" loading="lazy" decoding="async" alt=""><span class="graph-upto__mark" aria-hidden="true"></span></a>
               <figcaption>Taux de crash (moyenne glissante) au fil de l'entraînement PPO avec vent, tracé jusqu'à l'épisode 250.</figcaption>
             </figure>
             <dl class="metrics">
@@ -188,9 +189,29 @@
               </figure>
               <template class="slide__side">
             <figure class="rl-graph">
-              <a class="thumb thumb--graph graph-upto" style="--upto: 74.4%" href="assets/ppo-crash-rate.png" aria-label="Agrandir le graphique : taux de crash PPO">
-                <img class="graph-upto__base" src="assets/ppo-crash-rate.png" width="960" height="720" loading="lazy" decoding="async" alt="Courbe du taux de crash sur environ 950 épisodes : pic à 75 % au départ, chute vers 35 à 45 %, minimum de 18 % vers l'épisode 300, puis environ 32 % en fin d'entraînement."><img class="graph-upto__live" src="assets/ppo-crash-rate.png" width="960" height="720" loading="lazy" decoding="async" alt=""><span class="graph-upto__mark" aria-hidden="true"></span></a>
+              <a class="thumb thumb--graph graph-upto" style="--upto: 74.3%" href="assets/ppo-crash-rate-dark.png" aria-label="Agrandir le graphique : taux de crash PPO">
+                <img class="graph-upto__base" src="assets/ppo-crash-rate-dark.png" width="1200" height="750" loading="lazy" decoding="async" alt="Courbe du taux de crash sur environ 950 épisodes : pic à 75 % au départ, chute vers 35 à 45 %, minimum de 18 % vers l'épisode 300, puis environ 32 % en fin d'entraînement."><img class="graph-upto__live" src="assets/ppo-crash-rate-dark.png" width="1200" height="750" loading="lazy" decoding="async" alt=""><span class="graph-upto__mark" aria-hidden="true"></span></a>
               <figcaption>Taux de crash (moyenne glissante) au fil de l'entraînement PPO avec vent, tracé jusqu'à l'épisode 700.</figcaption>
+            </figure>
+            <dl class="metrics">
+              <div><dt>Entraînement</dt><dd>~950 épisodes</dd></div>
+              <div><dt>Crash avec vent</dt><dd>~75&nbsp;% → ~30&nbsp;%</dd></div>
+            </dl>
+              </template>
+            </li>
+            <li class="slide" data-label="PPO avec vent · évaluation" data-hero-slide>
+              <figure class="slide__figure">
+                <video class="video" poster="assets/lander-hero-poster.jpg" width="2400" height="1600" muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo sans son de 6 secondes : l'agent PPO entraîné pilote le module lunaire malgré le vent et se pose entre les deux drapeaux">
+                  <source src="assets/lander-hero.mp4" type="video/mp4">
+                  <source src="assets/lander-hero.webm" type="video/webm">
+                </video>
+                <figcaption><span class="slide__label">PPO avec vent · évaluation</span> Évaluation de l'agent entraîné : il se pose entre les drapeaux, score 313,8 (seuil de réussite : 200).</figcaption>
+              </figure>
+              <template class="slide__side">
+            <figure class="rl-graph">
+              <a class="thumb thumb--graph graph-upto" style="--upto: 93.4%" href="assets/ppo-crash-rate-dark.png" aria-label="Agrandir le graphique : taux de crash PPO">
+                <img class="graph-upto__base" src="assets/ppo-crash-rate-dark.png" width="1200" height="750" loading="lazy" decoding="async" alt="Courbe du taux de crash sur environ 950 épisodes : pic à 75 % au départ, chute vers 35 à 45 %, minimum de 18 % vers l'épisode 300, puis environ 32 % en fin d'entraînement."><img class="graph-upto__live" src="assets/ppo-crash-rate-dark.png" width="1200" height="750" loading="lazy" decoding="async" alt=""><span class="graph-upto__mark" aria-hidden="true"></span></a>
+              <figcaption>Taux de crash (moyenne glissante) sur tout l'entraînement PPO avec vent : l'agent évalué est celui de la fin.</figcaption>
             </figure>
             <dl class="metrics">
               <div><dt>Entraînement</dt><dd>~950 épisodes</dd></div>
@@ -215,8 +236,8 @@
           <!-- Colonne de droite : sans JavaScript, celle de la première diapositive. -->
           <div class="rl-side" id="rl-side">
             <figure class="rl-graph">
-              <a class="thumb thumb--graph" href="assets/q-learning-training.png" aria-label="Agrandir le graphique : performance d'entraînement Q-Learning">
-                <img src="assets/q-learning-training.png" width="640" height="480" loading="lazy" decoding="async" alt="Courbe de récompense moyenne sur les 100 derniers épisodes, sur 50 000 épisodes : elle oscille sans converger, le plus souvent entre 40 et 100, avec un creux à environ -30 vers l'épisode 21 000."></a>
+              <a class="thumb thumb--graph" href="assets/q-learning-training-dark.png" aria-label="Agrandir le graphique : performance d'entraînement Q-Learning">
+                <img src="assets/q-learning-training-dark.png" width="1200" height="750" loading="lazy" decoding="async" alt="Courbe de récompense moyenne sur les 100 derniers épisodes, sur 50 000 épisodes : elle oscille sans converger, le plus souvent entre 40 et 100, avec un creux à environ -30 vers l'épisode 21 000."></a>
               <figcaption>Courbe d'entraînement étendue (50 000 épisodes).</figcaption>
             </figure>
             <dl class="metrics">
@@ -246,11 +267,17 @@
           <p class="scene__lead">Un jeu en réseau où des équipes d'IA s'affrontent sur Trantor, un monde en tuiles : la première équipe à amener 6 joueurs au niveau maximal l'emporte. Trois programmes dialoguent en TCP via un protocole texte.</p>
         </header>
         <figure class="zappy__media">
-          <!-- Démo recadrée sur la fenêtre du jeu (terminaux retirés) : contrôles natifs conservés pour avancer dans la minute de démo. -->
-          <video class="video video--zappy" poster="assets/zappy-poster-crop.jpg" width="1180" height="628" controls muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo de démonstration de Zappy, 49 secondes, sans son : le client graphique 3D affiche la carte en damier, les ressources et les joueurs des deux équipes en mode navigation et interaction, puis la vue 2D après un appui sur TAB">
+          <div class="video-wrap" data-video-group>
+          <!-- Démo recadrée sur la fenêtre du jeu (terminaux retirés), lue en boucle comme une animation. -->
+          <video class="video video--zappy" poster="assets/zappy-poster-crop.jpg" width="1180" height="628" muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo de démonstration de Zappy, 49 secondes, sans son : le client graphique 3D affiche la carte en damier, les ressources et les joueurs des deux équipes en mode navigation et interaction, puis la vue 2D après un appui sur TAB">
             <source src="assets/zappy-demo-crop.mp4" type="video/mp4">
             <source src="assets/zappy-demo-crop.webm" type="video/webm">
           </video>
+            <button class="video-toggle video-toggle--overlay" type="button" aria-label="Mettre la vidéo en pause" hidden>
+              <svg class="icon-pause" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+              <svg class="icon-play" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+            </button>
+          </div>
           <figcaption>Démo du client graphique 3D : caméra libre, sélection de tuiles et de joueurs, équipes en rouge et noir.</figcaption>
         </figure>
         <div class="zappy__net">
@@ -429,12 +456,22 @@
           <span class="spec">Architecture · C++ · Équipe de 3</span>
           <p class="scene__lead">Jeux et bibliothèques graphiques chargés dynamiquement (.so) et interchangeables à chaud : SFML, SDL2, NCURSES × Snake, Minesweeper.</p>
         </header>
-        <figure class="arcade__media">
+        <!-- arcade.js ajoute par-dessus la vidéo un bouton « Jouer à Arcade » : le jeu (portage du projet)
+             prend alors la place de la vidéo, dans la même boîte. Sans JavaScript, la vidéo reste seule. -->
+        <figure class="arcade__media" data-arcade>
+          <div class="arcade-stage">
+          <div class="video-wrap" data-video-group>
           <!-- Enregistrement complet du terminal : les jeux s'y affichent aussi en NCURSES, il n'est donc pas recadré. -->
-          <video class="video video--arcade" poster="assets/arcade-poster.jpg" width="1850" height="1076" controls muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo de démonstration d'Arcade, 33 secondes, sans son : le menu, Snake puis le Démineur, affichés tour à tour avec SFML, SDL2 et NCURSES dans le terminal, sans redémarrer le programme">
+          <video class="video video--arcade" poster="assets/arcade-poster.jpg" width="1850" height="1076" muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo de démonstration d'Arcade, 33 secondes, sans son : le menu, Snake puis le Démineur, affichés tour à tour avec SFML, SDL2 et NCURSES dans le terminal, sans redémarrer le programme">
             <source src="assets/arcade.mp4" type="video/mp4">
             <source src="assets/arcade.webm" type="video/webm">
           </video>
+            <button class="video-toggle video-toggle--overlay" type="button" aria-label="Mettre la vidéo en pause" hidden>
+              <svg class="icon-pause" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+              <svg class="icon-play" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+            </button>
+          </div>
+          </div>
           <figcaption>Démo : le menu, Snake et le Démineur, passés à chaud de SFML à SDL2 puis à NCURSES (dans le terminal).</figcaption>
         </figure>
         <div class="cq arcade__diagram">
@@ -485,11 +522,10 @@
             <span class="term__note">Émulation dans le navigateur</span>
           </div>
           <div class="term__body">
-          <div class="term__screen" role="log" aria-label="Sortie du terminal 42sh" tabindex="0">
-            <span class="term__cmd"><span class="term__prompt">42sh&gt;</span> echo "hello" | cat -e &gt; out.txt ; cat out.txt</span>
-            <span class="term__out">hello$</span>
-            <span class="term__cmd"><span class="term__prompt">42sh&gt;</span> exit</span>
-          </div>
+          <!-- Sans JavaScript : extrait statique (le texte est préformaté, d'où l'absence d'indentation). -->
+          <div class="term__screen" role="log" aria-label="Sortie du terminal 42sh" tabindex="0"><span class="term__cmd"><span class="term__prompt">42sh&gt;</span> echo "hello" | cat -e &gt; out.txt ; cat out.txt
+</span><span class="term__out">hello$
+</span><span class="term__cmd"><span class="term__prompt">42sh&gt;</span> exit</span></div>
           <form class="term__form" hidden>
             <span class="term__ps" aria-hidden="true"></span>
             <input class="term__input" id="shell-input" type="text" aria-label="Commande 42sh (émulation)" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send">
@@ -645,5 +681,6 @@
 
 <script src="script.js" defer></script>
 <script src="shell.js" defer></script>
+<script src="arcade.js" defer></script>
 </body>
 </html>
