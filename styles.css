@@ -1330,6 +1330,64 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
 .timeline h3 { font-size: 22px; font-weight: 600; line-height: 1.3; }
 .timeline p { font-size: 18px; line-height: 1.6; color: var(--text-3); }
 .timeline__date { font-family: var(--font-mono); font-size: 15px; text-transform: uppercase; color: var(--accent); }
+/* Distinctions : point bleu plein, pour les distinguer des étapes du parcours (cercles creux). */
+.timeline--awards li::before { border-color: #4da3ff; background: #4da3ff; }
+
+/* Frise 2023 → 2027 : trois couloirs (formation, expériences, distinctions) sur une échelle en mois.
+   Sur petit écran, elle garde sa largeur et défile horizontalement. */
+.frise { display: flex; flex-direction: column; gap: 14px; grid-column: 1 / -1; }
+.frise__scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-color: var(--line-3) transparent; }
+.frise__grid {
+  --lane: 46px;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  grid-template-rows: repeat(3, var(--lane)) 30px;
+  min-width: 680px;
+  padding: 28px 0 4px; /* place pour le repère « aujourd'hui », au-dessus des couloirs */
+}
+.frise__lane { grid-column: 1; grid-row: var(--row); align-self: center; font-family: var(--font-mono); font-size: 13px; text-transform: uppercase; color: var(--text-2); }
+.frise__track { position: relative; grid-column: 2; grid-row: 1 / -1; }
+.frise__tick, .frise__now { position: absolute; top: 0; bottom: 30px; left: calc((var(--at) - 8) * 100% / 49); width: 1px; background: var(--line-2); }
+.frise__tick > span, .frise__now > span { position: absolute; top: 100%; left: 0; padding-top: 8px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 13px; color: var(--text-2); white-space: nowrap; }
+.frise__now { width: 2px; background: var(--ok); }
+.frise__now > span { top: auto; bottom: 100%; padding: 0 0 6px; color: var(--ok); }
+.frise__now[hidden] { display: none; }
+.frise__bar {
+  position: absolute;
+  top: calc((var(--row) - 1) * var(--lane) + 8px);
+  left: calc((var(--from) - 8) * 100% / 49);
+  width: calc((var(--to) - var(--from)) * 100% / 49 - 3px);
+  height: calc(var(--lane) - 16px);
+  overflow: hidden;
+  padding: 0 10px;
+  border-radius: 8px;
+  font: 500 14px/calc(var(--lane) - 16px) var(--font-sans);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transform-origin: 0 50%;
+}
+.frise__bar--edu { background: var(--surface-2); border: 1px solid var(--line-3); line-height: calc(var(--lane) - 18px); color: var(--text); }
+.frise__bar--open { -webkit-mask-image: linear-gradient(to right, #000 80%, transparent); mask-image: linear-gradient(to right, #000 80%, transparent); }
+.frise__bar--xp { background: rgba(165, 151, 255, 0.2); border: 1px solid var(--accent); line-height: calc(var(--lane) - 18px); color: var(--text); }
+.frise__bar--goal { border: 2px dashed var(--accent-2); line-height: calc(var(--lane) - 20px); color: var(--accent-2); }
+.frise__mark {
+  position: absolute;
+  top: calc((var(--row) - 1) * var(--lane) + var(--lane) / 2);
+  left: calc((var(--at) - 8) * 100% / 49);
+  padding-left: 14px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.frise__mark::before { content: ""; position: absolute; left: -5px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: #4da3ff; }
+.frise__mark--left { padding: 0 14px 0 0; transform: translate(-100%, -50%); }
+.frise__mark--left::before { left: auto; right: -5px; }
+.frise figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 17px; line-height: 1.5; color: var(--text-2); }
+.anim-ready [data-anim="career"]:not(.is-in) .frise__bar { transform: scaleX(0); }
+.anim-ready [data-anim="career"]:not(.is-in) .frise__mark { opacity: 0; }
+.anim-ready [data-anim="career"].is-in .frise__bar { transition: transform 900ms var(--ease-out); transition-delay: calc(500ms + var(--k, 0) * 160ms); }
+.anim-ready [data-anim="career"].is-in .frise__mark { transition: opacity var(--dur-medium) var(--ease-out); transition-delay: calc(700ms + var(--k, 0) * 160ms); }
 
 /* ---------- Contact ---------- */
 .section--contact { padding-block: 64px; border-bottom: 0; }
@@ -1523,7 +1581,7 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .container--stack { gap: 48px; }
   .core-stack { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
   .extras { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 40px; }
-  .container--career { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 80px; align-items: start; }
+  .container--career { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 80px; align-items: start; }
   .contact__actions { justify-content: center; gap: 16px; }
 
   .site-footer__inner { flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; }
@@ -1620,7 +1678,12 @@ a.zoomable, a.thumb { cursor: zoom-in; }
 /* Parcours sur bureau : un écran entier, pour que la section suivante (contact) n'apparaisse pas
    à moitié quand la molette s'arrête sur le parcours. */
 @media (min-width: 1024px) {
-  .section--career { min-height: 100svh; }
+  .section--career { display: flex; flex-direction: column; justify-content: center; min-height: 100svh; padding-top: 104px; padding-bottom: 48px; }
+  .container--career { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 56px; }
+  .container--career .career__col { gap: 24px; }
+  .container--career .frise__grid { --lane: 40px; }
+  .container--career .timeline h3 { font-size: 20px; }
+  .container--career .timeline p { font-size: 17px; }
 }
 /* Lunar Lander sur bureau : la largeur du carrousel suit la hauteur de l'écran (colonne de gauche ci-dessus), pour que ses boutons restent visibles. */
 @media (min-width: 1024px) {

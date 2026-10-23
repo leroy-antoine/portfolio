@@ -1,6 +1,6 @@
 # Portfolio - Antoine Leroy
 
-Étudiant en informatique à EPITECH (GPA 3.04, plus de 80 projets réalisés), **je recherche un stage d'ingénieur logiciel et de développeur IA, de début avril à début août 2027.**
+Étudiant en informatique à EPITECH (GPA 3.04, plus de 80 projets réalisés), **je recherche un stage d'ingénieur logiciel et de développeur IA, de début avril à fin juillet 2027.**
 
 Ce dépôt contient mon portfolio : mes projets (Lunar Lander en apprentissage par renforcement, Zappy, Arcade, Raytracer, Doctor Cvrie, my_shell), ma stack, mon parcours et mes coordonnées.
 

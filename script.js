@@ -866,3 +866,14 @@ document.querySelectorAll('[data-carousel]').forEach((root) => {
   // Une autre action de défilement (clavier, lien, barre) interrompt l'animation.
   ['keydown', 'pointerdown', 'touchstart'].forEach((type) => window.addEventListener(type, () => { if (anim && !anim.done) anim = null; }, { passive: true }));
 })();
+
+/* Frise du parcours : repère « aujourd'hui », en mois depuis janvier 2023 (échelle de la frise : 8 à 57). */
+(function initFriseNow() {
+  const now = document.querySelector('.frise__now');
+  if (!now) return;
+  const d = new Date();
+  const at = (d.getFullYear() - 2023) * 12 + d.getMonth() + d.getDate() / 31;
+  if (at < 8 || at > 57) return;
+  now.style.setProperty('--at', at.toFixed(2));
+  now.hidden = false;
+})();
