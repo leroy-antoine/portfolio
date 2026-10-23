@@ -74,8 +74,19 @@ function initCarousel(root) {
     dotsEl.appendChild(dot);
     return dot;
   });
+  // Trop de points pour la largeur (9 vidéos sur téléphone) : un compteur « 3 / 9 » les remplace,
+  // les flèches restent. Le compteur est muet : l'annonce passe déjà par .carousel__status.
+  const count = document.createElement('span');
+  count.className = 'carousel__count';
+  count.setAttribute('aria-hidden', 'true');
+  dotsEl.after(count);
   controls.hidden = false;
   root.classList.add('is-ready');
+  const fit = () => {
+    controls.classList.remove('is-compact');
+    controls.classList.toggle('is-compact', controls.scrollWidth > controls.clientWidth + 1);
+  };
+  new ResizeObserver(fit).observe(controls);
 
   const step = () => (slides[1].offsetLeft - slides[0].offsetLeft) || track.clientWidth;
 
@@ -83,6 +94,7 @@ function initCarousel(root) {
     if (index === current) return;
     current = index;
     dots.forEach((dot, i) => dot.toggleAttribute('aria-current', i === index));
+    count.textContent = `${index + 1} / ${total}`;
     slides.forEach((slide, i) => slide.querySelectorAll('video').forEach((video) => {
       if (i === index) delete video.dataset.inactive;
       else video.dataset.inactive = '';

@@ -216,16 +216,14 @@ svg.lg-only { display: none; }
 }
 .brand:hover { color: var(--text); }
 .brand__logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex: none;
+  display: block;
   width: 36px;
   height: 36px;
-  border-radius: 9px;
+  border-radius: 50%;
   border: 1px solid var(--line-3);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--accent);
+  object-fit: cover;
+  background: var(--bg-deep);
 }
 .brand__name { font-size: 16px; font-weight: 600; }
 
@@ -661,6 +659,9 @@ h1 {
 .carousel__dot:hover::before { background: var(--control); }
 .carousel__dot[aria-current]::before { width: 22px; background: var(--accent); }
 .carousel__toggle { flex: none; margin-left: auto; }
+.carousel__count { display: none; min-width: 56px; font: 15px var(--font-mono); color: var(--text-2); text-align: center; }
+.carousel__controls.is-compact .carousel__dots { display: none; }
+.carousel__controls.is-compact .carousel__count { display: block; }
 .carousel__dot { flex: none; }
 
 /* Graphique tracé jusqu'à l'épisode montré : courbe entière estompée, partie parcourue nette,
@@ -819,17 +820,22 @@ h1 {
 .arcade-stage { position: relative; display: grid; }
 .arcade-stage > * { grid-area: 1 / 1; min-width: 0; }
 .arcade-stage > [hidden] { display: none; }
+/* Sur ordinateur, avant le lancement : vidéo floutée sous le bouton, comme le terminal de my_shell.
+   Le bouton pause de la vidéo reste net et cliquable par-dessus. */
+.arcade-stage .video--arcade { transition: filter var(--dur-long) var(--ease-out), opacity var(--dur-long) var(--ease-out); }
+.arcade-stage.is-locked .video--arcade { filter: blur(5px); opacity: 0.55; }
+.arcade-stage.is-locked .video-toggle--overlay { z-index: 2; }
 .arcade-play {
-  place-self: center;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  padding: 18px 22px 16px;
-  border: 1px solid var(--line-2);
-  border-radius: 18px;
-  background: rgba(9, 8, 15, 0.86);
+  padding: 24px;
+  border: 0;
+  border-radius: 16px;
+  background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(6, 5, 11, 0.72), rgba(6, 5, 11, 0.2));
   color: var(--text);
   cursor: pointer;
 }
@@ -841,7 +847,7 @@ h1 {
   font: 600 clamp(19px, calc(19px + 7 * (100vw - 390px) / 890), 26px) var(--font-sans);
   transition: background-color var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
 }
-.arcade-play__hint { font: 15px var(--font-sans); color: var(--text-2); }
+.arcade-play__hint { font: 15px var(--font-sans); color: var(--text-3); }
 .arcade-play:hover .arcade-play__label { background: var(--accent-hover); transform: translateY(-2px); }
 .arcade-play:focus-visible { outline: none; }
 .arcade-play:focus-visible .arcade-play__label { outline: 3px solid var(--text); outline-offset: 3px; }
@@ -946,7 +952,7 @@ h1 {
 .arch__group { display: flex; flex-direction: column; gap: 10px; }
 .arch__group--display .arch__label { order: 1; }
 .arch__label { font-family: var(--font-mono); font-size: 14px; text-transform: uppercase; text-align: center; color: var(--text-2); }
-.arch__chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.arch__chips { display: grid; grid-template-columns: repeat(3, minmax(min-content, 1fr)); gap: 8px; } /* « Minesweeper » prend la largeur qu'il lui faut, sans être coupé */
 .chip {
   padding: 10px 4px;
   border: 1px solid var(--line-3);
@@ -1536,7 +1542,7 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .js { scroll-padding-top: 104px; }
   .site-header__bar { flex-wrap: nowrap; min-height: 88px; }
   .brand { gap: 12px; }
-  .brand__logo { width: 40px; height: 40px; border-radius: 10px; font-size: 15px; font-weight: 500; }
+  .brand__logo { width: 40px; height: 40px; }
   .brand__name { font-size: 17px; }
 
   .js .menu-toggle { display: none; }

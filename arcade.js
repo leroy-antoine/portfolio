@@ -547,6 +547,15 @@
   play.className = 'arcade-play';
   play.innerHTML = '<span class="arcade-play__label">Jouer à Arcade</span><span class="arcade-play__hint">Le vrai projet, porté en JavaScript</span>';
   stage.append(play);
+  // Le jeu se joue au clavier et à la souris : sur téléphone et tablette, la vidéo reste seule
+  // (le schéma change quand même de jeu et d'affichage). Sur ordinateur, elle est floutée sous le bouton.
+  const desktop = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const lock = () => {
+    if (started) return;
+    play.hidden = !desktop.matches;
+    stage.classList.toggle('is-locked', desktop.matches);
+  };
+  desktop.addEventListener('change', lock);
 
   const controls = document.createElement('div');
   controls.className = 'arcade-controls';
@@ -721,6 +730,7 @@
         videoWrap.hidden = true;
       }
       play.hidden = true;
+      stage.classList.remove('is-locked');
       emu.hidden = false;
       controls.hidden = false;
       media.classList.add('is-playing');
@@ -798,15 +808,17 @@
       const chip = event.target.closest('button.chip');
       if (!chip) return;
       const name = chip.textContent.trim().toLowerCase();
-      if (!started || !alive) start();
+      const playing = desktop.matches || started;
+      if (playing && (!started || !alive)) start();
       if (chip.dataset.chip === 'game') COMMANDS.LoadGame([`lib/arcade_${name}.so`]);
       else COMMANDS.LoadDisplay([`lib/arcade_${name}.so`]);
       sync(true);
-      canvas.focus({ preventScroll: true });
+      if (playing) canvas.focus({ preventScroll: true });
     });
     // État affiché avant le lancement : le Core démarre sur le menu avec SDL2 (./arcade lib/arcade_sdl2.so).
     boot();
     alive = false;
     sync(false);
   }
+  lock();
 })();
