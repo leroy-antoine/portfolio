@@ -1597,7 +1597,8 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   /* Doctor Cvrie : le nuage tient dans la hauteur disponible. */
   /* Doctor Cvrie : titre, carrousel et boutons tiennent dans l'écran ; l'explication remplit la droite. */
   .scene--cvrie .scene__inner { gap: 20px; }
-  .scene--cvrie .cvrie { grid-template-columns: minmax(360px, calc((100svh - 400px) * 1.333)) minmax(0, 1fr); gap: 48px; align-items: start; }
+  /* Hauteur de l'image : l'écran moins le titre, les boutons, les technologies et les marges, pour que la case tienne en un écran. */
+  .scene--cvrie .cvrie { grid-template-columns: minmax(360px, min(calc((100svh - 500px) * 1.333), 60%)) minmax(0, 1fr); gap: 48px; align-items: start; }
   .scene--cvrie .cvrie__side { gap: 18px; padding-top: 4px; }
 
   /* Arcade : la démo à gauche, le schéma interactif à droite. */
@@ -1616,6 +1617,11 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .scene--cvrie .cvrie__side { align-self: start; }
 }
 
+/* Parcours sur bureau : un écran entier, pour que la section suivante (contact) n'apparaisse pas
+   à moitié quand la molette s'arrête sur le parcours. */
+@media (min-width: 1024px) {
+  .section--career { min-height: 100svh; }
+}
 /* Lunar Lander sur bureau : la largeur du carrousel suit la hauteur de l'écran (colonne de gauche ci-dessus), pour que ses boutons restent visibles. */
 @media (min-width: 1024px) {
   .scene--lunar .scene__stage { padding-top: 100px; padding-bottom: 28px; }

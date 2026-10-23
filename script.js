@@ -485,11 +485,19 @@ window.videoManager = videoManager;
     };
     seek();
   }
+  // Échange en une seule image : la vidéo du carrousel apparaît au moment précis où celle du héro
+  // disparaît (jamais les deux à la fois), une fois sa nouvelle image décodée.
   const finish = () => {
     if (!handedOff) return;
-    heroVideo.dataset.inactive = '';
-    stage.classList.add('is-handed-off');
-    if (window.videoManager) window.videoManager.refresh();
+    const swap = () => {
+      if (!handedOff) return;
+      lunar.classList.remove('is-receiving');
+      stage.classList.add('is-handed-off');
+      heroVideo.dataset.inactive = '';
+      if (window.videoManager) window.videoManager.refresh();
+    };
+    if (typeof target.requestVideoFrameCallback === 'function' && !target.paused) target.requestVideoFrameCallback(() => requestAnimationFrame(swap));
+    else requestAnimationFrame(swap);
   };
 
   function render(p, rect) {
@@ -503,6 +511,8 @@ window.videoManager = videoManager;
     const vw = stage.clientWidth;
     const vh = stage.clientHeight;
     const t = target.getBoundingClientRect();
+    // Position réelle de la scène : collée en haut pendant la séquence, elle remonte avec la page ensuite.
+    const s = stage.getBoundingClientRect();
     const out = easeInOut(range(p, 0.04, 0.32));   // le titre sort
     const focus = easeOut(range(p, 0.12, 0.56));    // la vidéo devient nette
     const land = easeInOut(range(p, 0.5, DOCK));    // zoom arrière vers le carrousel
@@ -526,8 +536,8 @@ window.videoManager = videoManager;
     // elle défile avec la page et le relais tombe pile, où que l'on s'arrête.
     const ahead = Math.max(0, DOCK - p) * Math.max(1, track.offsetHeight - vh);
     const endScale = t.width / vw;
-    const cx = t.left + t.width / 2 - vw / 2;
-    const cy = t.top - ahead + t.height / 2 - vh / 2;
+    const cx = t.left + t.width / 2 - (s.left + vw / 2);
+    const cy = t.top - ahead + t.height / 2 - (s.top + vh / 2);
     set('--media-s', lerp(geo.start, endScale, land).toFixed(4));
     set('--media-x', `${lerp(0, cx, land).toFixed(1)}px`);
     set('--media-y', `${lerp(geo.yStart, cy, land).toFixed(1)}px`);
@@ -551,11 +561,11 @@ window.videoManager = videoManager;
     const done = p >= 0.985;
     if (done !== handedOff) {
       handedOff = done;
-      lunar.classList.toggle('is-receiving', !done);
       if (done) {
         if (Math.abs(heroVideo.currentTime - target.currentTime) > 0.08) sync(finish);
         else finish();
       } else {
+        lunar.classList.add('is-receiving');
         delete heroVideo.dataset.inactive;
         stage.classList.remove('is-handed-off');
         // En remontant, le carrousel revient sur la vidéo du héro pour que le relais reste continu.
@@ -769,4 +779,90 @@ document.querySelectorAll('[data-carousel]').forEach((root) => {
     document.documentElement.classList.remove('has-lightbox');
     if (opener) opener.focus();
   });
+})();
+
+/* ==========================================================================
+   Molette : un cran amène en douceur à la sous-partie suivante (ou précédente).
+   Pas dans le héro, dont la séquence suit le défilement, ni pour en sortir ou y revenir.
+   Une sous-partie plus haute que l'écran se parcourt aussi par crans animés, jusqu'à son bas.
+   « À propos » et « Stack » forment une seule sous-partie : un cran passe de l'une au parcours.
+   Les zones qui défilent elles-mêmes (terminal, carrousels) gardent la molette.
+   Mouvement réduit : défilement natif.
+   ========================================================================== */
+(function initWheelSnap() {
+  const parts = [...document.querySelectorAll('.projects > .scene, main > .section:not(.hero-seq):not(#stack)')];
+  if (parts.length < 2) return;
+  // Sous-parties franchies d'un seul cran, quelle que soit leur hauteur.
+  const whole = new Set([document.getElementById('a-propos')]);
+  const header = document.querySelector('.site-header');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const INERTIA = 100; // ms sans événement avant d'accepter un nouveau cran (inertie des pavés tactiles)
+  let anim = null;
+  let lastWheel = 0;
+
+  // Haut de la sous-partie, moins ce que l'en-tête en masquerait (les scènes ont déjà la marge voulue).
+  function snapTop(el) {
+    const box = el.querySelector(':scope > .scene__stage') || el;
+    const pad = parseFloat(getComputedStyle(box).paddingTop) || 0;
+    const head = header && getComputedStyle(header).position !== 'static' ? header.getBoundingClientRect().height : 0;
+    return Math.round(el.getBoundingClientRect().top + window.scrollY - Math.max(0, head + 8 - pad));
+  }
+  function scrollsItself(el, dir) {
+    for (; el && el !== document.body && el !== document.documentElement; el = el.parentElement) {
+      if (!/(auto|scroll)/.test(getComputedStyle(el).overflowY) || el.scrollHeight <= el.clientHeight + 1) continue;
+      if (dir > 0 ? el.scrollTop + el.clientHeight < el.scrollHeight - 1 : el.scrollTop > 0) return true;
+    }
+    return false;
+  }
+  function animateTo(y) {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const to = Math.max(0, Math.min(max, y));
+    const from = window.scrollY;
+    if (Math.abs(to - from) < 2) return;
+    anim = { from, to, t0: performance.now(), dur: Math.min(900, Math.max(480, Math.abs(to - from) * 0.6)), done: false };
+    const tick = (t) => {
+      if (!anim || anim.done) return;
+      const k = Math.min(1, (t - anim.t0) / anim.dur);
+      window.scrollTo({ top: anim.from + (anim.to - anim.from) * easeInOut(k), behavior: 'instant' });
+      if (k < 1) requestAnimationFrame(tick);
+      else anim.done = true;
+    };
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener('wheel', (event) => {
+    if (reduce.matches || event.ctrlKey || event.defaultPrevented) return;
+    if (event.deltaY === 0 || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+    const now = performance.now();
+    const quiet = now - lastWheel;
+    lastWheel = now;
+    if (anim) {
+      if (!anim.done || quiet < INERTIA) { event.preventDefault(); return; }
+      anim = null;
+    }
+    const dir = Math.sign(event.deltaY);
+    if (document.querySelector('dialog[open]') || scrollsItself(event.target, dir)) return;
+    const tops = parts.map(snapTop);
+    const y = window.scrollY;
+    const vh = window.innerHeight;
+    if (y < tops[0] - 2 || (dir < 0 && y <= tops[0] + 2)) return; // héro et passage héro ↔ projets
+    let i = 0;
+    while (i + 1 < tops.length && tops[i + 1] <= y + 2) i++;
+    const bottom = i + 1 < tops.length ? tops[i + 1] : document.documentElement.scrollHeight;
+    const page = Math.round(vh * 0.85);
+    const SLACK = 64; // une sous-partie qui ne dépasse que de sa marge basse compte comme tenant dans l'écran
+    let target = null;
+    const paged = !whole.has(parts[i]);
+    if (dir > 0) {
+      if (paged && y + vh < bottom - SLACK) target = Math.min(bottom - vh, y + page);
+      else if (i + 1 < tops.length) target = tops[i + 1];
+      else return;
+    } else if (paged && y > tops[i] + SLACK) target = Math.max(tops[i], y - page);
+    else if (y > tops[i] + 2) target = tops[i];
+    else if (i > 0) target = whole.has(parts[i - 1]) || tops[i] - tops[i - 1] - vh <= SLACK ? tops[i - 1] : tops[i] - vh;
+    if (target === null) return;
+    event.preventDefault();
+    animateTo(target);
+  }, { passive: false });
+  // Une autre action de défilement (clavier, lien, barre) interrompt l'animation.
+  ['keydown', 'pointerdown', 'touchstart'].forEach((type) => window.addEventListener(type, () => { if (anim && !anim.done) anim = null; }, { passive: true }));
 })();
