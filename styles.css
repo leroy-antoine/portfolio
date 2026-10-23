@@ -1250,6 +1250,7 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
 .anim-ready [data-anim="facts"].is-in .fact { transition: opacity var(--dur-long) var(--ease-out), transform var(--dur-long) var(--ease-out); transition-delay: calc(var(--k, 0) * 120ms); }
 .fact:nth-child(2) { --k: 1; }
 .fact:nth-child(3) { --k: 2; }
+.fact:nth-child(4) { --k: 3; }
 
 /* Stack : les langages se lèvent derrière un masque, les compétences tombent en cascade. */
 .core-stack__name { clip-path: inset(0 0 0 0); }
@@ -1382,12 +1383,16 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
   left: calc((var(--at) - 8) * 100% / 49);
   padding-left: 14px;
   transform: translateY(-50%);
+  padding-right: 6px;
+  border-radius: 4px;
+  background: var(--bg); /* le trait « aujourd'hui » passe derrière le libellé */
+  z-index: 1;
   font-size: 14px;
   color: var(--text-3);
   white-space: nowrap;
 }
 .frise__mark::before { content: ""; position: absolute; left: -5px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: #4da3ff; }
-.frise__mark--left { padding: 0 14px 0 0; transform: translate(-100%, -50%); }
+.frise__mark--left { padding: 0 14px 0 6px; transform: translate(-100%, -50%); }
 .frise__mark--left::before { left: auto; right: -5px; }
 .frise figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 17px; line-height: 1.5; color: var(--text-2); }
 .anim-ready [data-anim="career"]:not(.is-in) .frise__bar { transform: scaleX(0); }
@@ -1490,9 +1495,9 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .btn--primary-wide { flex: 0 0 auto; gap: 10px; }
   .btn--grow { flex: 0 0 auto; }
 
-  .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 0; }
   .fact { padding: 4px 28px; border-left: 1px solid var(--line-2); }
-  .fact:first-child { padding-left: 0; border-left: 0; }
+  .fact:nth-child(odd) { padding-left: 0; border-left: 0; }
   .fact__title { font-size: 30px; }
 
   .tags { gap: 10px; }
@@ -1668,9 +1673,13 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .scene--cvrie .cvrie__side { gap: 18px; padding-top: 4px; }
 
   /* Arcade : la démo à gauche, le schéma interactif à droite. */
+  /* La largeur de la démo suit la hauteur de l'écran (comme Lunar Lander) : titre, démo, schéma et
+     technologies tiennent dans un écran, démo lancée comprise (touches et aide sous le jeu). */
+  .scene--arcade .scene__stage { padding-bottom: 28px; }
   .scene--arcade .scene__inner {
+    --arcade-video-h: max(300px, calc(100svh - 450px));
     display: grid;
-    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, min(calc(var(--arcade-video-h) * 1850 / 1076), 63%)) minmax(0, 1fr);
     grid-template-areas: "head head" "media diagram" "foot foot";
     column-gap: 40px;
     row-gap: 24px;
@@ -1680,6 +1689,11 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .scene--arcade .arcade__media { grid-area: media; }
   .scene--arcade .arcade__diagram { grid-area: diagram; }
   .scene--arcade .scene__foot { grid-area: foot; }
+  /* Démo lancée : l'aide du jeu remplace la légende, les touches du Core tiennent sur une ligne. */
+  .scene--arcade .arcade__media.is-playing figcaption { display: none; }
+  .scene--arcade .arcade-controls__keys { gap: 6px; }
+  .scene--arcade .arcade-controls button { padding: 0 10px; font-size: 14px; }
+  .scene--arcade .arcade-controls kbd { font-size: 13px; }
   .scene--cvrie .cvrie__side { align-self: start; }
 }
 
@@ -1688,6 +1702,10 @@ a.zoomable, a.thumb { cursor: zoom-in; }
 @media (min-width: 1024px) {
   /* À propos : la marge haute dégage l'en-tête fixe (88 px) quand la molette pose la section en haut de l'écran. */
   .section--facts { padding-top: 136px; }
+  /* Quatre chiffres clés sur une ligne. */
+  .facts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .fact:nth-child(3) { padding-left: 28px; border-left: 1px solid var(--line-2); }
+  .fact__title { font-size: clamp(24px, 2.1vw, 30px); }
   .section--career { display: flex; flex-direction: column; justify-content: center; min-height: 100svh; padding-top: 104px; padding-bottom: 48px; }
   .container--career { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 56px; }
   .container--career .career__col { gap: 24px; }
