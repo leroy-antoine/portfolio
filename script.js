@@ -209,8 +209,8 @@ function initCarousel(root) {
     select(i, false);
   });
 
-  // data-start="last" : le carrousel s'ouvre sur la dernière diapositive (Lunar Lander : la vidéo du héro).
-  const first = root.dataset.start === 'last' ? total - 1 : 0;
+  // data-start="hero" : le carrousel s'ouvre sur la diapositive où se pose la vidéo du héro (data-hero-slide).
+  const first = root.dataset.start === 'hero' ? Math.max(0, slides.findIndex((slide) => slide.hasAttribute('data-hero-slide'))) : 0;
   if (first) track.scrollLeft = slides[first].offsetLeft - slides[0].offsetLeft;
   select(first, false);
 }

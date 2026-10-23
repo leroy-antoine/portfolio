@@ -93,15 +93,15 @@
     <div class="hero-seq__stage" data-video-group data-video-observe>
       <figure class="hero-seq__figure">
         <div class="hero-seq__media">
-          <video class="hero-seq__video" muted loop playsinline preload="auto" data-autoplay poster="assets/lander-hero-poster.jpg" width="2400" height="1600" aria-describedby="hero-caption" aria-label="Vidéo sans son de 6 secondes : l'agent PPO pilote le module lunaire malgré le vent et se pose entre les deux drapeaux">
-            <source src="assets/lander-hero.mp4" type="video/mp4">
-            <source src="assets/lander-hero.webm" type="video/webm">
+          <video class="hero-seq__video" muted loop playsinline preload="auto" data-autoplay poster="assets/ppo-ep250-hd-poster.jpg" width="2400" height="1600" aria-describedby="hero-caption" aria-label="Vidéo sans son de 6 secondes : épisode 250 de l'entraînement avec vent, l'agent PPO encore hésitant descend en oscillant et se pose contre le drapeau de gauche">
+            <source src="assets/ppo-ep250-hd.mp4" type="video/mp4">
+            <source src="assets/ppo-ep250-hd.webm" type="video/webm">
           </video>
           <div class="hero-seq__veil" aria-hidden="true"></div>
         </div>
         <figcaption class="hero-seq__caption" id="hero-caption">
           <span class="spec">Lunar Lander · agent PPO avec vent</span>
-          <span class="hero-seq__caption-text">Évaluation de l'agent entraîné : il se pose entre les drapeaux, score 313,8 (seuil de réussite : 200).</span>
+          <span class="hero-seq__caption-text">Épisode 250 : l'agent PPO, encore hésitant, descend vers la zone d'atterrissage.</span>
           <a class="link-src" href="#p-rl">Voir le projet
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></a>
         </figcaption>
@@ -148,7 +148,7 @@
                et la légende <figcaption>. Le contenu de <template class="slide__side"> s'affiche dans la colonne
                de droite quand la diapositive est visible (graphique et chiffres) ; il peut rester vide.
                La numérotation « n sur N », les points et les boutons sont générés automatiquement. -->
-          <section class="carousel" aria-roledescription="carrousel" aria-label="Vidéos Lunar Lander, du Q-Learning au PPO" data-carousel data-start="last" data-video-group>
+          <section class="carousel" aria-roledescription="carrousel" aria-label="Vidéos Lunar Lander, du Q-Learning au PPO" data-carousel data-start="hero" data-video-group>
             <ol class="carousel__track">
             <li class="slide" data-label="Q-Learning">
               <figure class="slide__figure">
@@ -185,9 +185,13 @@
             </dl>
               </template>
             </li>
-            <li class="slide" data-label="PPO avec vent · épisode 250">
+            <!-- data-hero-slide : la vidéo du héro (même fichier) se pose ici au défilement. -->
+            <li class="slide" data-label="PPO avec vent · épisode 250" data-hero-slide>
               <figure class="slide__figure">
-                <video class="video" src="assets/ppo-ep250.mp4" poster="assets/ppo-ep250-poster.jpg" width="600" height="400" muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo sans son : épisode 250, l'agent PPO encore hésitant descend vers la zone d'atterrissage"></video>
+                <video class="video" poster="assets/ppo-ep250-hd-poster.jpg" width="2400" height="1600" muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo sans son : épisode 250, l'agent PPO encore hésitant descend vers la zone d'atterrissage">
+                  <source src="assets/ppo-ep250-hd.mp4" type="video/mp4">
+                  <source src="assets/ppo-ep250-hd.webm" type="video/webm">
+                </video>
                 <figcaption><span class="slide__label">PPO avec vent · épisode 250</span> Épisode 250 : l'agent PPO, encore hésitant, descend vers la zone d'atterrissage.</figcaption>
               </figure>
               <template class="slide__side">
@@ -219,7 +223,7 @@
             </dl>
               </template>
             </li>
-            <li class="slide" data-label="PPO avec vent · évaluation" data-hero-slide>
+            <li class="slide" data-label="PPO avec vent · évaluation">
               <figure class="slide__figure">
                 <video class="video" poster="assets/lander-hero-poster.jpg" width="2400" height="1600" muted loop playsinline preload="metadata" data-autoplay aria-label="Vidéo sans son de 6 secondes : l'agent PPO entraîné pilote le module lunaire malgré le vent et se pose entre les deux drapeaux">
                   <source src="assets/lander-hero.mp4" type="video/mp4">
