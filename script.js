@@ -202,9 +202,12 @@ function initCarousel(root) {
     if (event.target.classList.contains('carousel__dot')) dots[wrap(keys[event.key])].focus();
   });
 
+  // Réalignement demandé par le héro : immédiat, même si la diapositive est déjà la courante
+  // (un défilement doux ou un geste peut avoir laissé la piste entre deux diapositives).
   root.addEventListener('carousel:goto', ({ detail }) => {
     const i = slides.indexOf(detail);
-    if (i < 0 || i === current) return;
+    if (i < 0) return;
+    releaseTarget();
     track.scrollLeft = slides[i].offsetLeft - slides[0].offsetLeft;
     select(i, false);
   });
@@ -536,6 +539,11 @@ window.videoManager = videoManager;
   let lead = 0;
   function sync(done) {
     let tries = 0;
+    // Filet de sécurité : si « seeked » n'arrive jamais (même instant, vidéo pas prête), on conclut quand même.
+    let called = false;
+    const end = done && (() => { if (!called) { called = true; done(); } });
+    if (end) setTimeout(end, 400);
+    done = end;
     const seek = () => {
       try { target.currentTime = heroVideo.currentTime + lead; } catch (e) { if (done) done(); return; } // métadonnées pas encore chargées
       target.addEventListener('seeked', () => {
@@ -550,8 +558,10 @@ window.videoManager = videoManager;
   // disparaît (jamais les deux à la fois), une fois sa nouvelle image décodée.
   const finish = () => {
     if (!handedOff) return;
+    let swapped = false;
     const swap = () => {
-      if (!handedOff) return;
+      if (!handedOff || swapped) return;
+      swapped = true;
       lunar.classList.remove('is-receiving');
       stage.classList.add('is-handed-off');
       heroVideo.dataset.inactive = '';
@@ -559,7 +569,24 @@ window.videoManager = videoManager;
     };
     if (typeof target.requestVideoFrameCallback === 'function' && !target.paused) target.requestVideoFrameCallback(() => requestAnimationFrame(swap));
     else requestAnimationFrame(swap);
+    setTimeout(swap, 300); // la vidéo du carrousel peut se mettre en pause avant sa prochaine image
   };
+  // Carrousel déplacé pendant la fin de la séquence (Lunar Lander déjà visible) : la vidéo du héro ne doit pas
+  // suivre sa diapositive hors du cadre (elle apparaîtrait à la place du graphique) ; le relais est fait tout de suite.
+  // Plus haut dans la séquence, c'est le carrousel qui revient sur la diapositive du héro.
+  const trackEl = carousel && carousel.querySelector('.carousel__track');
+  let detached = false;
+  function detach(on) {
+    if (on === detached) return;
+    detached = on;
+    stage.classList.toggle('is-handed-off', on);
+    lunar.classList.toggle('is-receiving', !on);
+    if (on) heroVideo.dataset.inactive = '';
+    else delete heroVideo.dataset.inactive;
+    if (window.videoManager) window.videoManager.refresh();
+  }
+  if (carousel) carousel.addEventListener('carousel:change', () => sequences.refresh());
+  if (trackEl) trackEl.addEventListener('scroll', () => sequences.refresh(), { passive: true });
 
   function render(p, rect) {
     if (!motion.allowed() || !target) {
@@ -572,6 +599,7 @@ window.videoManager = videoManager;
     const vw = stage.clientWidth;
     const vh = stage.clientHeight;
     const t = target.getBoundingClientRect();
+    const offSlide = trackEl ? Math.abs(t.left - trackEl.getBoundingClientRect().left) > 2 : false;
     // Position réelle de la scène : collée en haut pendant la séquence, elle remonte avec la page ensuite.
     const s = stage.getBoundingClientRect();
     const out = easeInOut(range(p, 0.04, 0.32));   // le titre sort
@@ -617,6 +645,11 @@ window.videoManager = videoManager;
     if (p >= 0.8 && !synced) { synced = true; sync(); }
     else if (p < 0.7) synced = false;
 
+    if (!handedOff) {
+      if (offSlide && p < 0.82) carousel.dispatchEvent(new CustomEvent('carousel:goto', { detail: heroSlide }));
+      else detach(offSlide);
+    }
+
     // Relais : la vidéo du carrousel apparaît sous celle du héro (même cadre), puis celle du héro
     // s'efface dès que les deux en sont au même instant.
     const done = p >= 0.985;
@@ -626,6 +659,7 @@ window.videoManager = videoManager;
         if (Math.abs(heroVideo.currentTime - target.currentTime) > 0.08) sync(finish);
         else finish();
       } else {
+        detached = false;
         lunar.classList.add('is-receiving');
         delete heroVideo.dataset.inactive;
         stage.classList.remove('is-handed-off');

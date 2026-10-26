@@ -892,13 +892,15 @@ h1 {
 .zappy__media { display: flex; flex-direction: column; gap: 0.625rem; width: min(100%, calc((100svh - 26.25rem) * 1.879)); min-width: min(100%, 35rem); }
 .zappy__media figcaption { font-size: 0.9375rem; line-height: 1.5; color: var(--text-2); }
 .video--zappy { border-radius: 1rem; }
-.zappy__net { --rail: 1.375rem; --dot: 0.75rem; position: relative; padding-left: var(--rail); }
-/* L'axe du fil (2 px de large, à 6 px du bord) est à 6 px + 1 px : chaque rond est centré dessus, quel que soit le retrait. */
-.zappy__wire { position: absolute; left: 0.375rem; top: 1.25rem; bottom: 1.25rem; width: 2px; background: var(--accent); transform-origin: top; }
+.zappy__net { --rail: 22px; --dot: 12px; --axis: 6px; --pk: 8px; position: relative; padding-left: var(--rail); }
+/* L'axe du fil (2 px de large, à --axis du bord) est à --axis + 1 px : chaque rond est centré dessus, quel que soit le retrait.
+   Toutes ces mesures sont des pixels entiers (voir @supports en fin de fichier) : fil, ronds et paquets tombent
+   sur la même grille de pixels, quelle que soit la taille de base (police agrandie, TV, grand écran). */
+.zappy__wire { position: absolute; left: var(--axis); top: 1.25rem; bottom: 1.25rem; width: 2px; background: var(--accent); transform-origin: top; }
 .zappy__net .parts > div::before {
   content: "";
   position: absolute;
-  left: calc(0.375rem + 1px - var(--rail) - var(--dot) / 2);
+  left: calc(var(--axis) + 1px - var(--rail) - var(--dot) / 2);
   top: 1.625rem;
   width: var(--dot);
   height: var(--dot);
@@ -1327,7 +1329,7 @@ button.chip { font-family: inherit; font-weight: inherit; line-height: 1.3; back
 .scene--zappy .parts > div:nth-child(3) { --k: 2; }
 /* Paquets TCP : vont et viennent le long du fil tant que la scène est à l'écran. */
 .zappy__wire { container-type: size; }
-.zappy__packet { position: absolute; left: calc(1px - 0.25rem); top: 0; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 0 0.1875rem rgba(236, 210, 74, 0.25); opacity: 0; }
+.zappy__packet { position: absolute; left: calc(1px - var(--pk) / 2); top: 0; width: var(--pk); height: var(--pk); border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 0 0.1875rem rgba(236, 210, 74, 0.25); opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
   .anim-ready [data-anim="zappy"].is-in .zappy__packet { animation: packet-v 2.6s var(--ease-in-out) 1.4s infinite; }
   .anim-ready [data-anim="zappy"].is-in .zappy__packet--back { animation-name: packet-v-back; animation-delay: 2.7s; background: var(--accent); box-shadow: 0 0 0 0.1875rem rgba(165, 151, 255, 0.25); }
@@ -1694,10 +1696,10 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .scene__lead { font-size: 1.1875rem; }
   /* Zappy : le fil relie les trois programmes à l'horizontale. */
   .zappy__net { padding-left: 0; padding-top: var(--rail); }
-  .zappy__wire { left: 1.25rem; right: 1.25rem; top: 0.375rem; bottom: auto; width: auto; height: 2px; transform-origin: left; }
-  .zappy__net .parts > div::before { left: 1.625rem; top: calc(0.375rem + 1px - var(--rail) - var(--dot) / 2); }
+  .zappy__wire { left: 1.25rem; right: 1.25rem; top: var(--axis); bottom: auto; width: auto; height: 2px; transform-origin: left; }
+  .zappy__net .parts > div::before { left: 1.625rem; top: calc(var(--axis) + 1px - var(--rail) - var(--dot) / 2); }
   .anim-ready [data-anim="zappy"]:not(.is-in) .zappy__wire { transform: scaleX(0); }
-  .zappy__packet { left: 0; top: calc(1px - 0.25rem); }
+  .zappy__packet { left: 0; top: calc(1px - var(--pk) / 2); }
   @media (prefers-reduced-motion: no-preference) {
     .anim-ready [data-anim="zappy"].is-in .zappy__packet { animation-name: packet-h; }
     .anim-ready [data-anim="zappy"].is-in .zappy__packet--back { animation-name: packet-h-back; }
@@ -1822,15 +1824,15 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   }
   .scene--zappy .scene__head { grid-area: head; max-width: 62.5rem; }
   .scene--zappy .zappy__media { grid-area: media; width: 100%; min-width: 0; }
-  .scene--zappy .zappy__net { --rail: 1.625rem; grid-area: net; align-self: start; padding: 0 0 0 var(--rail); }
+  .scene--zappy .zappy__net { --rail: 26px; grid-area: net; align-self: start; padding: 0 0 0 var(--rail); }
   .scene--zappy .scene__foot { grid-area: foot; }
   .scene--zappy .parts { grid-template-columns: minmax(0, 1fr); gap: 0.75rem; }
   .scene--zappy .parts > div { padding: 1rem 1.125rem; gap: 0.375rem; }
   .scene--zappy .parts dd { font-size: 1rem; }
-  .scene--zappy .zappy__wire { left: 0.375rem; right: auto; top: 1.25rem; bottom: 1.25rem; width: 2px; height: auto; transform-origin: top; }
-  .scene--zappy .zappy__net .parts > div::before { left: calc(0.375rem + 1px - var(--rail) - var(--dot) / 2); top: 1.375rem; }
+  .scene--zappy .zappy__wire { left: var(--axis); right: auto; top: 1.25rem; bottom: 1.25rem; width: 2px; height: auto; transform-origin: top; }
+  .scene--zappy .zappy__net .parts > div::before { left: calc(var(--axis) + 1px - var(--rail) - var(--dot) / 2); top: 1.375rem; }
   .anim-ready [data-anim="zappy"]:not(.is-in) .zappy__wire { transform: scaleY(0); }
-  .scene--zappy .zappy__packet { left: calc(1px - 0.25rem); top: 0; }
+  .scene--zappy .zappy__packet { left: calc(1px - var(--pk) / 2); top: 0; }
   @media (prefers-reduced-motion: no-preference) {
     .anim-ready [data-anim="zappy"].is-in .zappy__packet { animation-name: packet-v; }
     .anim-ready [data-anim="zappy"].is-in .zappy__packet--back { animation-name: packet-v-back; }
@@ -1932,11 +1934,12 @@ a.zoomable, a.thumb { cursor: zoom-in; }
 
 /* ==========================================================================
    Bureau jusqu'à 1080 px de haut (1280 × 720, 1366 × 768, 1536 × 864, 1440 × 900, et 1920 × 1080 une fois
-   les barres du navigateur déduites, soit environ 1920 × 950) : chaque scène tient dans un écran,
+   les barres du navigateur déduites, soit environ 1920 × 950 ; et les écrans plus grands en 16:9, qui affichent
+   la même composition agrandie : 2560 × 1440, 3840 × 2160) : chaque scène tient dans un écran,
    pour qu'un cran de molette suffise à la parcourir. On resserre les espacements et on laisse les médias
    suivre la hauteur de l'écran ; aucun contenu n'est retiré.
    ========================================================================== */
-@media (min-width: 1024px) and (max-height: 1080px) {
+@media (min-width: 1024px) and (max-height: 1080px), (min-width: 1921px) and (min-aspect-ratio: 16/9) {
   .scene__inner { gap: 1.25rem; }
   .scene--lunar .scene__inner, .scene--zappy .scene__inner, .scene--arcade .scene__inner { row-gap: 1.125rem; }
   .scene__head { max-width: 62.5rem; }
@@ -1989,6 +1992,12 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .container--career .frise__grid { grid-template-rows: repeat(3, var(--lane)) 1.625rem; padding-top: 1.5rem; }
   .container--career .frise figcaption { font-size: 1rem; }
 }
+/* Écrans de 1000 à 1080 px de haut (et leurs équivalents 16:9 agrandis) : au moins 80 px sous le contenu,
+   car une TV en HDMI peut rogner 2 à 5 % de l'image sur chaque bord (overscan). */
+@media (min-width: 1024px) and (min-height: 1000px) and (max-height: 1080px), (min-width: 1921px) and (min-aspect-ratio: 16/9) {
+  .scene--ray .ray { grid-template-columns: minmax(0, min(calc((100svh - 31.25rem) * 1.786), 64%)) minmax(0, 1fr); }
+  .scene--cvrie .cvrie { grid-template-columns: minmax(21.25rem, min(calc((100svh - 30rem) * 1.333), 56%)) minmax(0, 1fr); }
+}
 /* Bureau très peu haut (1280 × 720) : derniers resserrements, pour Doctor Cvrie et le parcours. */
 @media (min-width: 1024px) and (max-height: 760px) {
   .scene--cvrie .scene__inner { gap: 1rem; }
@@ -2002,6 +2011,15 @@ a.zoomable, a.thumb { cursor: zoom-in; }
   .container--career .timeline { gap: 0.75rem; }
   .container--career .frise { gap: 0.375rem; }
   .container--career .timeline p { line-height: 1.45; }
+}
+
+/* Fil de Zappy : mesures en rem arrondies au pixel entier (round()), pour que fil, ronds et paquets
+   restent centrés quand la taille de base n'est pas 16 px. Sans round() : les valeurs en px ci-dessus. */
+@supports (width: round(1rem, 1px)) {
+  .zappy__net { --rail: round(1.375rem, 1px); --dot: round(0.75rem, 2px); --axis: round(0.375rem, 1px); --pk: round(0.5rem, 2px); }
+  @media (min-width: 1024px) {
+    .scene--zappy .zappy__net { --rail: round(1.625rem, 1px); }
+  }
 }
 
 /* ---------- Mouvement réduit ---------- */
