@@ -505,7 +505,7 @@ window.videoManager = videoManager;
   const target = heroSlide && heroSlide.querySelector('video');
 
   const RATIO = 1.5;
-  const RADIUS = 12; // rayon des vidéos du carrousel (styles.css)
+  const RADIUS = 12; // rayon des vidéos du carrousel (styles.css, 0.75rem : suit la taille de base)
   let geo = { start: 1, yStart: 0 };
   function resize() {
     const vw = stage.clientWidth;
@@ -513,7 +513,7 @@ window.videoManager = videoManager;
     const baseH = vw / RATIO;
     // Départ : la boîte (toute la largeur, 3:2) agrandie pour couvrir l'écran, coins hors champ.
     const endScale = target ? Math.max(0.05, target.getBoundingClientRect().width / vw) : 0.5;
-    const margin = (RADIUS / endScale) * Math.max(1, vh / baseH) * 1.2 + 4;
+    const margin = ((RADIUS * parseFloat(getComputedStyle(document.documentElement).fontSize)) / 16 / endScale) * Math.max(1, vh / baseH) * 1.2 + 4;
     const start = Math.max((vw + 2 * margin) / vw, (vh + 2 * margin) / baseH);
     geo = { start, yStart: vh + margin - (start * baseH) / 2 - vh / 2 };
     written.clear();
@@ -602,7 +602,7 @@ window.videoManager = videoManager;
     set('--media-s', lerp(geo.start, endScale, land).toFixed(4));
     set('--media-x', `${lerp(0, cx, land).toFixed(1)}px`);
     set('--media-y', `${lerp(geo.yStart, cy, land).toFixed(1)}px`);
-    set('--media-r', `${(RADIUS / endScale).toFixed(2)}px`);
+    set('--media-r', `${((RADIUS * parseFloat(getComputedStyle(document.documentElement).fontSize)) / 16 / endScale).toFixed(2)}px`);
     set('--stage-a', (1 - fade).toFixed(3));
     // Le bouton pause du héro s'efface avant que celui du carrousel n'apparaisse au même endroit.
     set('--toggle-o', (1 - easeInOut(range(p, 0.74, 0.84))).toFixed(3));
@@ -819,24 +819,35 @@ document.querySelectorAll('[data-carousel]').forEach((root) => {
 
 /* ==========================================================================
    Visionneuse : un clic sur une image l'affiche en plein écran, le site flouté derrière.
-   Fermeture : croix, Échap ou clic à côté de l'image. Le focus revient au lien d'origine.
-   Sans JavaScript, le lien ouvre simplement l'image.
+   Les vidéos de Lunar Lander jouent dans la page comme des GIF (muettes, en boucle, sans lecteur) ;
+   un clic les ouvre en grand avec un lecteur (lecture, avancée, plein écran natif).
+   Fermeture : croix, Échap ou clic à côté. Le focus revient à l'élément d'origine.
+   Sans JavaScript, le lien ouvre simplement l'image ; les vidéos restent des vidéos d'ambiance.
    ========================================================================== */
 (function initLightbox() {
   const links = document.querySelectorAll('a.zoomable, a.thumb');
-  if (!links.length || typeof HTMLDialogElement !== 'function') return;
+  const videos = document.querySelectorAll('.scene--lunar .slide__figure > video');
+  if ((!links.length && !videos.length) || typeof HTMLDialogElement !== 'function') return;
   const dialog = document.createElement('dialog');
   dialog.className = 'lightbox';
-  dialog.setAttribute('aria-label', 'Image agrandie');
   dialog.innerHTML =
-    '<button class="lightbox__close" type="button" aria-label="Fermer l\'image">' +
+    '<button class="lightbox__close" type="button" aria-label="Fermer">' +
     '<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>' +
     '</button><figure class="lightbox__figure"><figcaption class="lightbox__caption"></figcaption></figure>';
   document.body.append(dialog);
   const caption = dialog.querySelector('.lightbox__caption');
-  // L'image n'est créée qu'à la première ouverture, directement avec sa source.
+  // L'image et le lecteur ne sont créés qu'à leur première ouverture.
   let img = null;
+  let player = null;
   let opener = null;
+
+  function show(media, label, text) {
+    [img, player].forEach((el) => { if (el) el.hidden = el !== media; });
+    dialog.setAttribute('aria-label', label);
+    caption.textContent = text;
+    document.documentElement.classList.add('has-lightbox');
+    dialog.showModal();
+  }
 
   links.forEach((link) => link.addEventListener('click', (event) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -851,36 +862,86 @@ document.querySelectorAll('[data-carousel]').forEach((root) => {
     }
     img.src = link.getAttribute('href');
     img.alt = text;
-    caption.textContent = text;
-    document.documentElement.classList.add('has-lightbox');
-    dialog.showModal();
+    show(img, 'Image agrandie', text);
   }));
+
+  // Vidéos : un bouton transparent recouvre chaque vidéo (même boîte 3:2) ; l'icône d'agrandissement
+  // est dans le coin. Le lecteur reprend la vidéo au même instant.
+  videos.forEach((video) => {
+    const figure = video.parentElement;
+    const labelEl = figure.querySelector('.slide__label');
+    const label = labelEl ? labelEl.textContent.trim() : 'Lunar Lander';
+    const cap = figure.querySelector('figcaption');
+    const rest = cap ? cap.textContent.replace(label, '').trim() : '';
+    const text = rest ? `${label} · ${rest}` : label;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'video-zoom';
+    button.setAttribute('aria-label', `Agrandir la vidéo « ${label} » avec un lecteur`);
+    button.innerHTML = '<span class="video-zoom__icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>';
+    video.after(button);
+    button.addEventListener('click', () => {
+      opener = button;
+      if (!player) {
+        player = document.createElement('video');
+        player.className = 'lightbox__video';
+        player.controls = true;
+        player.loop = true;
+        player.muted = true; // les vidéos sont sans son ; la lecture automatique reste permise
+        player.playsInline = true;
+        caption.before(player);
+      }
+      player.replaceChildren(...[...video.querySelectorAll('source')].map((source) => source.cloneNode()));
+      if (video.getAttribute('src')) player.src = video.getAttribute('src');
+      else player.removeAttribute('src');
+      player.poster = video.poster;
+      player.setAttribute('aria-label', video.getAttribute('aria-label') || label);
+      player.load();
+      const start = video.currentTime;
+      player.addEventListener('loadedmetadata', () => { try { player.currentTime = start; } catch (e) { /* début de la vidéo */ } }, { once: true });
+      show(player, 'Vidéo agrandie', text);
+      const playing = player.play();
+      if (playing && playing.catch) playing.catch(() => {});
+      player.focus();
+    });
+  });
+
   dialog.querySelector('.lightbox__close').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog || event.target.classList.contains('lightbox__figure')) dialog.close();
   });
   dialog.addEventListener('close', () => {
     document.documentElement.classList.remove('has-lightbox');
+    if (player) {
+      player.pause();
+      player.removeAttribute('src');
+      player.replaceChildren();
+      player.load(); // arrête le téléchargement
+    }
     if (opener) opener.focus();
   });
 })();
 
 /* ==========================================================================
    Molette : un cran amène en douceur à la sous-partie suivante (ou précédente).
-   Pas dans le héro, dont la séquence suit le défilement, ni pour en sortir ou y revenir.
-   Une sous-partie plus haute que l'écran se parcourt aussi par crans animés, jusqu'à son bas.
-   « À propos » et « Stack » forment une seule sous-partie : un cran passe de l'une au parcours.
+   Pas dans le héro, dont la séquence suit le défilement, ni pour y revenir ; à la fin de la séquence,
+   un cran pose Lunar Lander en entier.
+   Une sous-partie plus haute que l'écran se parcourt aussi par crans animés, jusqu'au bas de son contenu
+   (la marge basse n'impose pas de cran de plus).
+   « À propos » et « Stack » forment une seule sous-partie quand les deux tiennent dans l'écran ;
+   sinon chacune a son arrêt et occupe tout l'écran (styles.css), pour qu'aucune n'apparaisse à moitié.
    Les zones qui défilent elles-mêmes (terminal, carrousels) gardent la molette.
    Mouvement réduit : défilement natif.
    ========================================================================== */
 (function initWheelSnap() {
-  const parts = [...document.querySelectorAll('.projects > .scene, main > .section:not(.hero-seq):not(#stack)')];
+  const parts = [...document.querySelectorAll('.projects > .scene, main > .section:not(.hero-seq)')];
   if (parts.length < 2) return;
-  // Sous-parties franchies d'un seul cran, quelle que soit leur hauteur.
-  const whole = new Set([document.getElementById('a-propos')]);
+  const about = document.getElementById('a-propos');
+  const stack = document.getElementById('stack');
   const header = document.querySelector('.site-header');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const INERTIA = 100; // ms sans événement avant d'accepter un nouveau cran (inertie des pavés tactiles)
+  const END = 24; // marge gardée sous le contenu d'une sous-partie
   let anim = null;
   let lastWheel = 0;
 
@@ -890,6 +951,23 @@ document.querySelectorAll('[data-carousel]').forEach((root) => {
     const pad = parseFloat(getComputedStyle(box).paddingTop) || 0;
     const head = header && getComputedStyle(header).position !== 'static' ? header.getBoundingClientRect().height : 0;
     return Math.round(el.getBoundingClientRect().top + window.scrollY - Math.max(0, head + 8 - pad));
+  }
+  // Bas du contenu (et non de la section, dont la marge basse peut dépasser de l'écran sans rien cacher).
+  function contentEnd(el) {
+    if (el === parts[parts.length - 1]) return document.documentElement.scrollHeight; // dernier arrêt : jusqu'au pied de page
+    const inner = el.querySelector(':scope > .scene__stage > .scene__inner, :scope > .container') || el;
+    const end = inner.getBoundingClientRect().bottom + window.scrollY + END;
+    return Math.round(Math.min(end, el.getBoundingClientRect().bottom + window.scrollY));
+  }
+  // Arrêts de la molette : [haut, bas du contenu] de chaque sous-partie, « À propos » et « Stack » fusionnées si elles tiennent ensemble.
+  function stops() {
+    const list = parts.map((el) => ({ el, top: snapTop(el), end: contentEnd(el) }));
+    const a = list.findIndex((s) => s.el === about);
+    if (a >= 0 && list[a + 1] && list[a + 1].el === stack && list[a + 1].end - list[a].top <= window.innerHeight) {
+      list[a].end = list[a + 1].end;
+      list.splice(a + 1, 1);
+    }
+    return list;
   }
   function scrollsItself(el, dir) {
     for (; el && el !== document.body && el !== document.documentElement; el = el.parentElement) {
@@ -925,36 +1003,44 @@ document.querySelectorAll('[data-carousel]').forEach((root) => {
     }
     const dir = Math.sign(event.deltaY);
     if (document.querySelector('dialog[open]') || scrollsItself(event.target, dir)) return;
-    const tops = parts.map(snapTop);
+    const list = stops();
     const y = window.scrollY;
     const vh = window.innerHeight;
-    if (y < tops[0] - 2 || (dir < 0 && y <= tops[0] + 2)) return; // héro et passage héro ↔ projets
+    if (dir < 0 && y <= list[0].top + 2) return; // remontée vers le héro : défilement natif
+    if (y < list[0].top - 2) {
+      // Fin de la séquence du héro : dès que Lunar Lander commence à apparaître (le fond du héro
+      // s'efface sur le dernier tiers d'écran), un cran pose la scène entière, technologies comprises.
+      if (dir > 0 && y >= list[0].top - vh * 0.45) { event.preventDefault(); animateTo(list[0].top); }
+      return;
+    }
     let i = 0;
-    while (i + 1 < tops.length && tops[i + 1] <= y + 2) i++;
-    const bottom = i + 1 < tops.length ? tops[i + 1] : document.documentElement.scrollHeight;
+    while (i + 1 < list.length && list[i + 1].top <= y + 2) i++;
+    const cur = list[i];
     const page = Math.round(vh * 0.85);
-    const SLACK = 64; // une sous-partie qui ne dépasse que de sa marge basse compte comme tenant dans l'écran
     let target = null;
-    const paged = !whole.has(parts[i]);
     if (dir > 0) {
-      if (paged && y + vh < bottom - SLACK) target = Math.min(bottom - vh, y + page);
-      else if (i + 1 < tops.length) target = tops[i + 1];
+      if (y + vh < cur.end - END) target = Math.min(cur.end - vh, y + page); // au-delà de la marge : il reste du contenu à montrer
+      else if (i + 1 < list.length) target = list[i + 1].top;
       else return;
-    } else if (paged && y > tops[i] + SLACK) target = Math.max(tops[i], y - page);
-    else if (y > tops[i] + 2) target = tops[i];
-    else if (i > 0) target = whole.has(parts[i - 1]) || tops[i] - tops[i - 1] - vh <= SLACK ? tops[i - 1] : tops[i] - vh;
+    } else if (y > cur.top + END) target = Math.max(cur.top, y - page);
+    else if (i > 0) {
+      // La sous-partie précédente, par son bas si elle ne tient pas (même tolérance qu'en descendant).
+      const prev = list[i - 1];
+      const fromEnd = prev.end - vh;
+      target = fromEnd - prev.top <= END ? prev.top : fromEnd;
+    }
     if (target === null) return;
     event.preventDefault();
     animateTo(target);
   }, { passive: false });
   // Liens internes (menu, « Me contacter », « Voir le projet »…) : même arrivée que la molette, au lieu
   // du décalage de scroll-padding. Projets → première scène ; un titre de projet → sa scène ;
-  // Stack (fusionnée avec « À propos ») → arrêt de la molette sur « À propos ». Mouvement réduit : saut direct.
+  // Stack → son arrêt, ou celui d'« À propos » quand les deux sont fusionnées. Mouvement réduit : saut direct.
   function linkTop(el) {
     if (el.id === 'projets') return snapTop(parts[0]);
     const part = parts.find((p) => p === el || p.contains(el));
+    if (part === stack) return stops().find((s) => s.el === stack) ? snapTop(stack) : snapTop(about); // même arrêt que la molette
     if (part) return snapTop(part);
-    if (el.id === 'stack') return snapTop(document.getElementById('a-propos')); // même arrêt que la molette
     return null;
   }
   document.addEventListener('click', (event) => {
