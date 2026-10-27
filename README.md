@@ -6,7 +6,7 @@ Ce dépôt contient mon portfolio : mes projets (Lunar Lander en apprentissage p
 
 - Contact : etudes.leroy.antoine@gmail.com
 - GitHub : <https://github.com/leroy-antoine>
-- CV : [`assets/CV_LEROY_ANTOINE.pdf`](assets/CV_LEROY_ANTOINE.pdf)
+- CV : [`assets/CV - Antoine Leroy.pdf`](assets/CV%20-%20Antoine%20Leroy.pdf)
 
 ## Ce que contient la page
 
