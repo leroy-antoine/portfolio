@@ -543,13 +543,12 @@ window.videoManager = videoManager;
     let called = false;
     const end = done && (() => { if (!called) { called = true; done(); } });
     if (end) setTimeout(end, 400);
-    done = end;
     const seek = () => {
-      try { target.currentTime = heroVideo.currentTime + lead; } catch (e) { if (done) done(); return; } // métadonnées pas encore chargées
+      try { target.currentTime = heroVideo.currentTime + lead; } catch (e) { if (end) end(); return; } // métadonnées pas encore chargées
       target.addEventListener('seeked', () => {
         const drift = heroVideo.currentTime - target.currentTime;
         if (Math.abs(drift) > 0.05 && Math.abs(drift) < 2 && ++tries < 3) { lead += drift; seek(); }
-        else if (done) done();
+        else if (end) end();
       }, { once: true });
     };
     seek();
